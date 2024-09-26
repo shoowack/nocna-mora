@@ -39,6 +39,14 @@ export function MainNav() {
               Likovi
             </NavigationMenuLink>
           </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink
+              href="/categories"
+              className={navigationMenuTriggerStyle()}
+            >
+              Kategorije
+            </NavigationMenuLink>
+          </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
     </div>

@@ -213,7 +213,7 @@ async function main() {
       update: {},
       create: {
         name: categoryData.name,
-        slug: slug,
+        slug,
       },
     });
   }
@@ -223,28 +223,48 @@ async function main() {
   // Seed videos
   const videosData = [
     {
+      title: "Noćna mora, Malnar",
+      videoId: "444785863",
+      duration: 29,
+      provider: "VIMEO",
+      airedDate: new Date("2001-01-12"),
+      actors: actors.slice(0, 5).map((actor) => actor.id),
+    },
+    {
       title: "Noćna mora - Cijela emisija 12.01.2001.",
       videoId: "lTgvOOErUYg",
-      duration: 22340, // Duration in seconds
+      duration: 22340,
+      provider: "YOUTUBE",
       airedDate: new Date("2001-01-12"),
-      actors: actors.slice(0, 5).map((actor) => actor.id), // First 5 actors
+      actors: actors.slice(0, 5).map((actor) => actor.id),
     },
     {
       title: "Jaran,Bakica i Cigo",
       videoId: "PC0pzISCAQc",
-      duration: 4571, // Duration in seconds
-      actors: actors.slice(0, 5).map((actor) => actor.id), // First 5 actors
+      duration: 4571,
+      provider: "YOUTUBE",
+      actors: actors.slice(0, 5).map((actor) => actor.id),
     },
     {
       title: "Noćna Mora - 1/5 - Nenad Ivanković -19/20.11.2005",
       videoId: "xJ_-PjDDy_c",
       duration: 4121,
+      provider: "YOUTUBE",
+      airedDate: new Date("2005-11-20"),
+      actors: actors.slice(2, 9).map((actor) => actor.id),
+    },
+    {
+      title: "Nocna - Mora - Zatvoreno - 2",
+      videoId: "x32xkww",
+      duration: 4121,
+      provider: "DAILYMOTION",
       airedDate: new Date("2005-11-20"),
       actors: actors.slice(2, 9).map((actor) => actor.id),
     },
   ];
 
   const categories = await prisma.category.findMany();
+  console.log("categories:", categories);
 
   for (const videoData of videosData) {
     await prisma.video.create({
@@ -253,6 +273,7 @@ async function main() {
         videoId: videoData.videoId,
         duration: videoData.duration,
         airedDate: videoData.airedDate,
+        provider: videoData.provider,
         createdBy: {
           connect: { id: user?.id },
         },

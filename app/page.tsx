@@ -22,11 +22,7 @@ export default async function Index() {
           način koristeći pretragu.
         </p>
       </Container>
-      <div className="bg-neutral-100">
-        <Container>
-          <VideoGallery />
-        </Container>
-      </div>
+      <VideoGallery />
       <Container>
         <MemeGenerator />
       </Container>

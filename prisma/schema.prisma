@@ -110,11 +110,19 @@ model Actor {
   @@map("actors")
 }
 
+enum VideoProvider {
+  YOUTUBE
+  VIMEO
+  DAILYMOTION
+}
+
 model Video {
   // id          Int        @id @default(autoincrement())
   id          String     @id @default(cuid())
   title       String
   videoId     String
+  provider    VideoProvider
+
   duration    Int
   airedDate   DateTime?
 
@@ -123,7 +131,7 @@ model Video {
   userId      String
 
   actors      Actor[]    @relation("ActorVideos")
-  categories  Category[]   @relation("VideoCategories")
+  categories  Category[] @relation("VideoCategories")
 
   @@map("videos")
 }
