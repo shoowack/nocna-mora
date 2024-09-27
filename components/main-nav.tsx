@@ -47,6 +47,14 @@ export function MainNav() {
               Kategorije
             </NavigationMenuLink>
           </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink
+              href="/memes"
+              className={navigationMenuTriggerStyle()}
+            >
+              Memes
+            </NavigationMenuLink>
+          </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
     </div>

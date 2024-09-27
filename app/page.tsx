@@ -1,4 +1,3 @@
-import { MemeGenerator } from "@/components/meme-generator";
 import { VideoGallery } from "@/components/video-gallery";
 import { Container } from "@/components/container";
 
@@ -23,9 +22,6 @@ export default async function Index() {
         </p>
       </Container>
       <VideoGallery />
-      <Container>
-        <MemeGenerator />
-      </Container>
     </>
   );
 }
