@@ -38,7 +38,7 @@ export const VideoGallery = () => {
         </div>
         <Separator className="mt-2 mb-10" />
 
-        <div className="grid grid-cols-3 gap-5">
+        <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-5 xl:grid-cols-4">
           {videos.map((video: Video) => (
             <div
               key={video.id}
