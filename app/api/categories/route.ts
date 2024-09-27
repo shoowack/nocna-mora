@@ -3,10 +3,10 @@ import prisma from "@/lib/prisma";
 import { generateSlug } from "@/lib/slugify";
 import { auth } from "auth";
 
-export const GET = async () => {
-  const categories = await prisma.category.findMany();
-  return NextResponse.json(categories);
-};
+// export const GET = async () => {
+//   const categories = await prisma.category.findMany();
+//   return NextResponse.json(categories);
+// };
 
 export const POST = auth(async (request: Request) => {
   const session = (request as any).auth;
@@ -17,11 +17,11 @@ export const POST = auth(async (request: Request) => {
 
   try {
     const data = await request.json();
-    const slug = generateSlug(data.name);
+    const slug = generateSlug(data.title);
 
     const category = await prisma.category.create({
       data: {
-        name: data.name,
+        title: data.title,
         slug: slug,
       },
     });

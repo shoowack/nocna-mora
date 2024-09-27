@@ -1,18 +1,15 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Videotape } from "lucide-react";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { Container } from "@/components/container";
 import { Video, Provider } from "@/types/video";
-
-import Link from "next/link";
+import { VideoDetail } from "@/components/video-detail";
 
 export const VideoGallery = () => {
   const [videos, setVideos] = useState([]);
-  console.log("videos:", videos);
 
   useEffect(() => {
     fetch("/api/videos")
@@ -44,60 +41,7 @@ export const VideoGallery = () => {
               key={video.id}
               className="bg-neutral-200 rounded-lg overflow-hidden"
             >
-              <iframe
-                className="aspect-video w-full bg-black"
-                src={`https://${
-                  video.provider === "YOUTUBE"
-                    ? `www.youtube.com/embed/`
-                    : video.provider === "DAILYMOTION"
-                    ? `geo.dailymotion.com/player.html?video=`
-                    : `player.vimeo.com/video/`
-                }${video.videoId}`}
-                title={video.title}
-                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerPolicy="strict-origin-when-cross-origin"
-                allowFullScreen
-              />
-              <div className="p-4 space-y-4">
-                <p className="text-neutral-600 line-clamp-1">{video.title}</p>
-
-                {video.airedDate ? (
-                  <Badge variant="secondary" className="whitespace-nowrap">
-                    {new Date(video.airedDate).toLocaleString("hr-HR", {
-                      timeZone: "UTC",
-                      //   weekday: "long",
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                    })}
-                  </Badge>
-                ) : (
-                  <div className="h-5" />
-                )}
-
-                {video.actors.length > 0 && (
-                  <div className="flex gap-x-1 flex-wrap">
-                    {video.actors.map((actor) => (
-                      <Link key={actor.id} href={`/actor/${actor.slug}`}>
-                        <Badge className="m-0 px-1.5">{`${actor.firstName} ${actor.lastName}`}</Badge>
-                      </Link>
-                    ))}
-                  </div>
-                )}
-                <Separator className="w-full bg-neutral-300" />
-                {video.categories.length > 0 && (
-                  <div className="flex gap-x-1 flex-wrap">
-                    {video.categories.map((category) => (
-                      <Link
-                        key={category.id}
-                        href={`/category/${category.slug}`}
-                      >
-                        <Badge className="m-0 px-1.5">{category.title}</Badge>
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
+              <VideoDetail video={video} showActors showCategories />
             </div>
           ))}
         </div>

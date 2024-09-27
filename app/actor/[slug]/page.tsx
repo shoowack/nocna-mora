@@ -6,7 +6,7 @@ export default async function ActorPage({ params }) {
   const { slug } = params;
 
   const actor = await prisma.actor.findUnique({
-    where: { slug: slug },
+    where: { slug },
     include: {
       createdBy: true,
       videos: true,

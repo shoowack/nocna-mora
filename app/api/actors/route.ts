@@ -36,18 +36,18 @@ export const POST = auth(async (request: Request) => {
   }
 });
 
-export const GET = auth(async (request: Request) => {
-  try {
-    const actors = await prisma.actor.findMany({
-      orderBy: { createdAt: "desc" },
-    });
+// export const GET = auth(async (request: Request) => {
+//   try {
+//     const actors = await prisma.actor.findMany({
+//       orderBy: { createdAt: "desc" },
+//     });
 
-    return NextResponse.json({ actors }, { status: 200 });
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json(
-      { message: "Internal server error" },
-      { status: 500 }
-    );
-  }
-});
+//     return NextResponse.json({ actors }, { status: 200 });
+//   } catch (error) {
+//     console.error(error);
+//     return NextResponse.json(
+//       { message: "Internal server error" },
+//       { status: 500 }
+//     );
+//   }
+// });

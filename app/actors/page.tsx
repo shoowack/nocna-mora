@@ -1,27 +1,44 @@
-"use client";
-
+// "use client";
+import prisma from "@/lib/prisma";
 import { Container } from "@/components/container";
 import { CustomLink } from "@/components/custom-link";
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 
-export default function Actors() {
-  const [data, setData] = useState();
-  console.log("data:", data);
+export default async function Actors({ params }) {
+  // export default function Actors() {
+  // const [data, setData] = useState();
 
-  useEffect(() => {
-    (async () => {
-      const res = await fetch("/api/actors");
-      const json = await res.json();
+  // useEffect(() => {
+  //   (async () => {
+  //     const res = await fetch("/api/actors");
+  //     const json = await res.json();
 
-      setData(json);
-    })();
-  }, []);
+  //     setData(json);
+  //   })();
+  // }, []);
+  const actors = await prisma.actor.findMany({
+    orderBy: {
+      lastName: "asc",
+    },
+  });
+
+  // const actor = await prisma.actor.findUnique({
+  //   where: { slug: slug },
+  //   include: {
+  //     createdBy: true,
+  //     videos: true,
+  //   },
+  // });
+
+  if (!actors) {
+    return <div>Actors not found</div>;
+  }
 
   return (
     <Container>
-      {data && (
+      {actors && (
         <div className="flex flex-col space-y-10">
-          {data?.actors.map((actor) => (
+          {actors?.map((actor) => (
             <div className="flex flex-col space-y-2">
               <CustomLink
                 href={`/actor/${actor.slug}`}
