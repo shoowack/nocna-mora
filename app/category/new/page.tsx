@@ -1,7 +1,8 @@
 import { CategoryForm } from "@/components/category-form";
 import { Container } from "@/components/container";
 import { auth } from "auth";
-import { AccessDenied } from "@/components/access-denied";
+// import { AccessDenied } from "@/components/access-denied";
+import { redirect } from "next/navigation";
 
 export default async function NewCategoryPage() {
   const session = await auth();
@@ -16,7 +17,11 @@ export default async function NewCategoryPage() {
     };
   }
 
-  if (!session?.user) return <AccessDenied />;
+  if (!session?.user) {
+    redirect("/auth/signin");
+  }
+
+  // if (!session?.user) return <AccessDenied />;
 
   return (
     <Container>

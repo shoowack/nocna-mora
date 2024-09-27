@@ -62,8 +62,8 @@ export const ActorForm = () => {
       if (response.ok) {
         const data = await response.json();
 
-        // Redirect to the actor's page
-        router.push(`/actors/${data.actor.slug}`);
+        // Redirect to the actor page
+        router.push(`/actor/${data.actor.slug}`);
       } else {
         const errorData = await response.json();
         setError(errorData.message || "An error occurred.");

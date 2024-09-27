@@ -200,20 +200,23 @@ async function main() {
 
   // Seed categories
   const categoriesData = [
-    { name: "Milijunas" },
-    { name: "Vatreno lice" },
-    { name: "Dora Mora" },
+    { title: "Milijunas" },
+    { title: "Vatreno lice" },
+    { title: "Dora Mora" },
   ];
 
   for (const categoryData of categoriesData) {
-    const slug = generateSlug(categoryData.name);
+    const slug = generateSlug(categoryData.title);
 
     await prisma.category.upsert({
-      where: { name: categoryData.name },
+      where: { title: categoryData.title },
       update: {},
       create: {
-        name: categoryData.name,
+        title: categoryData.title,
         slug,
+        createdBy: {
+          connect: { id: user?.id },
+        },
       },
     });
   }
@@ -259,6 +262,14 @@ async function main() {
       duration: 4121,
       provider: "DAILYMOTION",
       airedDate: new Date("2005-11-20"),
+      actors: actors.slice(2, 9).map((actor) => actor.id),
+    },
+    {
+      title: "Noćna Mora - 02.01.10",
+      videoId: "8531666",
+      duration: 2158,
+      provider: "VIMEO",
+      airedDate: new Date("2010-10-01"),
       actors: actors.slice(2, 9).map((actor) => actor.id),
     },
   ];

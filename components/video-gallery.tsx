@@ -58,22 +58,6 @@ export const VideoGallery = () => {
                 referrerPolicy="strict-origin-when-cross-origin"
                 allowFullScreen
               />
-              {/* )  (
-                <iframe
-                  src={}
-                  className="aspect-video w-full bg-black"
-                  allowFullScreen
-                  title={video.title}
-                  allow="web-share"
-                />
-              ) : (
-                <iframe
-                  src={}
-                  allow="autoplay; fullscreen; picture-in-picture; clipboard-write"
-                  className="aspect-video w-full bg-black"
-                  title={video.title}
-                />
-              )} */}
               <div className="p-4 space-y-4">
                 <p className="text-neutral-600 line-clamp-1">{video.title}</p>
 
@@ -94,11 +78,21 @@ export const VideoGallery = () => {
                 {video.actors.length > 0 && (
                   <div className="flex gap-x-1 flex-wrap">
                     {video.actors.map((actor) => (
-                      <Link key={actor.id} href={`/actors/${actor.slug}`}>
-                        <Badge
-                          className="m-0 px-1.5"
-                          key={actor.id}
-                        >{`${actor.firstName} ${actor.lastName}`}</Badge>
+                      <Link key={actor.id} href={`/actor/${actor.slug}`}>
+                        <Badge className="m-0 px-1.5">{`${actor.firstName} ${actor.lastName}`}</Badge>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+                <Separator className="w-full bg-neutral-300" />
+                {video.categories.length > 0 && (
+                  <div className="flex gap-x-1 flex-wrap">
+                    {video.categories.map((category) => (
+                      <Link
+                        key={category.id}
+                        href={`/category/${category.slug}`}
+                      >
+                        <Badge className="m-0 px-1.5">{category.title}</Badge>
                       </Link>
                     ))}
                   </div>

@@ -49,19 +49,20 @@ model Session {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String       @id @default(cuid())
   name          String?
-  email         String?   @unique
+  email         String?      @unique
   emailVerified DateTime?
   image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
   accounts      Account[]
   sessions      Session[]
-  images        Image[]   @relation("UserImages")
-  memes         Meme[]    @relation("UserMemes")
-  videos        Video[]   @relation("UserVideos")
-  actors        Actor[]   @relation("UserActors")
+  images        Image[]      @relation("UserImages")
+  memes         Meme[]       @relation("UserMemes")
+  videos        Video[]      @relation("UserVideos")
+  actors        Actor[]      @relation("UserActors")
+  categories    Category[]   @relation("UserCategories")
 
   @@map("users")
 }
@@ -76,7 +77,6 @@ model VerificationToken {
 }
 
 model Image {
-  // id         Int      @id @default(autoincrement())
   id         String   @id @default(cuid())
   url        String
   title      String?
@@ -90,7 +90,6 @@ model Image {
 }
 
 model Actor {
-  // id        Int      @id @default(autoincrement())
   id        String   @id @default(cuid())
   firstName String
   lastName  String
@@ -117,7 +116,6 @@ enum VideoProvider {
 }
 
 model Video {
-  // id          Int        @id @default(autoincrement())
   id          String     @id @default(cuid())
   title       String
   videoId     String
@@ -137,7 +135,6 @@ model Video {
 }
 
 model Meme {
-  // id          Int      @id @default(autoincrement())
   id          String   @id @default(cuid())
   url         String
   topText     String
@@ -154,11 +151,14 @@ model Meme {
 }
 
 model Category {
-  id        Int      @id @default(autoincrement())
-  name      String   @unique
+  id        String   @id @default(cuid())
+  title      String   @unique
   slug      String   @unique
   videos    Video[]  @relation("VideoCategories")
+
   createdAt DateTime @default(now())
+  createdBy User     @relation("UserCategories", fields: [userId], references: [id])
+  userId    String
   updatedAt DateTime @updatedAt
 
   @@map("categories")

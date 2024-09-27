@@ -1,8 +1,9 @@
 import { ActorForm } from "@/components/actor-form";
 import { auth } from "auth";
 import { SessionProvider } from "next-auth/react";
-import { AccessDenied } from "@/components/access-denied";
+// import { AccessDenied } from "@/components/access-denied";
 import { Container } from "@/components/container";
+import { redirect } from "next/navigation";
 
 export default async function NewActorPage() {
   const session = await auth();
@@ -17,7 +18,11 @@ export default async function NewActorPage() {
     };
   }
 
-  if (!session?.user) return <AccessDenied />;
+  if (!session?.user) {
+    redirect("/auth/signin");
+  }
+
+  // if (!session?.user) return <AccessDenied />;
 
   return (
     <SessionProvider basePath={"/auth"} session={session}>

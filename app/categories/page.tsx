@@ -9,13 +9,13 @@ export default async function CategoriesPage() {
   return (
     <Container>
       <h1 className="text-2xl font-bold mb-4">Kategorije</h1>
-      <Link href="/categories/new" className="btn btn-primary mb-4">
+      <Link href="/category/new" className="btn btn-primary mb-4">
         Add New Category
       </Link>
       <ul>
         {categories.map((category) => (
           <li key={category.id}>
-            <Link href={`/categories/${category.slug}`}>{category.name}</Link>
+            <Link href={`/category/${category.slug}`}>{category.title}</Link>
           </li>
         ))}
       </ul>

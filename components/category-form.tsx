@@ -16,7 +16,7 @@ interface CategoryFormProps {
 
 export function CategoryForm({ category }: CategoryFormProps) {
   const router = useRouter();
-  const [name, setName] = useState(category ? category.name : "");
+  const [name, setName] = useState(category ? category.title : "");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -29,7 +29,7 @@ export function CategoryForm({ category }: CategoryFormProps) {
 
     try {
       const response = await fetch(
-        isEditing ? `/api/categories/${category.slug}` : "/api/categories",
+        isEditing ? `/api/category/${category.slug}` : "/api/category",
         {
           method: isEditing ? "PUT" : "POST",
           headers: { "Content-Type": "application/json" },
@@ -38,7 +38,7 @@ export function CategoryForm({ category }: CategoryFormProps) {
       );
 
       if (response.ok) {
-        router.push("/categories");
+        router.push("/category");
       } else {
         const errorData = await response.json();
         setError(errorData.message || "An error occurred.");

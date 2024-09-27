@@ -4,7 +4,7 @@ import prisma from "@/lib/prisma";
 export async function GET(request: Request) {
   try {
     const videos = await prisma.video.findMany({
-      include: { createdBy: true, actors: true },
+      include: { createdBy: true, actors: true, categories: true },
       orderBy: { createdAt: "desc" },
     });
 

@@ -31,7 +31,7 @@ export default async function EditCategoryPage({
 
   const handleDelete = async () => {
     if (confirm("Are you sure you want to delete this category?")) {
-      const response = await fetch(`/api/categories/${params.slug}`, {
+      const response = await fetch(`/api/category/${params.slug}`, {
         method: "DELETE",
       });
 

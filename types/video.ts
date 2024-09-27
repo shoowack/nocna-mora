@@ -1,4 +1,5 @@
 import { Actor } from "@/types/actor";
+import { Categories } from "@/types/categories";
 
 export type Provider = {
   YOUTUBE: "YOUTUBE";
@@ -13,7 +14,7 @@ export type Video = {
   thumbnailUrl: string;
   videoId: string;
   airedDate: string;
-  category: string[];
+  categories: Categories[];
   actors: Actor[];
   provider: Provider;
 };

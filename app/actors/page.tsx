@@ -24,7 +24,7 @@ export default function Actors() {
           {data?.actors.map((actor) => (
             <div className="flex flex-col space-y-2">
               <CustomLink
-                href={`/actors/${actor.slug}`}
+                href={`/actor/${actor.slug}`}
                 className="text-xl font-bold"
                 key={actor.id}
               >{`${actor.firstName} ${actor.lastName}`}</CustomLink>
