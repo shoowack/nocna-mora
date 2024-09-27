@@ -118,7 +118,7 @@ enum VideoProvider {
 model Video {
   id          String     @id @default(cuid())
   title       String
-  videoId     String
+  videoId     String     @unique
   provider    VideoProvider
 
   duration    Int

@@ -167,23 +167,29 @@ async function main() {
       firstName: "Vesna",
       lastName: "Klaić",
       nickname: "",
-      age: 124,
+      age: 1,
       bio: "",
       gender: "female",
     },
   ];
 
-  // Create actors in the database
   for (const actorData of actorsData) {
     const slug = generateSlug(`${actorData.firstName} ${actorData.lastName}`);
 
-    await prisma.actor.create({
-      data: {
+    await prisma.actor.upsert({
+      where: { slug: slug },
+      update: {
+        firstName: actorData.firstName,
+        lastName: actorData.lastName,
+        age: actorData.age,
+        bio: actorData.bio,
+        gender: actorData.gender,
+        nickname: actorData.nickname,
+      },
+      create: {
         ...actorData,
         slug: slug,
-        userId: user?.id, // Associate the actor with the user
-        // Alternatively, you can use:
-        // createdBy: { connect: { id: user.id } },
+        userId: user?.id, // Associate with default user
       },
     });
   }
@@ -203,6 +209,7 @@ async function main() {
     { title: "Milijunas" },
     { title: "Vatreno lice" },
     { title: "Dora Mora" },
+    { title: "Picolovka" },
   ];
 
   for (const categoryData of categoriesData) {
@@ -278,13 +285,26 @@ async function main() {
   console.log("categories:", categories);
 
   for (const videoData of videosData) {
-    await prisma.video.create({
-      data: {
+    await prisma.video.upsert({
+      where: { videoId: videoData.videoId }, // Unique identifier
+      update: {
+        videoId: videoData.videoId,
+        duration: videoData.duration,
+        provider: videoData.provider,
+        airedDate: videoData.airedDate,
+        actors: {
+          set: videoData.actors.map((actorId) => ({ id: actorId })),
+        },
+        categories: {
+          set: categories.map((category) => ({ id: category.id })),
+        },
+      },
+      create: {
         title: videoData.title,
         videoId: videoData.videoId,
         duration: videoData.duration,
-        airedDate: videoData.airedDate,
         provider: videoData.provider,
+        airedDate: videoData.airedDate,
         createdBy: {
           connect: { id: user?.id },
         },
