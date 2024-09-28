@@ -18,7 +18,7 @@ export default async function Actors({ params }) {
   //   })();
   // }, []);
   const actors = await prisma.actor.findMany({
-    where: { type: ActorType.MAIN },
+    where: { type: ActorType.GUEST },
     orderBy: {
       lastName: "asc",
     },
@@ -33,7 +33,7 @@ export default async function Actors({ params }) {
   // });
 
   if (!actors) {
-    return <div>Actors not found</div>;
+    return <div>Guests not found</div>;
   }
 
   return (
@@ -43,7 +43,7 @@ export default async function Actors({ params }) {
           {actors?.map((actor) => (
             <div className="flex flex-col space-y-2">
               <CustomLink
-                href={`/actor/${actor.slug}`}
+                href={`/guest/${actor.slug}`}
                 className="text-xl font-bold"
                 key={actor.id}
               >

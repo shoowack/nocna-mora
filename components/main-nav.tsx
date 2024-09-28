@@ -65,7 +65,7 @@ export function MainNav() {
           </NavigationMenuItem>
           <NavigationMenuItem>
             <NavigationMenuLink
-              // href="/guests"
+              href="/guests"
               className={navigationMenuTriggerStyle()}
             >
               Gosti

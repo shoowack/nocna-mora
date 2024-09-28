@@ -89,22 +89,28 @@ model Image {
   @@map("images")
 }
 
+enum ActorType {
+  MAIN
+  GUEST
+}
+
 model Actor {
-  id        String   @id @default(cuid())
-  firstName String
-  lastName  String
-  nickname  String?
-  bio       String?
-  gender    String?
-  age       Int?
-  slug      String   @unique
+  id          String      @id @default(cuid())
+  firstName   String
+  lastName    String
+  nickname    String?
+  bio         String?
+  gender      String?
+  age         Int?
+  slug        String      @unique
+  type        ActorType   @default(GUEST)
 
-  createdAt   DateTime @default(now())
+  createdAt   DateTime    @default(now())
   userId      String
-  createdBy   User     @relation("UserActors", fields: [userId], references: [id])
+  createdBy   User        @relation("UserActors", fields: [userId], references: [id])
 
-  videos    Video[]  @relation("ActorVideos")
-  images    Image[]  @relation("ActorImages")
+  videos      Video[]     @relation("ActorVideos")
+  images      Image[]     @relation("ActorImages")
 
   @@map("actors")
 }

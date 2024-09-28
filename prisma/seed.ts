@@ -1,5 +1,6 @@
 import prisma from "@/lib/prisma";
 import { generateSlug } from "../lib/slugify";
+import { VideoProvider, ActorType } from "@prisma/client";
 
 async function main() {
   // Create a default user to associate with actors
@@ -18,6 +19,7 @@ async function main() {
       bio: 'Željko Malnar is documentarist, TV author and writer. Educated at New Delhi University in mass communications. Made more then 100 documentary films about far east and tropical areas for which he has won awards. Co-author of the book U potrazi za staklenim gradom (In search for glass city). Author of TV series "Nightmare stage (OTV, 1992-1995) and series of interviews in Globus magazine.',
       gender: "Male",
       nickname: "Predsjednik",
+      type: ActorType.MAIN,
     },
     {
       firstName: "Nediljko",
@@ -26,6 +28,7 @@ async function main() {
       bio: "Savjetnik za moral i ćudoređe Republike Pešćenice",
       gender: "Male",
       nickname: "Tarzan",
+      type: ActorType.MAIN,
     },
     {
       firstName: "Zvonimir",
@@ -34,6 +37,7 @@ async function main() {
       bio: "Ministar obrane Republike Pešćenice",
       gender: "Male",
       nickname: "Ševa",
+      type: ActorType.MAIN,
     },
     {
       firstName: "Emir",
@@ -42,6 +46,7 @@ async function main() {
       age: 123,
       bio: "Erotski pjesnik",
       gender: "male",
+      type: ActorType.MAIN,
     },
     {
       firstName: "Sead",
@@ -50,6 +55,7 @@ async function main() {
       age: 123,
       bio: "Zastupnik romske nacionalne manjine",
       gender: "male",
+      type: ActorType.MAIN,
     },
     {
       firstName: "Darko",
@@ -58,6 +64,7 @@ async function main() {
       age: 123,
       bio: "Hrvat koji želi postati Srbin",
       gender: "male",
+      type: ActorType.MAIN,
     },
     {
       firstName: "Zoran",
@@ -66,6 +73,7 @@ async function main() {
       age: 123,
       bio: "Predstavlja TV Aukciju ukradenih slika u Noćnoj Mori.",
       gender: "male",
+      type: ActorType.MAIN,
     },
     {
       firstName: "Darijan",
@@ -74,6 +82,7 @@ async function main() {
       age: 123,
       bio: "Najbolji izvođač pjesme 'Moj galebe' svih vremena",
       gender: "male",
+      type: ActorType.MAIN,
     },
     {
       firstName: "Ivan",
@@ -82,6 +91,7 @@ async function main() {
       age: 123,
       bio: "Najbolji harmonikaš svih vremena. Bi bip!",
       gender: "male",
+      type: ActorType.MAIN,
     },
     {
       firstName: "Vlado",
@@ -90,6 +100,7 @@ async function main() {
       age: 123,
       bio: "Obični novinar",
       gender: "male",
+      type: ActorType.MAIN,
     },
     {
       firstName: "Remzo",
@@ -98,6 +109,7 @@ async function main() {
       age: 123,
       bio: "Urednik vijesti i narodni pjesnik. Dobio otkaz u Krašu.",
       gender: "male",
+      type: ActorType.MAIN,
     },
     {
       firstName: "Nenad",
@@ -106,6 +118,7 @@ async function main() {
       age: 123,
       bio: "Pjevač i bivši boksački prvak",
       gender: "male",
+      type: ActorType.MAIN,
     },
     {
       firstName: "Stanislav",
@@ -114,6 +127,7 @@ async function main() {
       age: 123,
       bio: "Narodni tribun Republike Pešćenice",
       gender: "male",
+      type: ActorType.MAIN,
     },
     {
       firstName: "Bruno",
@@ -122,6 +136,7 @@ async function main() {
       age: 123,
       bio: "Predsjednikovo sunce uneređeno",
       gender: "transgender",
+      type: ActorType.MAIN,
     },
     {
       firstName: "Ivica",
@@ -130,6 +145,7 @@ async function main() {
       age: 123,
       bio: "Plesač i ovisnik o marihuani",
       gender: "male",
+      type: ActorType.MAIN,
     },
     {
       firstName: "Siniša",
@@ -138,6 +154,7 @@ async function main() {
       age: 123,
       bio: "Pjevač",
       gender: "male",
+      type: ActorType.MAIN,
     },
     {
       firstName: "Darko",
@@ -146,6 +163,7 @@ async function main() {
       age: 123,
       bio: "Pjevač-imitator",
       gender: "male",
+      type: ActorType.MAIN,
     },
     {
       firstName: "Krešimir",
@@ -154,6 +172,7 @@ async function main() {
       age: 123,
       bio: "Podvojena ličnost, perač prozora koji misli da je pilot",
       gender: "male",
+      type: ActorType.MAIN,
     },
     {
       firstName: "Slađana",
@@ -162,6 +181,7 @@ async function main() {
       age: 123,
       bio: "",
       gender: "female",
+      type: ActorType.MAIN,
     },
     {
       firstName: "Vesna",
@@ -170,6 +190,7 @@ async function main() {
       age: 1,
       bio: "",
       gender: "female",
+      type: ActorType.MAIN,
     },
     {
       firstName: "Ljubomir",
@@ -178,6 +199,7 @@ async function main() {
       age: 99,
       bio: "Filozof i mudrac",
       gender: "male",
+      type: ActorType.MAIN,
     },
     {
       firstName: "Ivo",
@@ -186,6 +208,7 @@ async function main() {
       age: 99,
       bio: "Ribar sa otoka Oliba, završio 3 fakulteta - ribarski, tesarski i soboslikarsaki.",
       gender: "male",
+      type: ActorType.MAIN,
     },
     {
       firstName: "Ali",
@@ -194,6 +217,7 @@ async function main() {
       age: 99,
       bio: "Trbušni plesač",
       gender: "transgender",
+      type: ActorType.MAIN,
     },
     {
       firstName: "Baka",
@@ -202,6 +226,7 @@ async function main() {
       age: 99,
       bio: "Prodavačica sa zagrebačkog placa",
       gender: "female",
+      type: ActorType.MAIN,
     },
     {
       firstName: "Dubravka",
@@ -210,6 +235,7 @@ async function main() {
       age: 99,
       bio: "bivša Jaranova ljubav",
       gender: "female",
+      type: ActorType.MAIN,
     },
     {
       firstName: "Husnija",
@@ -218,6 +244,7 @@ async function main() {
       age: 99,
       bio: "Voditeljica vremenske prognoze",
       gender: "female",
+      type: ActorType.MAIN,
     },
     {
       firstName: "Hasan",
@@ -226,6 +253,7 @@ async function main() {
       age: 99,
       bio: "Husnijin sin",
       gender: "male",
+      type: ActorType.MAIN,
     },
     {
       firstName: "Sandra",
@@ -234,6 +262,7 @@ async function main() {
       age: 99,
       bio: "Pjevačica i voditeljica 'Golih vijesti'",
       gender: "female",
+      type: ActorType.GUEST,
     },
     {
       firstName: "Predrag",
@@ -242,6 +271,16 @@ async function main() {
       age: 99,
       bio: "Književnik",
       gender: "male",
+      type: ActorType.MAIN,
+    },
+    {
+      firstName: "Stjepan",
+      lastName: "Spajić",
+      nickname: "Rođo",
+      age: 99,
+      bio: "Hrvatski poduzetnik i sportski djelatnik, predsjednik zagrebačkoga nogometnog kluba Hrvatski dragovoljac",
+      gender: "male",
+      type: ActorType.GUEST,
     },
   ];
 
@@ -257,6 +296,7 @@ async function main() {
         bio: actorData.bio,
         gender: actorData.gender,
         nickname: actorData.nickname,
+        type: actorData.type,
       },
       create: {
         ...actorData,
@@ -423,10 +463,30 @@ async function main() {
         .filter((category) => ["picolovka"].includes(category.slug))
         .map((category) => category.id),
     },
+    {
+      title: "Noćna Mora - Picolovka - Ševa, Laki, Stankec",
+      videoId: "naQJjcn7pBU",
+      duration: 3453,
+      provider: "YOUTUBE",
+      airedDate: new Date("2010-10-01"),
+      actors: actors
+        .filter((actor) =>
+          [
+            "stanko-hranovic",
+            "ivica-lako",
+            "sead-hasanovic",
+            "hasan-hrustic",
+            "zvonimir-levacic",
+          ].includes(actor.slug)
+        )
+        .map((actor) => actor.id),
+      categories: categories
+        .filter((category) => ["picolovka"].includes(category.slug))
+        .map((category) => category.id),
+    },
   ];
 
   for (const videoData of videosData) {
-    console.log("videoData:", videoData);
     await prisma.video.upsert({
       where: { videoId: videoData.videoId }, // Unique identifier
       update: {

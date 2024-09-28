@@ -15,7 +15,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { useSession } from "next-auth/react";
 
-export const ActorForm = () => {
+export const ActorForm = ({ guest }: { guest?: boolean }) => {
   const router = useRouter();
   const { data: session } = useSession();
 
@@ -26,6 +26,7 @@ export const ActorForm = () => {
     bio: "",
     gender: "",
     age: "",
+    type: guest ? "GUEST" : "MAIN",
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
