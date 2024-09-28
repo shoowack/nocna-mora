@@ -278,10 +278,12 @@ async function main() {
 
   // Seed categories
   const categoriesData = [
-    { title: "Milijunas" },
+    { title: "Dnevnik" },
+    { title: "Tko želi biti milijunaš?", description: "Kviz" },
     { title: "Vatreno lice" },
-    { title: "Dora Mora" },
+    { title: "Dora Mora", description: "Glazbeno natjecanje" },
     { title: "Picolovka", description: "Kultna ljubavna emisija Picolovka" },
+    { title: "Izlet", description: "Emisije sa raznih izleta" },
   ];
 
   for (const categoryData of categoriesData) {
@@ -393,6 +395,27 @@ async function main() {
             "remzo-krak",
             "stanko-hranovic",
             "sead-hasanovic",
+          ].includes(actor.slug)
+        )
+        .map((actor) => actor.id),
+      categories: categories
+        .filter((category) => ["picolovka"].includes(category.slug))
+        .map((category) => category.id),
+    },
+    {
+      title: "Picolovka",
+      videoId: "weLWhh9dXpg",
+      duration: 3504,
+      provider: "YOUTUBE",
+      airedDate: new Date("2010-10-01"),
+      actors: actors
+        .filter((actor) =>
+          [
+            "nediljko-alagusic",
+            "ivica-lako",
+            "sead-hasanovic",
+            "husnija-hrustic",
+            "zvonimir-levacic",
           ].includes(actor.slug)
         )
         .map((actor) => actor.id),
