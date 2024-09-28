@@ -4,6 +4,7 @@ import { SessionProvider } from "next-auth/react";
 // import { AccessDenied } from "@/components/access-denied";
 import { Container } from "@/components/container";
 import { redirect } from "next/navigation";
+import TitleTemplate from "@/components/title-template";
 
 export default async function NewActorPage() {
   const session = await auth();
@@ -26,10 +27,9 @@ export default async function NewActorPage() {
 
   return (
     <SessionProvider basePath={"/auth"} session={session}>
-      <Container>
-        <h1 className="text-2xl font-bold mb-4">Add New Actor</h1>
+      <TitleTemplate title="Dodaj novog lika">
         <ActorForm />
-      </Container>
+      </TitleTemplate>
     </SessionProvider>
   );
 }

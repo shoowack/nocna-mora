@@ -233,7 +233,7 @@ async function main() {
       lastName: "Carić",
       nickname: "",
       age: 99,
-      bio: "bivša Jaranova ljubav",
+      bio: "Bivša Jaranova ljubav",
       gender: "female",
       type: ActorType.MAIN,
     },
@@ -282,6 +282,15 @@ async function main() {
       gender: "male",
       type: ActorType.GUEST,
     },
+    {
+      firstName: "Milan",
+      lastName: "Bandić",
+      nickname: "",
+      age: 99,
+      bio: "Dugogodišnji gradonačelnik grada Zagreba",
+      gender: "male",
+      type: ActorType.GUEST,
+    },
   ];
 
   for (const actorData of actorsData) {
@@ -323,7 +332,15 @@ async function main() {
     { title: "Vatreno lice" },
     { title: "Dora Mora", description: "Glazbeno natjecanje" },
     { title: "Picolovka", description: "Kultna ljubavna emisija Picolovka" },
-    { title: "Izlet", description: "Emisije sa raznih izleta" },
+    { title: "Izleti", description: "Emisije sa raznih izleta" },
+    {
+      title: "Dokumentarci",
+      description: "Dokumentarne emisije Željka Malnara",
+    },
+    {
+      title: "Gosti",
+      description: "Emisije sa raznim gostima",
+    },
   ];
 
   for (const categoryData of categoriesData) {
@@ -369,9 +386,15 @@ async function main() {
       duration: 22340,
       provider: "YOUTUBE",
       airedDate: new Date("2001-01-12"),
-      actors: actors.slice(0, 5).map((actor) => actor.id),
+      actors: actors
+        .filter((actor) =>
+          ["zeljko-malnar", "milan-bandic", "sead-hasanovic"].includes(
+            actor.slug
+          )
+        )
+        .map((actor) => actor.id),
       categories: categories
-        .filter((category) => ["picolovka"].includes(category.slug))
+        .filter((category) => ["gosti"].includes(category.slug))
         .map((category) => category.id),
     },
     {
@@ -413,13 +436,14 @@ async function main() {
       provider: "VIMEO",
       airedDate: new Date("2010-10-01"),
       actors: actors
-        .filter(
-          (actor) =>
-            actor.slug === "zeljko-malnar" || actor.slug === "sead-hasanovic"
+        .filter((actor) =>
+          ["zeljko-malnar", "milan-bandic", "sead-hasanovic"].includes(
+            actor.slug
+          )
         )
         .map((actor) => actor.id),
       categories: categories
-        .filter((category) => ["picolovka"].includes(category.slug))
+        .filter((category) => ["gosti"].includes(category.slug))
         .map((category) => category.id),
     },
     {
@@ -482,6 +506,20 @@ async function main() {
         .map((actor) => actor.id),
       categories: categories
         .filter((category) => ["picolovka"].includes(category.slug))
+        .map((category) => category.id),
+    },
+    {
+      title:
+        "Željko Malnar - Iskustva 'udarenih' motorista (cijeli dokumentarni/putopisni film)",
+      videoId: "sbm4wqRCK_I",
+      duration: 1800,
+      provider: "YOUTUBE",
+      airedDate: new Date("2010-10-01"),
+      actors: actors
+        .filter((actor) => ["zeljko-malnar"].includes(actor.slug))
+        .map((actor) => actor.id),
+      categories: categories
+        .filter((category) => ["dokumentarci"].includes(category.slug))
         .map((category) => category.id),
     },
   ];

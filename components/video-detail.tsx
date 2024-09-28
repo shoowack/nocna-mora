@@ -8,6 +8,7 @@ import { Provider, Video } from "@/types/video";
 import Link from "next/link";
 import Image from "next/image";
 import { PlayCircle, Youtube } from "lucide-react";
+import { ActorType } from "@prisma/client";
 
 interface VideoDetailProps {
   video: Video;
@@ -190,7 +191,12 @@ export const VideoDetail: FC<VideoDetailProps> = ({
             {singleVideo && <h2>Actors:</h2>}
             <div className="flex gap-x-1 flex-wrap">
               {video.actors.map((actor) => (
-                <Link key={actor.id} href={`/actor/${actor.slug}`}>
+                <Link
+                  key={actor.id}
+                  href={`/${
+                    actor.type === ActorType.GUEST ? "guest" : "actor"
+                  }/${actor.slug}`}
+                >
                   <Badge className="m-0 px-1.5">{`${actor.firstName} ${actor.lastName}`}</Badge>
                 </Link>
               ))}

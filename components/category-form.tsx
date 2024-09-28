@@ -56,7 +56,7 @@ export function CategoryForm({ category }: CategoryFormProps) {
       {error && <p className="text-red-500">{error}</p>}
 
       <div>
-        <Label htmlFor="name">Category Name</Label>
+        <Label htmlFor="name">Naziv</Label>
         <Input
           name="name"
           value={name}
@@ -69,8 +69,8 @@ export function CategoryForm({ category }: CategoryFormProps) {
         {loading
           ? "Submitting..."
           : isEditing
-          ? "Update Category"
-          : "Add Category"}
+          ? "Ažuriraj kategoriju"
+          : "Dodaj kategoriju"}
       </Button>
     </form>
   );

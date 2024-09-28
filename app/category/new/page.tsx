@@ -1,5 +1,6 @@
 import { CategoryForm } from "@/components/category-form";
 import { Container } from "@/components/container";
+import TitleTemplate from "@/components/title-template";
 import { auth } from "auth";
 // import { AccessDenied } from "@/components/access-denied";
 import { redirect } from "next/navigation";
@@ -24,9 +25,8 @@ export default async function NewCategoryPage() {
   // if (!session?.user) return <AccessDenied />;
 
   return (
-    <Container>
-      <h1 className="text-2xl font-bold mb-4">Add New Category</h1>
+    <TitleTemplate title="Dodaj novu kategoriju">
       <CategoryForm />
-    </Container>
+    </TitleTemplate>
   );
 }

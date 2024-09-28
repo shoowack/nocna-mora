@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,6 +17,7 @@ import { useSession } from "next-auth/react";
 
 export const ActorForm = ({ guest }: { guest?: boolean }) => {
   const router = useRouter();
+  const pathname = usePathname();
   const { data: session } = useSession();
 
   const [formData, setFormData] = useState({
@@ -82,7 +83,7 @@ export const ActorForm = ({ guest }: { guest?: boolean }) => {
       {error && <p className="text-red-500">{error}</p>}
 
       <div>
-        <Label htmlFor="firstName">First Name</Label>
+        <Label htmlFor="firstName">Ime</Label>
         <Input
           name="firstName"
           value={formData.firstName}
@@ -92,7 +93,7 @@ export const ActorForm = ({ guest }: { guest?: boolean }) => {
       </div>
 
       <div>
-        <Label htmlFor="lastName">Last Name</Label>
+        <Label htmlFor="lastName">Prezime</Label>
         <Input
           name="lastName"
           value={formData.lastName}
@@ -102,7 +103,7 @@ export const ActorForm = ({ guest }: { guest?: boolean }) => {
       </div>
 
       <div>
-        <Label htmlFor="nickname">Nickname</Label>
+        <Label htmlFor="nickname">Nadimak</Label>
         <Input
           name="nickname"
           value={formData.nickname}
@@ -111,12 +112,12 @@ export const ActorForm = ({ guest }: { guest?: boolean }) => {
       </div>
 
       <div>
-        <Label htmlFor="bio">Bio</Label>
+        <Label htmlFor="bio">Biografija</Label>
         <Textarea name="bio" value={formData.bio} onChange={handleChange} />
       </div>
 
       <div>
-        <Label htmlFor="gender">Gender</Label>
+        <Label htmlFor="gender">Spol</Label>
 
         <Select
           onValueChange={(e) =>
@@ -127,19 +128,19 @@ export const ActorForm = ({ guest }: { guest?: boolean }) => {
           defaultValue={formData.gender}
         >
           <SelectTrigger className="w-full">
-            <SelectValue placeholder="Gender" />
+            <SelectValue placeholder="Spol" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="male">Male</SelectItem>
-            <SelectItem value="female">Female</SelectItem>
+            <SelectItem value="male">Muško</SelectItem>
+            <SelectItem value="female">Žensko</SelectItem>
             <SelectItem value="transgender">Transgender</SelectItem>
-            <SelectItem value="other">Other</SelectItem>
+            <SelectItem value="other">Drugi</SelectItem>
           </SelectContent>
         </Select>
       </div>
 
       <div>
-        <Label htmlFor="age">Age</Label>
+        <Label htmlFor="age">Starost</Label>
         <Input
           type="number"
           name="age"
@@ -149,7 +150,11 @@ export const ActorForm = ({ guest }: { guest?: boolean }) => {
       </div>
 
       <Button type="submit" disabled={loading}>
-        {loading ? "Submitting..." : "Add Actor"}
+        {loading
+          ? "Submitting..."
+          : pathname === "/guest/new"
+          ? "Dodaj gosta"
+          : "Dodaj lika"}
       </Button>
     </form>
   );

@@ -1,8 +1,10 @@
 // "use client";
 import prisma from "@/lib/prisma";
-import { Container } from "@/components/container";
+import { Button } from "@/components/ui/button";
 import { CustomLink } from "@/components/custom-link";
 import { ActorType } from "@prisma/client";
+import TitleTemplate from "@/components/title-template";
+import Link from "next/link";
 // import { useEffect, useState } from "react";
 
 export default async function Actors({ params }) {
@@ -32,13 +34,16 @@ export default async function Actors({ params }) {
   //   },
   // });
 
-  if (!actors) {
-    return <div>Actors not found</div>;
-  }
-
   return (
-    <Container>
-      {actors && (
+    <TitleTemplate
+      title="Likovi"
+      newButton={
+        <Link href="/actor/new">
+          <Button>Novi lik</Button>
+        </Link>
+      }
+    >
+      {actors ? (
         <div className="flex flex-col space-y-10">
           {actors?.map((actor) => (
             <div className="flex flex-col space-y-2">
@@ -54,7 +59,9 @@ export default async function Actors({ params }) {
             </div>
           ))}
         </div>
+      ) : (
+        <div>Actors not found</div>
       )}
-    </Container>
+    </TitleTemplate>
   );
 }

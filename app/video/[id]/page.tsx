@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { Container } from "@/components/container";
 import { VideoDetail } from "@/components/video-detail";
+import { ActorType } from "@prisma/client";
 
 export default async function VideoPage({ params }) {
   const { id } = params;

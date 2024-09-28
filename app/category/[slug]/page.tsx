@@ -1,6 +1,8 @@
 import prisma from "@/lib/prisma";
-import { Container } from "@/components/container";
 import { VideoDetail } from "@/components/video-detail";
+import TitleTemplate from "@/components/title-template";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
 export default async function CategoryPage({ params }) {
   const { slug } = params;
@@ -13,24 +15,20 @@ export default async function CategoryPage({ params }) {
     },
   });
 
-  if (!category) {
-    return <div>Category not found</div>;
-  }
-
   return (
-    <Container>
-      <h1 className="text-2xl font-bold">
-        {category.title ? category.title : ""}
-      </h1>
-      {category.description && (
-        <p className="text-md mt-2">
-          {category.description ? category.description : ""}
-        </p>
-      )}
+    <TitleTemplate
+      title={category.title}
+      description={category.description}
+      newButton={
+        <Link href={`/category/${category.slug}/edit`}>
+          <Button>Ažuriraj kategoriju</Button>
+        </Link>
+      }
+    >
       {category.videos.length > 0 ? (
         <>
           <p className="text-xl font-bold mt-10">
-            Videi u {category.title} Kategoriji:
+            Videi u kategoriji {category.title.toLowerCase()}:
           </p>
           <div className="grid grid-cols-2 mt-3 gap-4">
             {category.videos.map((video) => (
@@ -41,12 +39,16 @@ export default async function CategoryPage({ params }) {
           </div>
         </>
       ) : (
-        <div className="flex h-[calc(100vh-18rem)] justify-center items-center pt-20 pb-10">
+        <div className="flex h-[calc(100vh-26rem)] justify-center items-center pt-20 pb-10">
           Trenutno nema videa u ovoj kategoriji. Provjerite ponovno kasnije ili
-          istražite druge kategorije.
+          istražite
+          <Link href="/categories" className="underline ml-1">
+            druge kategorije
+          </Link>
+          .
         </div>
         // "No videos in this category yet. Please check back later."
       )}
-    </Container>
+    </TitleTemplate>
   );
 }
