@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { CustomLink } from "@/components/custom-link";
 import {
@@ -12,10 +12,24 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Separator } from "./ui/separator";
+import Link from "next/link";
 
 export function MainNav() {
+  const [categories, setCategories] = useState();
+  console.log("categories:", categories);
+
+  useEffect(() => {
+    (async () => {
+      const res = await fetch("/api/categories");
+      const json = await res.json();
+
+      setCategories(json);
+    })();
+  }, []);
+
   return (
     <div className="flex items-center gap-4">
       <CustomLink href="/">
@@ -40,13 +54,39 @@ export function MainNav() {
             </NavigationMenuLink>
           </NavigationMenuItem>
           <NavigationMenuItem>
+            <NavigationMenuTrigger className="px-2">
+              Kategorije
+            </NavigationMenuTrigger>
+            <NavigationMenuContent>
+              <ul className="grid gap-3 p-6 pb-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                {categories?.map((category) => (
+                  <ListItem
+                    key={category.id}
+                    href={`/category/${category.slug}`}
+                    title={category.title}
+                  >
+                    {category.description}
+                  </ListItem>
+                ))}
+              </ul>
+              <Separator />
+              <div className="flex justify-end p-3 bg-neutral-100">
+                <Link href="/categories">
+                  <Button variant="outline" size={"sm"}>
+                    Sve kategorije
+                  </Button>
+                </Link>
+              </div>
+            </NavigationMenuContent>
+          </NavigationMenuItem>
+          {/* <NavigationMenuItem>
             <NavigationMenuLink
               href="/categories"
               className={navigationMenuTriggerStyle()}
             >
               Kategorije
             </NavigationMenuLink>
-          </NavigationMenuItem>
+          </NavigationMenuItem> */}
           <NavigationMenuItem>
             <NavigationMenuLink
               // href="/memes"
@@ -75,7 +115,6 @@ export function MainNav() {
             <NavigationMenuLink
               // href="/timeline"
               className={navigationMenuTriggerStyle()}
-              // className={cn(navigationMenuTriggerStyle({ variant, className }))}
               variant="disabled"
             >
               Vremenska linija
