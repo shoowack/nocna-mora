@@ -1,11 +1,12 @@
 // "use client";
+
+// import { useEffect, useState } from "react";
 import prisma from "@/lib/prisma";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CustomLink } from "@/components/custom-link";
 import { ActorType } from "@prisma/client";
-import TitleTemplate from "@/components/title-template";
-import Link from "next/link";
-// import { useEffect, useState } from "react";
+import { TitleTemplate } from "@/components/title-template";
 
 export default async function Actors({ params }) {
   // export default function Actors() {

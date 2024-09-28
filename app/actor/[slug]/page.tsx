@@ -1,5 +1,5 @@
 import prisma from "@/lib/prisma";
-import TitleTemplate from "@/components/title-template";
+import { TitleTemplate } from "@/components/title-template";
 import { VideoDetail } from "@/components/video-detail";
 import { ActorType } from "@prisma/client";
 import { Container } from "@/components/container";

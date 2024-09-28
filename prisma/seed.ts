@@ -321,7 +321,7 @@ async function main() {
   const actors = await prisma.actor.findMany();
 
   if (actors.length === 0) {
-    console.log("No actors found.");
+    console.log("🚨 No actors found.");
     return;
   }
 
@@ -366,6 +366,11 @@ async function main() {
   console.log("🗄️ Categories seeded successfully.");
 
   const categories = await prisma.category.findMany();
+
+  if (categories.length === 0) {
+    console.log("🚨 No categories found.");
+    return;
+  }
 
   // Seed videos
   const videosData = [

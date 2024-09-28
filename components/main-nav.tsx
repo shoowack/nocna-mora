@@ -19,7 +19,6 @@ import Link from "next/link";
 
 export function MainNav() {
   const [categories, setCategories] = useState();
-  console.log("categories:", categories);
 
   useEffect(() => {
     (async () => {

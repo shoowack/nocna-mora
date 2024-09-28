@@ -1,7 +1,7 @@
 import { Container } from "@/components/container";
 import { auth } from "auth";
 
-export default async function TitleTemplate({
+export async function TitleTemplate({
   title,
   description,
   children,

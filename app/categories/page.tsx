@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import Link from "next/link";
-import TitleTemplate from "@/components/title-template";
+import { TitleTemplate } from "@/components/title-template";
 import { Button } from "@/components/ui/button";
 import { CustomLink } from "@/components/custom-link";
 

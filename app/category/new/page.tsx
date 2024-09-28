@@ -1,9 +1,8 @@
-import { CategoryForm } from "@/components/category-form";
-import { Container } from "@/components/container";
-import TitleTemplate from "@/components/title-template";
 import { auth } from "auth";
-// import { AccessDenied } from "@/components/access-denied";
 import { redirect } from "next/navigation";
+import { CategoryForm } from "@/components/category-form";
+import { TitleTemplate } from "@/components/title-template";
+// import { AccessDenied } from "@/components/access-denied";
 
 export default async function NewCategoryPage() {
   const session = await auth();

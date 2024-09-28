@@ -1,12 +1,15 @@
 import prisma from "@/lib/prisma";
-import TitleTemplate from "@/components/title-template";
+import { TitleTemplate } from "@/components/title-template";
 import { VideoDetail } from "@/components/video-detail";
 import { ActorType } from "@prisma/client";
 import { Container } from "@/components/container";
 
-export default async function GuestPage({ params }) {
+export default async function GuestPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
   const { slug } = params;
-  console.log("slug:", slug);
 
   const actor = await prisma.actor.findUnique({
     where: { slug, type: ActorType.GUEST },

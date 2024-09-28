@@ -1,10 +1,14 @@
 import prisma from "@/lib/prisma";
-import { VideoDetail } from "@/components/video-detail";
-import TitleTemplate from "@/components/title-template";
 import Link from "next/link";
+import { TitleTemplate } from "@/components/title-template";
+import { VideoDetail } from "@/components/video-detail";
 import { Button } from "@/components/ui/button";
 
-export default async function CategoryPage({ params }) {
+export default async function CategoryPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
   const { slug } = params;
 
   const category = await prisma.category.findUnique({
@@ -17,15 +21,15 @@ export default async function CategoryPage({ params }) {
 
   return (
     <TitleTemplate
-      title={category.title}
-      description={category.description}
+      title={category?.title}
+      description={category?.description}
       newButton={
-        <Link href={`/category/${category.slug}/edit`}>
+        <Link href={`/category/${category?.slug}/edit`}>
           <Button>Ažuriraj kategoriju</Button>
         </Link>
       }
     >
-      {category.videos.length > 0 ? (
+      {category && category.videos.length > 0 ? (
         <>
           <p className="text-xl font-bold mt-10">
             Videi u kategoriji {category.title.toLowerCase()}:

@@ -1,13 +1,14 @@
 // "use client";
+
+// import { useEffect, useState } from "react";
+import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { CustomLink } from "@/components/custom-link";
 import { ActorType } from "@prisma/client";
 import { Button } from "@/components/ui/button";
-import TitleTemplate from "@/components/title-template";
-import Link from "next/link";
-// import { useEffect, useState } from "react";
+import { TitleTemplate } from "@/components/title-template";
 
-export default async function Actors({ params }) {
+export default async function Actors({ params }: { params: { slug: string } }) {
   // export default function Actors() {
   // const [data, setData] = useState();
 
