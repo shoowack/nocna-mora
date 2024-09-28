@@ -23,9 +23,9 @@ import { CalendarIcon, Folder } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { MultiSelect } from "@/components/ui/multi-select";
-import { Provider, VideoFormInputs, VideoFormProps } from "@/types/video";
+import { Provider, Video } from "@/types/video";
 
-export function VideoForm({ video }: VideoFormProps) {
+export function VideoForm({ video }: { video: Video }) {
   const router = useRouter();
 
   const {
@@ -33,7 +33,7 @@ export function VideoForm({ video }: VideoFormProps) {
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
-  } = useForm<VideoFormInputs>({
+  } = useForm<Video>({
     defaultValues: {
       title: video?.title || "",
       videoId: video?.videoId || "",
@@ -41,8 +41,8 @@ export function VideoForm({ video }: VideoFormProps) {
       airedDate: video?.airedDate ? new Date(video.airedDate) : null,
       provider: video?.provider || Provider.YOUTUBE,
       published: video?.published || false,
-      actorIds: video?.actorIds || [],
-      categoryIds: video?.categoryIds || [],
+      actors: video?.actors || [],
+      categories: video?.categories || [],
     },
   });
 
@@ -79,7 +79,7 @@ export function VideoForm({ video }: VideoFormProps) {
     fetchData();
   }, []);
 
-  const onSubmit = async (data: VideoFormInputs) => {
+  const onSubmit = async (data: Video) => {
     setError("");
 
     try {
@@ -95,8 +95,8 @@ export function VideoForm({ video }: VideoFormProps) {
             airedDate: data.airedDate ? data.airedDate.toISOString() : null,
             provider: data.provider,
             published: data.published,
-            actorIds: data.actorIds,
-            categoryIds: data.categoryIds,
+            actors: data.actors,
+            categories: data.categories,
           }),
         }
       );
@@ -250,23 +250,26 @@ export function VideoForm({ video }: VideoFormProps) {
         <Label htmlFor="actors">Likovi</Label>
         <Controller
           control={control}
-          name="actorIds"
-          render={({ field }) => (
-            <MultiSelect
-              options={actors.map((actors: any) => ({
-                label: `${actors.firstName} ${actors.lastName}`,
-                value: actors.id.toString(),
-                // icon: ({ className }) => (
-                //   <Folder className={cn("size-4", className)} />
-                // ),
-              }))}
-              onValueChange={field.onChange}
-              defaultValue={field.value.map((id: number) => id.toString())}
-              placeholder="Odaberi likove"
-              variant="inverted"
-              maxCount={5}
-            />
-          )}
+          name="actors"
+          render={({ field }) => {
+            console.log("field:", field);
+            return (
+              <MultiSelect
+                options={actors.map((actors: any) => ({
+                  label: `${actors.firstName} ${actors.lastName}`,
+                  value: actors.id.toString(),
+                  // icon: ({ className }) => (
+                  //   <Folder className={cn("size-4", className)} />
+                  // ),
+                }))}
+                onValueChange={field.onChange}
+                defaultValue={field.value?.map((actor) => actor.id)}
+                placeholder="Odaberi likove"
+                variant="inverted"
+                maxCount={5}
+              />
+            );
+          }}
         />
       </div>
 
@@ -275,10 +278,10 @@ export function VideoForm({ video }: VideoFormProps) {
         <Label htmlFor="categories">Kategorije</Label>
         <Controller
           control={control}
-          name="categoryIds"
+          name="categories"
           render={({ field }) => (
             <MultiSelect
-              options={categories.map((category: any) => ({
+              options={categories.map((category) => ({
                 label: category.title,
                 value: category.id.toString(),
                 // icon: ({ className }) => (
@@ -286,7 +289,7 @@ export function VideoForm({ video }: VideoFormProps) {
                 // ),
               }))}
               onValueChange={field.onChange}
-              defaultValue={field.value.map((id: number) => id.toString())}
+              defaultValue={field.value?.map((category) => category.id)}
               placeholder="Odaberi kategoriju/e"
               variant="inverted"
               maxCount={5}

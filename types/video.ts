@@ -24,15 +24,3 @@ export type Video = {
   actors?: Actor[];
   provider: Provider;
 };
-
-export type VideoFormInputs = Omit<Video, "id" | "categories" | "actors"> & {
-  actorIds: number[];
-  categoryIds: number[];
-};
-
-export interface VideoFormProps {
-  video?: Omit<Video, "categories" | "actors"> & {
-    actorIds: number[];
-    categoryIds: number[];
-  };
-}
