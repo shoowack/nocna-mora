@@ -1,5 +1,4 @@
 import prisma from "@/lib/prisma";
-import { Badge } from "@/components/ui/badge";
 import { Container } from "@/components/container";
 import { VideoDetail } from "@/components/video-detail";
 
@@ -9,7 +8,7 @@ export default async function CategoryPage({ params }) {
   const category = await prisma.category.findUnique({
     where: { slug: slug },
     include: {
-      // createdBy: true,
+      createdBy: true,
       videos: true,
     },
   });
@@ -23,7 +22,12 @@ export default async function CategoryPage({ params }) {
       <h1 className="text-2xl font-bold">
         {category.title ? category.title : ""}
       </h1>
-      {category.videos.length > 0 && (
+      {category.description && (
+        <p className="text-md mt-2">
+          {category.description ? category.description : ""}
+        </p>
+      )}
+      {category.videos.length > 0 ? (
         <>
           <p className="text-xl font-bold mt-10">
             Videi u {category.title} Kategoriji:
@@ -36,6 +40,12 @@ export default async function CategoryPage({ params }) {
             ))}
           </div>
         </>
+      ) : (
+        <div className="flex h-[calc(100vh-18rem)] justify-center items-center pt-20 pb-10">
+          Trenutno nema videa u ovoj kategoriji. Provjerite ponovno kasnije ili
+          istražite druge kategorije.
+        </div>
+        // "No videos in this category yet. Please check back later."
       )}
     </Container>
   );

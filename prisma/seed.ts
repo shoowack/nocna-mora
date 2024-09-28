@@ -40,15 +40,15 @@ async function main() {
       lastName: "Ilijaš",
       nickname: "Emir",
       age: 123,
-      bio: "",
+      bio: "Erotski pjesnik",
       gender: "male",
     },
     {
       firstName: "Sead",
       lastName: "Hasanović",
-      nickname: "Braco",
+      nickname: "Braco - CroRom",
       age: 123,
-      bio: "",
+      bio: "Zastupnik romske nacionalne manjine",
       gender: "male",
     },
     {
@@ -56,7 +56,7 @@ async function main() {
       lastName: "Dijanović",
       nickname: "Darkec",
       age: 123,
-      bio: "",
+      bio: "Hrvat koji želi postati Srbin",
       gender: "male",
     },
     {
@@ -64,7 +64,7 @@ async function main() {
       lastName: "Krivić",
       nickname: "",
       age: 123,
-      bio: "",
+      bio: "Predstavlja TV Aukciju ukradenih slika u Noćnoj Mori.",
       gender: "male",
     },
     {
@@ -72,7 +72,7 @@ async function main() {
       lastName: "Mišak",
       nickname: "Galeb",
       age: 123,
-      bio: "",
+      bio: "Najbolji izvođač pjesme 'Moj galebe' svih vremena",
       gender: "male",
     },
     {
@@ -80,7 +80,7 @@ async function main() {
       lastName: "Plehan",
       nickname: "Ivek",
       age: 123,
-      bio: "",
+      bio: "Najbolji harmonikaš svih vremena. Bi bip!",
       gender: "male",
     },
     {
@@ -88,7 +88,7 @@ async function main() {
       lastName: "Matijević",
       nickname: "Jajan",
       age: 123,
-      bio: "",
+      bio: "Obični novinar",
       gender: "male",
     },
     {
@@ -96,7 +96,7 @@ async function main() {
       lastName: "Krak",
       nickname: "Remzo",
       age: 123,
-      bio: "",
+      bio: "Urednik vijesti i narodni pjesnik. Dobio otkaz u Krašu.",
       gender: "male",
     },
     {
@@ -104,15 +104,15 @@ async function main() {
       lastName: "Blatnik",
       nickname: "Cezar",
       age: 123,
-      bio: "",
+      bio: "Pjevač i bivši boksački prvak",
       gender: "male",
     },
     {
-      firstName: "Stanko",
+      firstName: "Stanislav",
       lastName: "Hranović",
       nickname: "Stankec",
       age: 123,
-      bio: "",
+      bio: "Narodni tribun Republike Pešćenice",
       gender: "male",
     },
     {
@@ -120,7 +120,7 @@ async function main() {
       lastName: "Tomašić",
       nickname: "Anđa",
       age: 123,
-      bio: "",
+      bio: "Predsjednikovo sunce uneređeno",
       gender: "transgender",
     },
     {
@@ -128,7 +128,7 @@ async function main() {
       lastName: "Lako",
       nickname: "Laki",
       age: 123,
-      bio: "",
+      bio: "Plesač i ovisnik o marihuani",
       gender: "male",
     },
     {
@@ -136,7 +136,7 @@ async function main() {
       lastName: "Polovina",
       nickname: "Gibo od Kutine",
       age: 123,
-      bio: "",
+      bio: "Pjevač",
       gender: "male",
     },
     {
@@ -144,7 +144,7 @@ async function main() {
       lastName: "Djugumović",
       nickname: "Darko",
       age: 123,
-      bio: "",
+      bio: "Pjevač-imitator",
       gender: "male",
     },
     {
@@ -152,7 +152,7 @@ async function main() {
       lastName: "Ricijaš",
       nickname: "Giovanni",
       age: 123,
-      bio: "",
+      bio: "Podvojena ličnost, perač prozora koji misli da je pilot",
       gender: "male",
     },
     {
@@ -170,6 +170,78 @@ async function main() {
       age: 1,
       bio: "",
       gender: "female",
+    },
+    {
+      firstName: "Ljubomir",
+      lastName: "Đomešić",
+      nickname: "Ljubo",
+      age: 99,
+      bio: "Filozof i mudrac",
+      gender: "male",
+    },
+    {
+      firstName: "Ivo",
+      lastName: "Ribar",
+      nickname: "Ivo Ribar",
+      age: 99,
+      bio: "Ribar sa otoka Oliba, završio 3 fakulteta - ribarski, tesarski i soboslikarsaki.",
+      gender: "male",
+    },
+    {
+      firstName: "Ali",
+      lastName: "Milai",
+      nickname: "",
+      age: 99,
+      bio: "Trbušni plesač",
+      gender: "transgender",
+    },
+    {
+      firstName: "Baka",
+      lastName: "Milica",
+      nickname: "",
+      age: 99,
+      bio: "Prodavačica sa zagrebačkog placa",
+      gender: "female",
+    },
+    {
+      firstName: "Dubravka",
+      lastName: "Carić",
+      nickname: "",
+      age: 99,
+      bio: "bivša Jaranova ljubav",
+      gender: "female",
+    },
+    {
+      firstName: "Husnija",
+      lastName: "Hrustić",
+      nickname: "",
+      age: 99,
+      bio: "Voditeljica vremenske prognoze",
+      gender: "female",
+    },
+    {
+      firstName: "Hasan",
+      lastName: "Hrustić",
+      nickname: "Draki",
+      age: 99,
+      bio: "Husnijin sin",
+      gender: "male",
+    },
+    {
+      firstName: "Sandra",
+      lastName: "Dabo",
+      nickname: "Kraljica Novalje",
+      age: 99,
+      bio: "Pjevačica i voditeljica 'Golih vijesti'",
+      gender: "female",
+    },
+    {
+      firstName: "Predrag",
+      lastName: "Raos",
+      nickname: "",
+      age: 99,
+      bio: "Književnik",
+      gender: "male",
     },
   ];
 
@@ -209,7 +281,7 @@ async function main() {
     { title: "Milijunas" },
     { title: "Vatreno lice" },
     { title: "Dora Mora" },
-    { title: "Picolovka" },
+    { title: "Picolovka", description: "Kultna ljubavna emisija Picolovka" },
   ];
 
   for (const categoryData of categoriesData) {
@@ -217,9 +289,13 @@ async function main() {
 
     await prisma.category.upsert({
       where: { title: categoryData.title },
-      update: {},
+      update: {
+        title: categoryData.title,
+        description: categoryData.description,
+      },
       create: {
         title: categoryData.title,
+        description: categoryData.description,
         slug,
         createdBy: {
           connect: { id: user?.id },
@@ -230,6 +306,8 @@ async function main() {
 
   console.log("🗄️ Categories seeded successfully.");
 
+  const categories = await prisma.category.findMany();
+
   // Seed videos
   const videosData = [
     {
@@ -239,6 +317,9 @@ async function main() {
       provider: "VIMEO",
       airedDate: new Date("2001-01-12"),
       actors: actors.slice(0, 5).map((actor) => actor.id),
+      categories: categories
+        .filter((category) => ["picolovka"].includes(category.slug))
+        .map((category) => category.id),
     },
     {
       title: "Noćna mora - Cijela emisija 12.01.2001.",
@@ -247,6 +328,9 @@ async function main() {
       provider: "YOUTUBE",
       airedDate: new Date("2001-01-12"),
       actors: actors.slice(0, 5).map((actor) => actor.id),
+      categories: categories
+        .filter((category) => ["picolovka"].includes(category.slug))
+        .map((category) => category.id),
     },
     {
       title: "Jaran,Bakica i Cigo",
@@ -254,6 +338,9 @@ async function main() {
       duration: 4571,
       provider: "YOUTUBE",
       actors: actors.slice(0, 5).map((actor) => actor.id),
+      categories: categories
+        .filter((category) => ["picolovka"].includes(category.slug))
+        .map((category) => category.id),
     },
     {
       title: "Noćna Mora - 1/5 - Nenad Ivanković -19/20.11.2005",
@@ -262,6 +349,9 @@ async function main() {
       provider: "YOUTUBE",
       airedDate: new Date("2005-11-20"),
       actors: actors.slice(2, 9).map((actor) => actor.id),
+      categories: categories
+        .filter((category) => ["picolovka"].includes(category.slug))
+        .map((category) => category.id),
     },
     {
       title: "Nocna - Mora - Zatvoreno - 2",
@@ -270,6 +360,9 @@ async function main() {
       provider: "DAILYMOTION",
       airedDate: new Date("2005-11-20"),
       actors: actors.slice(2, 9).map((actor) => actor.id),
+      categories: categories
+        .filter((category) => ["picolovka"].includes(category.slug))
+        .map((category) => category.id),
     },
     {
       title: "Noćna Mora - 02.01.10",
@@ -277,14 +370,40 @@ async function main() {
       duration: 2158,
       provider: "VIMEO",
       airedDate: new Date("2010-10-01"),
-      actors: actors.slice(2, 9).map((actor) => actor.id),
+      actors: actors
+        .filter(
+          (actor) =>
+            actor.slug === "zeljko-malnar" || actor.slug === "sead-hasanovic"
+        )
+        .map((actor) => actor.id),
+      categories: categories
+        .filter((category) => ["picolovka"].includes(category.slug))
+        .map((category) => category.id),
+    },
+    {
+      title: "Picolovka FULL VIDEO! Remzo, Jaran, Stankec na vrućoj stolici",
+      videoId: "0_qYNvTlS34",
+      duration: 2338,
+      provider: "YOUTUBE",
+      airedDate: new Date("2010-10-01"),
+      actors: actors
+        .filter((actor) =>
+          [
+            "vlado-matijevic",
+            "remzo-krak",
+            "stanko-hranovic",
+            "sead-hasanovic",
+          ].includes(actor.slug)
+        )
+        .map((actor) => actor.id),
+      categories: categories
+        .filter((category) => ["picolovka"].includes(category.slug))
+        .map((category) => category.id),
     },
   ];
 
-  const categories = await prisma.category.findMany();
-  console.log("categories:", categories);
-
   for (const videoData of videosData) {
+    console.log("videoData:", videoData);
     await prisma.video.upsert({
       where: { videoId: videoData.videoId }, // Unique identifier
       update: {
@@ -296,7 +415,7 @@ async function main() {
           set: videoData.actors.map((actorId) => ({ id: actorId })),
         },
         categories: {
-          set: categories.map((category) => ({ id: category.id })),
+          set: videoData.categories.map((category) => ({ id: category })),
         },
       },
       create: {
@@ -312,7 +431,9 @@ async function main() {
           connect: videoData.actors.map((actorId) => ({ id: actorId })),
         },
         categories: {
-          connect: categories.map((category) => ({ id: category.id })),
+          connect: videoData.categories.map((category) => ({
+            id: category,
+          })),
         },
       },
     });

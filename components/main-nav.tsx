@@ -49,10 +49,36 @@ export function MainNav() {
           </NavigationMenuItem>
           <NavigationMenuItem>
             <NavigationMenuLink
-              href="/memes"
+              // href="/memes"
               className={navigationMenuTriggerStyle()}
             >
               Memes
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink
+              // href="/excursions"
+              className={navigationMenuTriggerStyle()}
+            >
+              Izleti
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink
+              // href="/guests"
+              className={navigationMenuTriggerStyle()}
+            >
+              Gosti
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+          <NavigationMenuItem>
+            <NavigationMenuLink
+              // href="/timeline"
+              className={navigationMenuTriggerStyle()}
+              // className={cn(navigationMenuTriggerStyle({ variant, className }))}
+              variant="disabled"
+            >
+              Vremenska linija
             </NavigationMenuLink>
           </NavigationMenuItem>
         </NavigationMenuList>

@@ -151,15 +151,16 @@ model Meme {
 }
 
 model Category {
-  id        String   @id @default(cuid())
-  title      String   @unique
-  slug      String   @unique
-  videos    Video[]  @relation("VideoCategories")
+  id          String   @id @default(cuid())
+  title       String   @unique
+  slug        String   @unique
+  description String?
+  videos      Video[]  @relation("VideoCategories")
 
-  createdAt DateTime @default(now())
-  createdBy User     @relation("UserCategories", fields: [userId], references: [id])
-  userId    String
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  createdBy   User     @relation("UserCategories", fields: [userId], references: [id])
+  userId      String
+  updatedAt   DateTime @updatedAt
 
   @@map("categories")
 }

@@ -44,7 +44,10 @@ export default async function Actors({ params }) {
                 href={`/actor/${actor.slug}`}
                 className="text-xl font-bold"
                 key={actor.id}
-              >{`${actor.firstName} ${actor.lastName}`}</CustomLink>
+              >
+                {`${actor.firstName} ${actor.lastName}`}{" "}
+                {actor.nickname && `(${actor.nickname})`}
+              </CustomLink>
               <p>{actor.bio}</p>
             </div>
           ))}

@@ -49,10 +49,7 @@ export const VideoDetail: FC<VideoDetailProps> = ({
   };
 
   const videoUrl = getVideoUrl();
-  console.log("videoUrl:", videoUrl);
-
   const thumbnailUrl = getThumbnailUrl();
-  console.log("thumbnailUrl:", thumbnailUrl);
 
   return (
     <div>
