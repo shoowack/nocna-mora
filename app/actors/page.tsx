@@ -38,7 +38,8 @@ export default async function Actors({ params }) {
   return (
     <TitleTemplate
       title="Likovi"
-      newButton={
+      contained
+      button={
         <Link href="/actor/new">
           <Button>Novi lik</Button>
         </Link>

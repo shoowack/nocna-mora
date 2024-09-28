@@ -23,7 +23,8 @@ export default async function CategoryPage({
     <TitleTemplate
       title={category?.title}
       description={category?.description}
-      newButton={
+      contained
+      button={
         <Link href={`/category/${category?.slug}/edit`}>
           <Button>Ažuriraj kategoriju</Button>
         </Link>

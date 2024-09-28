@@ -26,7 +26,7 @@ export default async function NewActorPage() {
 
   return (
     <SessionProvider basePath={"/auth"} session={session}>
-      <TitleTemplate title="Dodaj novog gosta">
+      <TitleTemplate title="Dodaj novog gosta" contained>
         <ActorForm guest />
       </TitleTemplate>
     </SessionProvider>

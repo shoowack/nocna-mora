@@ -1,7 +1,6 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { auth } from "auth";
 import prisma from "@/lib/prisma";
-import { generateSlug } from "@/lib/slugify";
 
 export const GET = async (
   request: Request,
@@ -32,7 +31,7 @@ export const GET = async (
 };
 
 export const PUT = auth(
-  async (request: Request, { params }: { params: { slug: string } }) => {
+  async (request: Request, { params }: { params: { id: string } }) => {
     const session = (request as any).auth;
 
     if (!session) {
@@ -56,17 +55,14 @@ export const PUT = auth(
         }
       }
 
-      const slug = generateSlug(data.title);
-
       const updatedVideo = await prisma.video.update({
-        where: { slug: params.slug },
+        where: { id: params.id },
         data: {
           title: data.title,
-          url: data.url,
+          videoId: data.videoId,
           duration: data.duration,
           airedDate: data.airedDate,
           provider: data.provider,
-          slug: slug,
           actors: {
             set: [], // Clear existing connections
             connect: data.actorIds.map((id: number) => ({ id })),
@@ -83,6 +79,49 @@ export const PUT = auth(
       console.error("Error updating video:", error);
       return NextResponse.json(
         { message: "Internal server error" },
+        { status: 500 }
+      );
+    }
+  }
+);
+
+export const DELETE = auth(
+  async (request: NextRequest, { params }: { params: { id: string } }) => {
+    const { id } = params;
+
+    const session = (request as any).auth;
+
+    if (!session) {
+      return NextResponse.json(
+        { message: "Not authenticated" },
+        { status: 401 }
+      );
+    }
+
+    try {
+      const video = await prisma.video.findUnique({
+        where: { id },
+      });
+
+      if (!video) {
+        return NextResponse.json(
+          { error: "Video not found." },
+          { status: 404 }
+        );
+      }
+
+      await prisma.video.delete({
+        where: { id },
+      });
+
+      return NextResponse.json(
+        { message: "Video deleted successfully." },
+        { status: 200 }
+      );
+    } catch (error) {
+      console.error("Error deleting video:", error);
+      return NextResponse.json(
+        { error: "An error occurred while deleting the video." },
         { status: 500 }
       );
     }

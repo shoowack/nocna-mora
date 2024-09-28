@@ -10,7 +10,8 @@ export default async function CategoriesPage() {
   return (
     <TitleTemplate
       title="Kategorije"
-      newButton={
+      contained
+      button={
         <Link href="/category/new">
           <Button>Nova kategorija</Button>
         </Link>

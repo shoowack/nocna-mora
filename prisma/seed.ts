@@ -536,6 +536,7 @@ async function main() {
         videoId: videoData.videoId,
         duration: videoData.duration,
         provider: videoData.provider,
+        published: true,
         airedDate: videoData.airedDate,
         actors: {
           set: videoData.actors.map((actorId) => ({ id: actorId })),
@@ -550,6 +551,7 @@ async function main() {
         duration: videoData.duration,
         provider: videoData.provider,
         airedDate: videoData.airedDate,
+        published: true,
         createdBy: {
           connect: { id: user?.id },
         },

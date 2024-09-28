@@ -38,7 +38,8 @@ export default async function Actors({ params }: { params: { slug: string } }) {
   return (
     <TitleTemplate
       title="Gosti"
-      newButton={
+      contained
+      button={
         <Link href="/guest/new">
           <Button>Novi gost</Button>
         </Link>

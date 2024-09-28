@@ -1,10 +1,10 @@
-import { auth } from "auth";
-import { redirect } from "next/navigation";
-import { CategoryForm } from "@/components/category-form";
+import { VideoForm } from "@/components/video-form";
 import { TitleTemplate } from "@/components/title-template";
-// import { AccessDenied } from "@/components/access-denied";
+import { auth } from "auth";
+import { SessionProvider } from "next-auth/react";
+import { redirect } from "next/navigation";
 
-export default async function NewCategoryPage() {
+export default async function NewVideoPage() {
   const session = await auth();
 
   if (session?.user) {
@@ -21,11 +21,11 @@ export default async function NewCategoryPage() {
     redirect("/auth/signin");
   }
 
-  // if (!session?.user) return <AccessDenied />;
-
   return (
-    <TitleTemplate title="Dodaj novu kategoriju" contained>
-      <CategoryForm />
-    </TitleTemplate>
+    <SessionProvider basePath={"/auth"} session={session}>
+      <TitleTemplate title="Dodaj novi video" contained>
+        <VideoForm />
+      </TitleTemplate>
+    </SessionProvider>
   );
 }

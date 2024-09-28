@@ -5,12 +5,14 @@ export async function TitleTemplate({
   title,
   description,
   children,
-  newButton,
+  button,
+  contained = false,
 }: {
   title?: string;
   description?: string | null;
   children: React.ReactNode;
-  newButton?: React.ReactNode;
+  button?: React.ReactNode;
+  contained?: boolean;
 }) {
   const session = await auth();
 
@@ -36,11 +38,11 @@ export async function TitleTemplate({
               )}
             </div>
 
-            {session?.user && newButton}
+            {session?.user && button}
           </div>
         </Container>
       </div>
-      <Container className="md:py-8">{children}</Container>
+      {contained ? <Container>{children}</Container> : children}
     </>
   );
 }

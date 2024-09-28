@@ -129,6 +129,7 @@ model Video {
 
   duration    Int
   airedDate   DateTime?
+  published   Boolean    @default(false)
 
   createdAt   DateTime   @default(now())
   createdBy   User       @relation("UserVideos", fields: [userId], references: [id])

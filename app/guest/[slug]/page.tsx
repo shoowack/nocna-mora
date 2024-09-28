@@ -33,11 +33,16 @@ export default async function GuestPage({
         actor.nickname ? ` - ${actor.nickname}` : ""
       } ${actor.age ? ` (${actor.age})` : ""}`}
       description={actor.bio ? actor.bio : ""}
+      contained
     >
       {actor.videos.length > 0 ? (
         <>
           <p className="text-xl font-bold mt-10">
-            Videi u kojima se {actor.nickname ?? actor.firstName} pojavljuje:
+            Videi u kojima se{" "}
+            {actor.nickname
+              ? actor.nickname
+              : `${actor.firstName} ${actor.lastName}`}{" "}
+            pojavljuje:
           </p>
           <div className="grid grid-cols-2 mt-3 gap-4">
             {actor.videos.map((video) => (

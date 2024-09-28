@@ -39,17 +39,15 @@ export const POST = auth(async (request: Request) => {
       );
     }
 
-    const slug = generateSlug(data.title);
-
     const newVideo = await prisma.video.create({
       data: {
         title: data.title,
-        videoId: data.url,
+        videoId: data.videoId,
         duration: data.duration,
         airedDate: data.airedDate,
         provider: data.provider,
-        slug: slug,
         userId: session.user.id,
+        published: data.published,
         actors: {
           connect: data.actorIds.map((id: number) => ({ id })),
         },

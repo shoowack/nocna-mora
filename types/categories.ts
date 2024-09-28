@@ -1,6 +1,6 @@
 export type Categories = {
   id: String;
-  name: String;
+  title: String;
   slug: String;
   //   videos    Video[]  @relation("VideoCategories")
 

@@ -1,12 +1,23 @@
-import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { NextResponse } from "next/server";
 import { generateSlug } from "@/lib/slugify";
 import { auth } from "auth";
 
-export const GET = async () => {
-  const categories = await prisma.category.findMany();
-  return NextResponse.json(categories);
-};
+export const GET = auth(async (request: Request) => {
+  try {
+    const categories = await prisma.category.findMany({
+      orderBy: { createdAt: "desc" },
+    });
+
+    return NextResponse.json(categories, { status: 200 });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    );
+  }
+});
 
 export const POST = auth(async (request: Request) => {
   const session = (request as any).auth;
