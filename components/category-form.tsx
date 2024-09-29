@@ -6,10 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
-import { Categories } from "@/types/categories";
 import { Plus, Save, Trash2 } from "lucide-react";
+import { Category } from "@prisma/client";
 
-export function CategoryForm({ category }: { category?: Categories }) {
+export function CategoryForm({ category }: { category?: Category }) {
   const router = useRouter();
 
   // Initialize React Hook Form
@@ -17,7 +17,7 @@ export function CategoryForm({ category }: { category?: Categories }) {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<Categories>({
+  } = useForm<Category>({
     defaultValues: {
       title: category?.title || "",
     },
@@ -29,7 +29,7 @@ export function CategoryForm({ category }: { category?: Categories }) {
   const isEditing = Boolean(category);
 
   // Submit Handler
-  const onSubmit = async (data: Categories) => {
+  const onSubmit = async (data: Category) => {
     setError("");
     setLoading(true);
 
