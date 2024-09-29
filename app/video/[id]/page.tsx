@@ -4,6 +4,7 @@ import { VideoDetail } from "@/components/video-detail";
 import { Container } from "@/components/container";
 import { AlertTriangle, ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { auth } from "auth";
 import Link from "next/link";
 
 export default async function VideoPage({
@@ -12,9 +13,20 @@ export default async function VideoPage({
   params: { id: string };
 }) {
   const { id } = params;
+  const session = await auth();
+
+  if (session?.user) {
+    // TODO: Look into https://react.dev/reference/react/experimental_taintObjectReference
+    // filter out sensitive data before passing to client.
+    session.user = {
+      name: session.user.name,
+      email: session.user.email,
+      image: session.user.image,
+    };
+  }
 
   const video = await prisma.video.findUnique({
-    where: { id, published: true },
+    where: { id },
     include: {
       categories: true,
       actors: true,
@@ -22,7 +34,8 @@ export default async function VideoPage({
     },
   });
 
-  if (!video) {
+  // TODO: Add role check - unpublished videos should be accessible for authenticated admin users only
+  if (!video || (!video.published && !session?.user)) {
     return (
       <Container className="text-center">
         <AlertTriangle className="mx-auto h-8 w-8 stroke-yellow-500 mb-5" />

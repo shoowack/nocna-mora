@@ -166,6 +166,8 @@ model Category {
 
   createdAt   DateTime @default(now())
   createdBy   User     @relation("UserCategories", fields: [userId], references: [id])
+  deletedAt   DateTime? // soft delete
+
   userId      String
   updatedAt   DateTime @updatedAt
 

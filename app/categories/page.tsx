@@ -5,7 +5,9 @@ import { Button } from "@/components/ui/button";
 import { CustomLink } from "@/components/custom-link";
 
 export default async function CategoriesPage() {
-  const categories = await prisma.category.findMany();
+  const categories = await prisma.category.findMany({
+    where: { deletedAt: null },
+  });
 
   return (
     <TitleTemplate

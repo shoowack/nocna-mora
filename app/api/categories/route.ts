@@ -7,6 +7,7 @@ export const GET = auth(async (request: Request) => {
   try {
     const categories = await prisma.category.findMany({
       orderBy: { createdAt: "desc" },
+      where: { deletedAt: null },
     });
 
     return NextResponse.json(categories, { status: 200 });
@@ -34,6 +35,8 @@ export const POST = auth(async (request: Request) => {
       data: {
         title: data.title,
         slug: slug,
+        // createdBy: session.user.id,
+        createdBy: { connect: { email: session.user.email } },
       },
     });
 

@@ -1,44 +1,50 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { useForm } from "react-hook-form";
+import { Categories } from "@/types/categories";
+import { Plus, Save, Trash2 } from "lucide-react";
 
-interface CategoryFormProps {
-  category?: {
-    id: number;
-    name: string;
-    slug: string;
-  };
-}
-
-export function CategoryForm({ category }: CategoryFormProps) {
+export function CategoryForm({ category }: { category?: Categories }) {
   const router = useRouter();
-  const [name, setName] = useState(category ? category.title : "");
+
+  // Initialize React Hook Form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<Categories>({
+    defaultValues: {
+      title: category?.title || "",
+    },
+  });
+
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const isEditing = Boolean(category);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
+  // Submit Handler
+  const onSubmit = async (data: Categories) => {
     setError("");
+    setLoading(true);
 
     try {
       const response = await fetch(
-        isEditing ? `/api/category/${category.slug}` : "/api/category",
+        isEditing ? `/api/categories/${category?.slug}` : "/api/categories",
         {
           method: isEditing ? "PUT" : "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name }),
+          body: JSON.stringify({ title: data.title }),
         }
       );
 
       if (response.ok) {
-        router.push("/category");
+        router.push("/categories");
       } else {
         const errorData = await response.json();
         setError(errorData.message || "An error occurred.");
@@ -51,27 +57,75 @@ export function CategoryForm({ category }: CategoryFormProps) {
     }
   };
 
-  return (
-    <form className="space-y-4" onSubmit={handleSubmit}>
-      {error && <p className="text-red-500">{error}</p>}
+  // Delete Handler
+  const handleDelete = async () => {
+    if (confirm("Are you sure you want to delete this category?")) {
+      try {
+        const response = await fetch(`/api/categories/${category?.slug}`, {
+          method: "DELETE",
+        });
 
+        if (response.ok) {
+          router.push("/categories");
+        } else {
+          const errorData = await response.json();
+          setError(errorData.message || "Failed to delete the category.");
+        }
+      } catch (err) {
+        console.error(err);
+        setError("An error occurred while deleting the category.");
+      }
+    }
+  };
+
+  return (
+    <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+      {/* Title Field */}
       <div>
-        <Label htmlFor="name">Naziv</Label>
+        <Label htmlFor="title">Naziv</Label>
         <Input
-          name="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
+          id="title"
+          {...register("title", { required: "Title is required" })}
+          placeholder="Unesite naziv kategorije"
         />
+        {errors.title && <p className="text-red-500">{errors.title.message}</p>}
       </div>
 
-      <Button type="submit" disabled={loading}>
-        {loading
-          ? "Submitting..."
-          : isEditing
-          ? "Ažuriraj kategoriju"
-          : "Dodaj kategoriju"}
-      </Button>
+      {/* Display Server-Side Errors */}
+      {error && <p className="text-red-500">{error}</p>}
+
+      {/* Submit and Delete Buttons */}
+      <div className="flex space-x-4">
+        <Button
+          type="submit"
+          disabled={isSubmitting || loading}
+          className="flex items-center"
+        >
+          {isEditing ? (
+            <Save className="size-4 mr-2" />
+          ) : (
+            <Plus className="size-4 mr-2" />
+          )}
+          {isSubmitting || loading
+            ? "Submitting..."
+            : isEditing
+            ? "Ažuriraj kategoriju"
+            : "Dodaj kategoriju"}
+        </Button>
+
+        {/* Delete Button (Visible Only When Editing) */}
+        {isEditing && (
+          <Button
+            variant="destructive"
+            onClick={handleDelete}
+            disabled={isSubmitting || loading}
+            className="flex items-center"
+          >
+            <Trash2 className="size-4 mr-2" />
+            Obriši kategoriju
+          </Button>
+        )}
+      </div>
     </form>
   );
 }

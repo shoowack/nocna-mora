@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
-import { generateSlug } from "@/lib/slugify";
 import { auth } from "auth";
 
 export async function GET(request: Request) {
@@ -49,10 +48,10 @@ export const POST = auth(async (request: Request) => {
         userId: session.user.id,
         published: data.published,
         actors: {
-          connect: data.actorIds.map((id: number) => ({ id })),
+          connect: data.actors.map((id: number) => ({ id })),
         },
         categories: {
-          connect: data.categoryIds.map((id: number) => ({ id })),
+          connect: data.categories.map((id: number) => ({ id })),
         },
       },
     });

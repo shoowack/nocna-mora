@@ -63,13 +63,14 @@ export const PUT = auth(
           duration: data.duration,
           airedDate: data.airedDate,
           provider: data.provider,
+          published: data.published,
           actors: {
             set: [], // Clear existing connections
-            connect: data.actorIds.map((id: number) => ({ id })),
+            connect: data.actors.map((id: number) => ({ id })),
           },
           categories: {
             set: [], // Clear existing connections
-            connect: data.categoryIds.map((id: number) => ({ id })),
+            connect: data.categories.map((id: number) => ({ id })),
           },
         },
       });

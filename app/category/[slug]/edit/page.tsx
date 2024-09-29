@@ -1,55 +1,41 @@
-"use client";
-
-import React, { useEffect, useState } from "react";
-// import prisma from "@/lib/prisma";
+import prisma from "@/lib/prisma";
+import { auth } from "auth";
+import { redirect } from "next/navigation";
 import { CategoryForm } from "@/components/category-form";
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/navigation";
+import { TitleTemplate } from "@/components/title-template";
 
 export default async function EditCategoryPage({
   params,
 }: {
   params: { slug: string };
 }) {
-  const router = useRouter();
+  const session = await auth();
 
-  //   const category = await prisma.category.findUnique({
-  //     where: { slug: params.slug },
-  //   });
+  if (session?.user) {
+    // TODO: Look into https://react.dev/reference/react/experimental_taintObjectReference
+    // filter out sensitive data before passing to client.
+    session.user = {
+      name: session.user.name,
+      email: session.user.email,
+      image: session.user.image,
+    };
+  }
 
-  const [category, setCategory] = useState([]);
+  if (!session?.user) {
+    redirect("/auth/signin");
+  }
 
-  useEffect(() => {
-    fetch(`/api/category/${params.slug}`)
-      .then((res) => res.json())
-      .then((data) => setCategory(data.category));
-  }, []);
+  const category = await prisma.category.findUnique({
+    where: { slug: params.slug },
+  });
 
   if (!category) {
     return <div>Category not found</div>;
   }
 
-  const handleDelete = async () => {
-    if (confirm("Are you sure you want to delete this category?")) {
-      const response = await fetch(`/api/category/${params.slug}`, {
-        method: "DELETE",
-      });
-
-      if (response.ok) {
-        router.push("/categories");
-      } else {
-        // Handle error
-      }
-    }
-  };
-
   return (
-    <div className="container mx-auto py-8">
-      <h1 className="text-2xl font-bold mb-4">Edit Category</h1>
+    <TitleTemplate title="Ažuriraj kategoriju" contained>
       <CategoryForm category={category} />
-      <Button variant="destructive" onClick={handleDelete}>
-        Delete Category
-      </Button>
-    </div>
+    </TitleTemplate>
   );
 }

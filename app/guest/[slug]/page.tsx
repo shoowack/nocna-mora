@@ -3,6 +3,7 @@ import { TitleTemplate } from "@/components/title-template";
 import { VideoDetail } from "@/components/video-detail";
 import { ActorType } from "@prisma/client";
 import { Container } from "@/components/container";
+import { auth } from "auth";
 
 export default async function GuestPage({
   params,
@@ -10,6 +11,17 @@ export default async function GuestPage({
   params: { slug: string };
 }) {
   const { slug } = params;
+  const session = await auth();
+
+  if (session?.user) {
+    // TODO: Look into https://react.dev/reference/react/experimental_taintObjectReference
+    // filter out sensitive data before passing to client.
+    session.user = {
+      name: session.user.name,
+      email: session.user.email,
+      image: session.user.image,
+    };
+  }
 
   const actor = await prisma.actor.findUnique({
     where: { slug, type: ActorType.GUEST },
@@ -27,6 +39,11 @@ export default async function GuestPage({
     return <Container>Gost {slug} ne postoji</Container>;
   }
 
+  // Filter videos: Show all videos if user is logged in, otherwise show only published videos
+  const visibleVideos = session?.user
+    ? actor?.videos // Logged in users see all videos
+    : actor?.videos.filter((video) => video.published); // Non-logged in users see only published videos
+
   return (
     <TitleTemplate
       title={`${actor.firstName} ${actor.lastName} ${
@@ -35,7 +52,7 @@ export default async function GuestPage({
       description={actor.bio ? actor.bio : ""}
       contained
     >
-      {actor.videos.length > 0 ? (
+      {visibleVideos.length > 0 ? (
         <>
           <p className="text-xl font-bold mt-10">
             Videi u kojima se{" "}
@@ -45,7 +62,7 @@ export default async function GuestPage({
             pojavljuje:
           </p>
           <div className="grid grid-cols-2 mt-3 gap-4">
-            {actor.videos.map((video) => (
+            {visibleVideos.map((video) => (
               <VideoDetail key={video.id} video={video} showCategories />
             ))}
           </div>

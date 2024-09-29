@@ -20,7 +20,12 @@ export type Video = {
   airedDate: Date | null;
   duration: number;
   published: boolean;
-  categories?: Categories[];
-  actors?: Actor[];
   provider: Provider;
+  actors?: Actor[];
+  categories?: Categories[];
+};
+
+export type VideoFormInputs = Omit<Video, "id" | "categories" | "actors"> & {
+  actors?: string[];
+  categories?: string[];
 };

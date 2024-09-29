@@ -1,5 +1,5 @@
-import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
+import { NextResponse } from "next/server";
 import { auth } from "auth";
 import { generateSlug } from "@/lib/slugify";
 
@@ -8,7 +8,7 @@ export const GET = async (
   { params }: { params: { slug: string } }
 ) => {
   const category = await prisma.category.findUnique({
-    where: { slug: params.slug },
+    where: { slug: params.slug, deletedAt: null },
   });
 
   if (!category) {
@@ -37,8 +37,8 @@ export const PUT = auth(
       const updatedCategory = await prisma.category.update({
         where: { slug: params.slug },
         data: {
-          name: data.name,
-          slug: generateSlug(data.name),
+          title: data.title,
+          slug: generateSlug(data.title),
         },
       });
 
@@ -65,18 +65,40 @@ export const DELETE = auth(
     }
 
     try {
-      await prisma.category.delete({
+      // Find the category by slug
+      const category = await prisma.category.findUnique({
         where: { slug: params.slug },
       });
 
+      if (!category) {
+        return NextResponse.json(
+          { error: "Category not found." },
+          { status: 404 }
+        );
+      }
+
+      // TODO: Authorization Check (e.g., only admins or creators can delete)
+      // if (category.userId !== user.id && !user.isAdmin) {
+      //   return NextResponse.json(
+      //     { error: "Forbidden. You don't have permission to delete this category." },
+      //     { status: 403 }
+      //   );
+      // }
+
+      // Soft delete: set deletedAt to current timestamp
+      await prisma.category.update({
+        where: { slug: params.slug },
+        data: { deletedAt: new Date() },
+      });
+
       return NextResponse.json(
-        { message: "Category deleted" },
+        { message: "Category deleted successfully." },
         { status: 200 }
       );
     } catch (error) {
       console.error("Error deleting category:", error);
       return NextResponse.json(
-        { message: "Internal server error" },
+        { message: "An error occurred while deleting the category." },
         { status: 500 }
       );
     }

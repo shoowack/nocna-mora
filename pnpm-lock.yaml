@@ -15,6 +15,7 @@ specifiers:
   '@radix-ui/react-select': ^2.1.1
   '@radix-ui/react-separator': ^1.1.0
   '@radix-ui/react-slot': ^1.1.0
+  '@radix-ui/react-switch': ^1.1.0
   '@simplewebauthn/server': ^9.0.3
   '@types/node': 22.5.5
   '@types/react': ^18.2.23
@@ -56,6 +57,7 @@ dependencies:
   '@radix-ui/react-select': 2.1.1_v7oowgwszxe5r7pzypmn5yqqwe
   '@radix-ui/react-separator': 1.1.0_v7oowgwszxe5r7pzypmn5yqqwe
   '@radix-ui/react-slot': 1.1.0_yaxnkdwimwz6xfkjep7bossl2e
+  '@radix-ui/react-switch': 1.1.0_v7oowgwszxe5r7pzypmn5yqqwe
   '@simplewebauthn/server': 9.0.3
   '@vercel/kv': 1.0.1
   class-variance-authority: 0.7.0
@@ -1443,6 +1445,32 @@ packages:
       '@radix-ui/react-compose-refs': 1.1.0_yaxnkdwimwz6xfkjep7bossl2e
       '@types/react': 18.3.8
       react: 18.3.1
+    dev: false
+
+  /@radix-ui/react-switch/1.1.0_v7oowgwszxe5r7pzypmn5yqqwe:
+    resolution: {integrity: sha512-OBzy5WAj641k0AOSpKQtreDMe+isX0MQJ1IVyF03ucdF3DunOnROVrjWs8zsXUxC3zfZ6JL9HFVCUlMghz9dJw==}
+    peerDependencies:
+      '@types/react': '*'
+      '@types/react-dom': '*'
+      react: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+      react-dom: ^16.8 || ^17.0 || ^18.0 || ^19.0 || ^19.0.0-rc
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      '@types/react-dom':
+        optional: true
+    dependencies:
+      '@radix-ui/primitive': 1.1.0
+      '@radix-ui/react-compose-refs': 1.1.0_yaxnkdwimwz6xfkjep7bossl2e
+      '@radix-ui/react-context': 1.1.0_yaxnkdwimwz6xfkjep7bossl2e
+      '@radix-ui/react-primitive': 2.0.0_v7oowgwszxe5r7pzypmn5yqqwe
+      '@radix-ui/react-use-controllable-state': 1.1.0_yaxnkdwimwz6xfkjep7bossl2e
+      '@radix-ui/react-use-previous': 1.1.0_yaxnkdwimwz6xfkjep7bossl2e
+      '@radix-ui/react-use-size': 1.1.0_yaxnkdwimwz6xfkjep7bossl2e
+      '@types/react': 18.3.8
+      '@types/react-dom': 18.3.0
+      react: 18.3.1
+      react-dom: 18.3.1_react@18.3.1
     dev: false
 
   /@radix-ui/react-use-callback-ref/1.0.1_yaxnkdwimwz6xfkjep7bossl2e:

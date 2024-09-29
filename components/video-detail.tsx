@@ -17,6 +17,9 @@ const VideoContent: FC<{
 }> = ({ singleVideo, video, showActors, showCategories }) => {
   return (
     <div className="p-4 space-y-4">
+      {!video.published && (
+        <Badge variant="destructive">Video nije javan</Badge>
+      )}
       {!singleVideo && (
         <p className="text-neutral-600 line-clamp-1">{video.title}</p>
       )}
@@ -34,7 +37,6 @@ const VideoContent: FC<{
       ) : singleVideo ? null : (
         <div className="h-5" />
       )}
-
       {video.actors?.length > 0 && showActors && (
         <>
           {singleVideo && <h2>Actors:</h2>}

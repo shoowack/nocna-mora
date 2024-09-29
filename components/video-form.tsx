@@ -19,11 +19,12 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { CalendarIcon, Folder } from "lucide-react";
+import { CalendarIcon, Folder, Plus, Save, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { MultiSelect } from "@/components/ui/multi-select";
-import { Provider, Video } from "@/types/video";
+import { Provider, Video, VideoFormInputs } from "@/types/video";
+import { Switch } from "@/components/ui/switch";
 
 export function VideoForm({ video }: { video: Video }) {
   const router = useRouter();
@@ -33,22 +34,25 @@ export function VideoForm({ video }: { video: Video }) {
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
-  } = useForm<Video>({
+  } = useForm<VideoFormInputs>({
     defaultValues: {
       title: video?.title || "",
       videoId: video?.videoId || "",
       duration: video?.duration || 0,
       airedDate: video?.airedDate ? new Date(video.airedDate) : null,
-      provider: video?.provider || Provider.YOUTUBE,
       published: video?.published || false,
-      actors: video?.actors || [],
-      categories: video?.categories || [],
+      provider: video?.provider,
+      actors: video?.actors?.map((actor) => actor.id) || [],
+      categories: video?.categories?.map((category) => category.id) || [],
     },
   });
 
   const [actors, setActors] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState(false);
+
+  const isEditing = Boolean(video);
 
   useEffect(() => {
     // Fetch actors and categories
@@ -84,9 +88,9 @@ export function VideoForm({ video }: { video: Video }) {
 
     try {
       const response = await fetch(
-        video ? `/api/videos/${video.id}` : "/api/videos",
+        isEditing ? `/api/videos/${video.id}` : "/api/videos",
         {
-          method: video ? "PUT" : "POST",
+          method: isEditing ? "PUT" : "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             title: data.title,
@@ -103,7 +107,7 @@ export function VideoForm({ video }: { video: Video }) {
 
       if (response.ok) {
         const responseData = await response.json();
-        router.push(video ? `/video/${responseData.video.id}` : "/videos");
+        router.push(isEditing ? `/video/${responseData.video.id}` : "/"); // TODO use /videos instead of / once it becomes available
       } else {
         const errorData = await response.json();
         setError(errorData.message || "An error occurred.");
@@ -136,8 +140,6 @@ export function VideoForm({ video }: { video: Video }) {
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
-      {error && <p className="text-red-500">{error}</p>}
-
       {/* Title */}
       <div>
         <Label htmlFor="title">Naslov</Label>
@@ -251,25 +253,22 @@ export function VideoForm({ video }: { video: Video }) {
         <Controller
           control={control}
           name="actors"
-          render={({ field }) => {
-            console.log("field:", field);
-            return (
-              <MultiSelect
-                options={actors.map((actors: any) => ({
-                  label: `${actors.firstName} ${actors.lastName}`,
-                  value: actors.id.toString(),
-                  // icon: ({ className }) => (
-                  //   <Folder className={cn("size-4", className)} />
-                  // ),
-                }))}
-                onValueChange={field.onChange}
-                defaultValue={field.value?.map((actor) => actor.id)}
-                placeholder="Odaberi likove"
-                variant="inverted"
-                maxCount={5}
-              />
-            );
-          }}
+          render={({ field }) => (
+            <MultiSelect
+              options={actors.map((actors: any) => ({
+                label: `${actors.firstName} ${actors.lastName}`,
+                value: actors.id.toString(),
+                // icon: ({ className }) => (
+                //   <Folder className={cn("size-4", className)} />
+                // ),
+              }))}
+              onValueChange={field.onChange}
+              defaultValue={field.value}
+              placeholder="Odaberi likove"
+              variant="inverted"
+              maxCount={5}
+            />
+          )}
         />
       </div>
 
@@ -289,7 +288,7 @@ export function VideoForm({ video }: { video: Video }) {
                 // ),
               }))}
               onValueChange={field.onChange}
-              defaultValue={field.value?.map((category) => category.id)}
+              defaultValue={field.value}
               placeholder="Odaberi kategoriju/e"
               variant="inverted"
               maxCount={5}
@@ -297,23 +296,52 @@ export function VideoForm({ video }: { video: Video }) {
           )}
         />
       </div>
+      <div className="flex items-center space-x-2">
+        <Controller
+          control={control}
+          name="published"
+          render={({ field }) => (
+            <Switch
+              onCheckedChange={field.onChange}
+              checked={field.value}
+              id="published"
+            />
+          )}
+        />
+        <Label htmlFor="published">Published</Label>
+      </div>
+
+      {/* Display Server-Side Errors */}
+      {error && <p className="text-red-500">{error}</p>}
 
       {/* Submit and Delete Buttons */}
       <div className="flex space-x-4">
-        <Button type="submit" disabled={isSubmitting}>
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          className="flex items-center"
+        >
+          {isEditing ? (
+            <Save className="size-4 mr-2" />
+          ) : (
+            <Plus className="size-4 mr-2" />
+          )}
           {isSubmitting
             ? "Submitting..."
-            : video
+            : isEditing
             ? "Ažuriraj Video"
             : "Dodaj Video"}
         </Button>
 
-        {video && (
+        {/* Delete Button (Visible Only When Editing) */}
+        {isEditing && (
           <Button
             variant="destructive"
             onClick={handleDelete}
             disabled={isSubmitting}
+            className="flex items-center"
           >
+            <Trash2 className="size-4 mr-2" />
             Obriši video
           </Button>
         )}
