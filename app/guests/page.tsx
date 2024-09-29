@@ -8,32 +8,13 @@ import { ActorType } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { TitleTemplate } from "@/components/title-template";
 
-export default async function Actors({ params }: { params: { slug: string } }) {
-  // export default function Actors() {
-  // const [data, setData] = useState();
-
-  // useEffect(() => {
-  //   (async () => {
-  //     const res = await fetch("/api/actors");
-  //     const json = await res.json();
-
-  //     setData(json);
-  //   })();
-  // }, []);
+export default async function Actors() {
   const actors = await prisma.actor.findMany({
     where: { type: ActorType.GUEST },
     orderBy: {
       lastName: "asc",
     },
   });
-
-  // const actor = await prisma.actor.findUnique({
-  //   where: { slug: slug },
-  //   include: {
-  //     createdBy: true,
-  //     videos: true,
-  //   },
-  // });
 
   return (
     <TitleTemplate
@@ -49,7 +30,7 @@ export default async function Actors({ params }: { params: { slug: string } }) {
       {actors ? (
         <div className="flex flex-col space-y-10">
           {actors?.map((actor) => (
-            <div className="flex flex-col space-y-2">
+            <div key={actor.id} className="flex flex-col space-y-2">
               <CustomLink
                 href={`/guest/${actor.slug}`}
                 className="text-xl font-bold"

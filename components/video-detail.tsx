@@ -69,7 +69,7 @@ const VideoContent: FC<{
           {singleVideo && <h2>Categories:</h2>}
           <div className="flex gap-x-1 flex-wrap">
             {video.categories?.map((category) => (
-              <Link href={`/category/${category.slug}`}>
+              <Link key={category.id} href={`/category/${category.slug}`}>
                 <Badge className="m-0 px-1.5">{category.title}</Badge>
               </Link>
             ))}

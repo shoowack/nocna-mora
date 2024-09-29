@@ -36,7 +36,7 @@ export const POST = auth(async (request: Request & { auth: any }) => {
   }
 });
 
-export const GET = auth(async (request: Request) => {
+export const GET = auth(async () => {
   try {
     const actors = await prisma.actor.findMany({
       orderBy: { createdAt: "desc" },

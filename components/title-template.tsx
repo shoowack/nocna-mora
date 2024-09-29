@@ -1,5 +1,6 @@
 import { Container } from "@/components/container";
 import { auth } from "auth";
+import { ReactNode } from "react";
 
 export async function TitleTemplate({
   title,
@@ -10,8 +11,8 @@ export async function TitleTemplate({
 }: {
   title?: string;
   description?: string | null;
-  children: React.ReactNode;
-  button?: React.ReactNode;
+  children: ReactNode;
+  button?: ReactNode;
   contained?: boolean;
 }) {
   const session = await auth();

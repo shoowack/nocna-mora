@@ -29,7 +29,7 @@ export default async function Actors() {
       {actors ? (
         <div className="flex flex-col space-y-10">
           {actors?.map((actor) => (
-            <div className="flex flex-col space-y-2">
+            <div key={actor.id} className="flex flex-col space-y-2">
               <CustomLink
                 href={`/actor/${actor.slug}`}
                 className="text-xl font-bold"

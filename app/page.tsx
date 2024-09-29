@@ -9,12 +9,12 @@ export default async function Index() {
           Dobrodošli na arhivsku stranicu Noćne More!
         </h1>
         <p>
-          Ovdje možete pronaći videozapise legendarne emisije "Noćna Mora", s
-          dodatnim informacijama o likovima, događajima i ključnim trenucima iz
-          emisije. Svaki video je pažljivo označen za lakšu pretragu i
-          filtriranje kako biste brzo pronašli omiljene trenutke. Pregledajte i
-          istražite ovu jedinstvenu kolekciju emisija koje su ostavile traga u
-          povijesti hrvatske televizije.
+          Ovdje možete pronaći videozapise legendarne emisije &quot;Noćna
+          Mora&quot;, s dodatnim informacijama o likovima, događajima i ključnim
+          trenucima iz emisije. Svaki video je pažljivo označen za lakšu
+          pretragu i filtriranje kako biste brzo pronašli omiljene trenutke.
+          Pregledajte i istražite ovu jedinstvenu kolekciju emisija koje su
+          ostavile traga u povijesti hrvatske televizije.
         </p>
         <p>
           Pronađite svoje omiljene likove, scene i emisije na brz i jednostavan

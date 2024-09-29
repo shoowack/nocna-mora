@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { auth } from "auth";
 
-export async function GET(request: Request) {
+export async function GET() {
   try {
     const videos = await prisma.video.findMany({
       include: { createdBy: true, actors: true, categories: true },

@@ -41,7 +41,8 @@ export default async function CategoryPage({
     <Container className="flex justify-center">
       <div className="flex h-[calc(100vh-18rem)] justify-center items-center pt-20 pb-10 flex-col">
         <div className="text-2xl mb-5">
-          Kategorija <span className="font-bold">"{slug}"</span> ne postoji
+          Kategorija <span className="font-bold">&quot;{slug}&quot;</span> ne
+          postoji
         </div>
         <Link href="/categories">
           <Button>Natrag na kategorije</Button>

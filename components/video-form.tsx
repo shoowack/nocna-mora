@@ -19,7 +19,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { CalendarIcon, Folder, Plus, Save, Trash2 } from "lucide-react";
+import {
+  CalendarIcon,
+  // Folder,
+  Plus,
+  Save,
+  Trash2,
+} from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { MultiSelect } from "@/components/ui/multi-select";
@@ -96,6 +102,7 @@ export function VideoForm({
     data: Video & { actors?: string[]; categories?: string[] }
   ) => {
     setError("");
+    setLoading(true);
 
     try {
       const response = await fetch(
@@ -126,6 +133,8 @@ export function VideoForm({
     } catch (err) {
       console.error(err);
       setError("An error occurred while submitting the form.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -331,7 +340,7 @@ export function VideoForm({
       <div className="flex space-x-4">
         <Button
           type="submit"
-          disabled={isSubmitting}
+          disabled={isSubmitting || loading}
           className="flex items-center"
         >
           {isEditing ? (
@@ -339,7 +348,7 @@ export function VideoForm({
           ) : (
             <Plus className="size-4 mr-2" />
           )}
-          {isSubmitting
+          {isSubmitting || loading
             ? "Submitting..."
             : isEditing
             ? "Ažuriraj Video"
@@ -351,7 +360,7 @@ export function VideoForm({
           <Button
             variant="destructive"
             onClick={handleDelete}
-            disabled={isSubmitting}
+            disabled={isSubmitting || loading}
             className="flex items-center"
           >
             <Trash2 className="size-4 mr-2" />

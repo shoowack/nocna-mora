@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { generateSlug } from "@/lib/slugify";
 import { auth } from "auth";
 
-export const GET = auth(async (request: Request) => {
+export const GET = auth(async () => {
   try {
     const categories = await prisma.category.findMany({
       orderBy: { createdAt: "desc" },

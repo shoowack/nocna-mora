@@ -22,7 +22,7 @@ export default async function CategoriesPage() {
       {categories.length ? (
         <div className="flex flex-col space-y-10">
           {categories.map((category) => (
-            <div className="flex flex-col space-y-2">
+            <div key={category.id} className="flex flex-col space-y-2">
               <CustomLink
                 href={`/category/${category.slug}`}
                 className="text-xl font-bold"
