@@ -1,10 +1,10 @@
-import { Container } from "@/components/container";
-import { MemeGenerator } from "@/components/meme-generator";
+// import { Container } from "@/components/container";
+// import { MemeGenerator } from "@/components/meme-generator";
 
-export default async function MemesPage({ params }) {
-  return (
-    <Container>
-      <MemeGenerator />
-    </Container>
-  );
-}
+// export default async function MemesPage() {
+//   return (
+//     <Container>
+//       <MemeGenerator />
+//     </Container>
+//   );
+// }

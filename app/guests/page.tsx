@@ -38,6 +38,7 @@ export default async function Actors({ params }: { params: { slug: string } }) {
   return (
     <TitleTemplate
       title="Gosti"
+      description="Osobe koje su gostovale u Noćnoj mori a nisu dio standardne ekipe"
       contained
       button={
         <Link href="/guest/new">

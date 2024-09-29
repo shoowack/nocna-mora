@@ -4,6 +4,6 @@ export type Categories = {
   slug: String;
   //   videos    Video[]  @relation("VideoCategories")
 
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
 };

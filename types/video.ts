@@ -1,17 +1,6 @@
 import { Actor } from "@/types/actor";
 import { Categories } from "@/types/categories";
-
-// export enum Provider {
-//   YOUTUBE,
-//   VIMEO,
-//   DAILYMOTION,
-// }
-
-export enum Provider {
-  YOUTUBE = "YOUTUBE",
-  VIMEO = "VIMEO",
-  DAILYMOTION = "DAILYMOTION",
-}
+import { VideoProvider } from "@prisma/client";
 
 export type Video = {
   id: string;
@@ -20,7 +9,7 @@ export type Video = {
   airedDate: Date | null;
   duration: number;
   published: boolean;
-  provider: Provider;
+  provider: VideoProvider;
   actors?: Actor[];
   categories?: Categories[];
 };

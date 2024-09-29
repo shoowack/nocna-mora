@@ -5,7 +5,11 @@ import { ActorType } from "@prisma/client";
 import { Container } from "@/components/container";
 import { auth } from "auth";
 
-export default async function ActorPage({ params }) {
+export default async function ActorPage({
+  params,
+}: {
+  params: { slug: string };
+}) {
   const { slug } = params;
   const session = await auth();
 

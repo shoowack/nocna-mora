@@ -3,8 +3,8 @@ import { Separator } from "@/components/ui/separator";
 import { Videotape } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/container";
-import { Video } from "@/types/video";
 import { VideoDetail } from "@/components/video-detail";
+import { Video } from "@prisma/client";
 
 export const VideoGallery = async () => {
   const videos = await prisma.video.findMany({

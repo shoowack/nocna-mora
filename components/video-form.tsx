@@ -23,10 +23,14 @@ import { CalendarIcon, Folder, Plus, Save, Trash2 } from "lucide-react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { MultiSelect } from "@/components/ui/multi-select";
-import { Provider, Video, VideoFormInputs } from "@/types/video";
 import { Switch } from "@/components/ui/switch";
+import { VideoProvider, Video, Actor, Category } from "@prisma/client";
 
-export function VideoForm({ video }: { video: Video }) {
+export function VideoForm({
+  video,
+}: {
+  video?: Video & { actors?: Actor[]; categories?: Category[] };
+}) {
   const router = useRouter();
 
   const {
@@ -34,7 +38,12 @@ export function VideoForm({ video }: { video: Video }) {
     handleSubmit,
     control,
     formState: { errors, isSubmitting },
-  } = useForm<VideoFormInputs>({
+  } = useForm<
+    Video & {
+      actors?: string[];
+      categories?: string[];
+    }
+  >({
     defaultValues: {
       title: video?.title || "",
       videoId: video?.videoId || "",
@@ -83,12 +92,14 @@ export function VideoForm({ video }: { video: Video }) {
     fetchData();
   }, []);
 
-  const onSubmit = async (data: Video) => {
+  const onSubmit = async (
+    data: Video & { actors?: string[]; categories?: string[] }
+  ) => {
     setError("");
 
     try {
       const response = await fetch(
-        isEditing ? `/api/videos/${video.id}` : "/api/videos",
+        isEditing ? `/api/videos/${video?.id}` : "/api/videos",
         {
           method: isEditing ? "PUT" : "POST",
           headers: { "Content-Type": "application/json" },
@@ -208,6 +219,8 @@ export function VideoForm({ video }: { video: Video }) {
               <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
                   mode="single"
+                  // TODO: Fix TS error
+                  // @ts-ignore
                   selected={field.value}
                   onSelect={(date) => field.onChange(date)}
                   disabled={(date) =>
@@ -234,9 +247,9 @@ export function VideoForm({ video }: { video: Video }) {
                 <SelectValue placeholder="Select provider" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value={Provider.YOUTUBE}>YouTube</SelectItem>
-                <SelectItem value={Provider.VIMEO}>Vimeo</SelectItem>
-                <SelectItem value={Provider.DAILYMOTION}>
+                <SelectItem value={VideoProvider.YOUTUBE}>YouTube</SelectItem>
+                <SelectItem value={VideoProvider.VIMEO}>Vimeo</SelectItem>
+                <SelectItem value={VideoProvider.DAILYMOTION}>
                   Dailymotion
                 </SelectItem>
               </SelectContent>

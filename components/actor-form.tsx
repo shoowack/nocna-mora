@@ -120,6 +120,8 @@ export const ActorForm = ({ guest }: { guest?: boolean }) => {
         <Select
           onValueChange={(e) =>
             handleChange({
+              // TODO: Fix TS error
+              // @ts-ignore
               target: { name: "gender", value: e },
             })
           }

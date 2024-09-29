@@ -3,14 +3,18 @@ import Link from "next/link";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { Video } from "@/types/video";
 import { PlayCircle } from "lucide-react";
-import { ActorType } from "@prisma/client";
+import {
+  ActorType,
+  VideoProvider,
+  Video,
+  Category,
+  Actor,
+} from "@prisma/client";
 import { Container } from "@/components/container";
-import { cn } from "@/lib/utils";
 
 const VideoContent: FC<{
-  video: Video;
+  video: Video & { actors?: Actor[]; categories?: Category[] };
   singleVideo?: boolean;
   showActors?: boolean;
   showCategories?: boolean;
@@ -37,11 +41,11 @@ const VideoContent: FC<{
       ) : singleVideo ? null : (
         <div className="h-5" />
       )}
-      {video.actors?.length > 0 && showActors && (
+      {video.actors && video.actors?.length > 0 && showActors && (
         <>
           {singleVideo && <h2>Actors:</h2>}
           <div className="flex gap-x-1 flex-wrap">
-            {video.actors?.map((actor) => (
+            {video.actors.map((actor) => (
               <Link
                 key={actor.id}
                 href={`/${actor.type === ActorType.GUEST ? "guest" : "actor"}/${
@@ -54,11 +58,13 @@ const VideoContent: FC<{
           </div>
         </>
       )}
-      {video.categories?.length > 0 &&
+      {video.categories &&
+        video.categories.length > 0 &&
         showCategories &&
-        video.actors?.length > 0 &&
+        video.actors &&
+        video.actors.length > 0 &&
         showActors && <Separator className="w-full bg-neutral-300" />}
-      {video.categories?.length > 0 && showCategories && (
+      {video.categories && video.categories.length > 0 && showCategories && (
         <>
           {singleVideo && <h2>Categories:</h2>}
           <div className="flex gap-x-1 flex-wrap">
@@ -88,11 +94,11 @@ export const VideoDetail: FC<VideoDetailProps> = ({
 }) => {
   const getVideoUrl = () => {
     switch (video.provider) {
-      case "YOUTUBE":
+      case VideoProvider.YOUTUBE:
         return `https://www.youtube.com/embed/${video.videoId}`;
-      case "VIMEO":
+      case VideoProvider.VIMEO:
         return `https://player.vimeo.com/video/${video.videoId}`;
-      case "DAILYMOTION":
+      case VideoProvider.DAILYMOTION:
         return `https://geo.dailymotion.com/player.html?video=${video.videoId}`;
       default:
         return "";
@@ -101,11 +107,11 @@ export const VideoDetail: FC<VideoDetailProps> = ({
 
   const getThumbnailUrl = () => {
     switch (video.provider) {
-      case "YOUTUBE":
+      case VideoProvider.YOUTUBE:
         return `https://img.youtube.com/vi/${video.videoId}/0.jpg`;
-      case "VIMEO":
+      case VideoProvider.VIMEO:
         return `https://vumbnail.com/${video.videoId}_1920x1080.jpg`;
-      case "DAILYMOTION":
+      case VideoProvider.DAILYMOTION:
         return `https://www.dailymotion.com/thumbnail/video/${video.videoId}`;
       default:
         return "";

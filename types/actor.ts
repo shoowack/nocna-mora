@@ -1,3 +1,5 @@
+import { ActorType } from "@prisma/client";
+
 export type Actor = {
   id: string;
   firstName: string;
@@ -6,4 +8,6 @@ export type Actor = {
   age: number;
   bio: string;
   slug: string;
+  gender: string;
+  type: ActorType;
 };

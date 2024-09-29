@@ -1,6 +1,6 @@
 import prisma from "@/lib/prisma";
 import { generateSlug } from "../lib/slugify";
-import { VideoProvider, ActorType } from "@prisma/client";
+import { ActorType, VideoProvider } from "@prisma/client";
 
 async function main() {
   // Create a default user to associate with actors
@@ -307,6 +307,8 @@ async function main() {
         nickname: actorData.nickname,
         type: actorData.type,
       },
+      // TODO: Fix TS error
+      // @ts-ignore
       create: {
         ...actorData,
         slug: slug,
@@ -378,7 +380,7 @@ async function main() {
       title: "Noćna mora, Malnar",
       videoId: "444785863",
       duration: 29,
-      provider: "VIMEO",
+      provider: VideoProvider.VIMEO,
       airedDate: new Date("2001-01-12"),
       actors: actors.slice(0, 5).map((actor) => actor.id),
       categories: categories
@@ -389,7 +391,7 @@ async function main() {
       title: "Noćna mora - Cijela emisija 12.01.2001.",
       videoId: "lTgvOOErUYg",
       duration: 22340,
-      provider: "YOUTUBE",
+      provider: VideoProvider.YOUTUBE,
       airedDate: new Date("2001-01-12"),
       actors: actors
         .filter((actor) =>
@@ -406,7 +408,7 @@ async function main() {
       title: "Jaran,Bakica i Cigo",
       videoId: "PC0pzISCAQc",
       duration: 4571,
-      provider: "YOUTUBE",
+      provider: VideoProvider.YOUTUBE,
       actors: actors.slice(0, 5).map((actor) => actor.id),
       categories: categories
         .filter((category) => ["picolovka"].includes(category.slug))
@@ -416,7 +418,7 @@ async function main() {
       title: "Noćna Mora - 1/5 - Nenad Ivanković -19/20.11.2005",
       videoId: "xJ_-PjDDy_c",
       duration: 4121,
-      provider: "YOUTUBE",
+      provider: VideoProvider.YOUTUBE,
       airedDate: new Date("2005-11-20"),
       actors: actors.slice(2, 9).map((actor) => actor.id),
       categories: categories
@@ -427,7 +429,7 @@ async function main() {
       title: "Nocna - Mora - Zatvoreno - 2",
       videoId: "x32xkww",
       duration: 4121,
-      provider: "DAILYMOTION",
+      provider: VideoProvider.DAILYMOTION,
       airedDate: new Date("2005-11-20"),
       actors: actors.slice(2, 9).map((actor) => actor.id),
       categories: categories
@@ -438,7 +440,7 @@ async function main() {
       title: "Noćna Mora - 02.01.10",
       videoId: "8531666",
       duration: 2158,
-      provider: "VIMEO",
+      provider: VideoProvider.VIMEO,
       airedDate: new Date("2010-10-01"),
       actors: actors
         .filter((actor) =>
@@ -455,7 +457,7 @@ async function main() {
       title: "Picolovka FULL VIDEO! Remzo, Jaran, Stankec na vrućoj stolici",
       videoId: "0_qYNvTlS34",
       duration: 2338,
-      provider: "YOUTUBE",
+      provider: VideoProvider.YOUTUBE,
       airedDate: new Date("2010-10-01"),
       actors: actors
         .filter((actor) =>
@@ -475,7 +477,7 @@ async function main() {
       title: "Picolovka",
       videoId: "weLWhh9dXpg",
       duration: 3504,
-      provider: "YOUTUBE",
+      provider: VideoProvider.YOUTUBE,
       airedDate: new Date("2010-10-01"),
       actors: actors
         .filter((actor) =>
@@ -496,7 +498,7 @@ async function main() {
       title: "Noćna Mora - Picolovka - Ševa, Laki, Stankec",
       videoId: "naQJjcn7pBU",
       duration: 3453,
-      provider: "YOUTUBE",
+      provider: VideoProvider.YOUTUBE,
       airedDate: new Date("2010-10-01"),
       actors: actors
         .filter((actor) =>
@@ -518,7 +520,7 @@ async function main() {
         "Željko Malnar - Iskustva 'udarenih' motorista (cijeli dokumentarni/putopisni film)",
       videoId: "sbm4wqRCK_I",
       duration: 1800,
-      provider: "YOUTUBE",
+      provider: VideoProvider.YOUTUBE,
       airedDate: new Date("2010-10-01"),
       actors: actors
         .filter((actor) => ["zeljko-malnar"].includes(actor.slug))

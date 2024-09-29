@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { CustomLink } from "@/components/custom-link";
 import {
   NavigationMenu,
@@ -15,10 +16,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Separator } from "./ui/separator";
-import Link from "next/link";
+import { Category } from "@prisma/client";
 
 export function MainNav() {
-  const [categories, setCategories] = useState();
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -58,7 +59,7 @@ export function MainNav() {
             </NavigationMenuTrigger>
             <NavigationMenuContent>
               <ul className="grid gap-3 p-6 pb-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                {categories?.map((category) => (
+                {categories.map((category: Category) => (
                   <ListItem
                     key={category.id}
                     href={`/category/${category.slug}`}
@@ -106,7 +107,6 @@ export function MainNav() {
             <NavigationMenuLink
               // href="/timeline"
               className={navigationMenuTriggerStyle()}
-              variant="disabled"
             >
               Vremenska linija
             </NavigationMenuLink>
