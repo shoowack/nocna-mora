@@ -12,7 +12,8 @@
     "prisma:studio": "prisma studio",
     "seed": "tsx prisma/seed.ts",
     "typecheck": "tsc --noEmit",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "prisma generate"
   },
   "author": "Ivan Suvak <isuvak@gmail.com>",
   "dependencies": {
@@ -66,6 +67,5 @@
   },
   "engines": {
     "node": ">=20.0.0"
-  },
-  "postinstall": "prisma generate"
+  }
 }
