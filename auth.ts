@@ -3,6 +3,9 @@ import "next-auth/jwt";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 
+import FacebookProvider, {
+  FacebookProfile,
+} from "next-auth/providers/facebook";
 import GitHub, { GitHubProfile } from "next-auth/providers/github";
 import type { NextAuthConfig } from "next-auth";
 
@@ -19,6 +22,17 @@ const config = {
           email: profile.email,
           name: profile.name,
           image: profile.avatar_url,
+        };
+      },
+    }),
+    FacebookProvider({
+      profile(profile: FacebookProfile) {
+        return {
+          id: profile.id.toString(),
+          role: "user",
+          email: profile.email,
+          name: profile.name,
+          image: profile.picture.data.url,
         };
       },
     }),
