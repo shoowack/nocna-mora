@@ -159,7 +159,7 @@ export function MainNav() {
                     </div>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
-                <NavigationMenuItem>
+                <NavigationMenuItem className="opacity-50 pointer-events-none">
                   <NavigationMenuLink
                     // href="/memes"
                     className={navigationMenuTriggerStyle()}
@@ -167,7 +167,7 @@ export function MainNav() {
                     Memes
                   </NavigationMenuLink>
                 </NavigationMenuItem>
-                <NavigationMenuItem>
+                <NavigationMenuItem className="opacity-50 pointer-events-none">
                   <NavigationMenuLink
                     // href="/excursions"
                     className={navigationMenuTriggerStyle()}
@@ -183,7 +183,7 @@ export function MainNav() {
                     Gosti
                   </NavigationMenuLink>
                 </NavigationMenuItem>
-                <NavigationMenuItem>
+                <NavigationMenuItem className="opacity-50 pointer-events-none">
                   <NavigationMenuLink
                     // href="/timeline"
                     className={navigationMenuTriggerStyle()}
