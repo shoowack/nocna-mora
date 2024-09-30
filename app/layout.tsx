@@ -12,6 +12,9 @@ export const metadata: Metadata = {
   title: "Noćna Mora",
   description:
     "Dobrodošli na arhivsku stranicu Noćne More! Pregledajte i istražite ovu jedinstvenu kolekciju emisija koje su ostavile traga u povijesti hrvatske televizije.",
+  openGraph: {
+    images: "/og-image.jpeg",
+  },
 };
 
 export default function RootLayout({ children }: PropsWithChildren) {
