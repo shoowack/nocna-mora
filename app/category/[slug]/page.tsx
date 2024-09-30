@@ -75,12 +75,15 @@ export default async function CategoryPage({
         </>
       ) : (
         <div className="flex h-[calc(100vh-26rem)] justify-center items-center pt-20 pb-10">
-          Trenutno nema videa u ovoj kategoriji. Provjerite ponovno kasnije ili
-          istražite
-          <Link href="/categories" className="underline ml-1">
-            druge kategorije
-          </Link>
-          .
+          {/* Without this extra div, layout breaks. */}
+          <div>
+            Trenutno nema videa u ovoj kategoriji. Provjerite ponovno kasnije
+            ili istražite
+            <Link href="/categories" className="underline ml-1">
+              druge kategorije
+            </Link>
+            .
+          </div>
         </div>
         // "No videos in this category yet. Please check back later."
       )}
