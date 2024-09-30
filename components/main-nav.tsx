@@ -80,22 +80,6 @@ export function MainNav() {
                 </NavigationMenuItem>
                 <NavigationMenuItem className="opacity-50 pointer-events-none">
                   <NavigationMenuLink
-                    // href="/excursions"
-                    className={navigationMenuTriggerStyle()}
-                  >
-                    Izleti
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <NavigationMenuLink
-                    href="/guests"
-                    className={navigationMenuTriggerStyle()}
-                  >
-                    Gosti
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-                <NavigationMenuItem className="opacity-50 pointer-events-none">
-                  <NavigationMenuLink
                     // href="/timeline"
                     className={navigationMenuTriggerStyle()}
                   >
@@ -165,22 +149,6 @@ export function MainNav() {
                     className={navigationMenuTriggerStyle()}
                   >
                     Memes
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-                <NavigationMenuItem className="opacity-50 pointer-events-none">
-                  <NavigationMenuLink
-                    // href="/excursions"
-                    className={navigationMenuTriggerStyle()}
-                  >
-                    Izleti
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <NavigationMenuLink
-                    href="/guests"
-                    className={navigationMenuTriggerStyle()}
-                  >
-                    Gosti
                   </NavigationMenuLink>
                 </NavigationMenuItem>
                 <NavigationMenuItem className="opacity-50 pointer-events-none">
