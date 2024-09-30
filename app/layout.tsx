@@ -13,7 +13,20 @@ export const metadata: Metadata = {
   description:
     "Dobrodošli na arhivsku stranicu Noćne More! Pregledajte i istražite ovu jedinstvenu kolekciju emisija koje su ostavile traga u povijesti hrvatske televizije.",
   openGraph: {
-    images: "/og-image.jpeg",
+    title: "Noćna Mora",
+    description:
+      "Dobrodošli na arhivsku stranicu Noćne More! Pregledajte i istražite ovu jedinstvenu kolekciju emisija koje su ostavile traga u povijesti hrvatske televizije.",
+    url: "https://nocna-mora.vercel.app",
+    siteName: "Noćna Mora",
+    images: [
+      {
+        url: "/og-image.jpeg",
+        width: 1600,
+        height: 1200,
+      },
+    ],
+    locale: "hr_HR",
+    type: "website",
   },
 };
 
