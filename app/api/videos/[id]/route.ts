@@ -37,6 +37,15 @@ export const PUT = auth(async (request: Request, { params }: any) => {
     return NextResponse.json({ message: "Not authenticated" }, { status: 401 });
   }
 
+  if (session?.user?.role !== "admin") {
+    return NextResponse.json(
+      {
+        message: "You do not have permission to perform this action.",
+      },
+      { status: 403 }
+    );
+  }
+
   try {
     const data = await request.json();
 
@@ -88,6 +97,15 @@ export const DELETE = auth(async (request: NextRequest, { params }: any) => {
 
   if (!session) {
     return NextResponse.json({ message: "Not authenticated" }, { status: 401 });
+  }
+
+  if (session?.user?.role !== "admin") {
+    return NextResponse.json(
+      {
+        message: "You do not have permission to perform this action.",
+      },
+      { status: 403 }
+    );
   }
 
   try {

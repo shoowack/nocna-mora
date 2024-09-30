@@ -5,22 +5,41 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/container";
 import { VideoDetail } from "@/components/video-detail";
 import { Video } from "@prisma/client";
+import { auth } from "auth";
 
 export const VideoGallery = async () => {
+  const session = await auth();
+
+  if (session?.user) {
+    // TODO: Look into https://react.dev/reference/react/experimental_taintObjectReference
+    // filter out sensitive data before passing to client.
+    session.user = {
+      name: session.user.name,
+      email: session.user.email,
+      image: session.user.image,
+      role: session.user.role,
+    };
+  }
+
+  const isAdmin = session?.user?.role === "admin";
+
   const videos = await prisma.video.findMany({
-    where: {
-      published: true,
-    },
+    where: isAdmin
+      ? {} // No filter for admins
+      : { published: true }, // Non-admins see only published videos,
     include: {
       categories: true,
       actors: true,
-      createdBy: true,
     },
     take: 4,
     orderBy: {
       createdAt: "desc",
     },
   });
+
+  if (!videos.length) {
+    return null;
+  }
 
   return (
     <div className="bg-neutral-100">

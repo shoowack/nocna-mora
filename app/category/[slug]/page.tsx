@@ -21,21 +21,23 @@ export default async function CategoryPage({
       name: session.user.name,
       email: session.user.email,
       image: session.user.image,
+      role: session.user.role,
     };
   }
+
+  const isAdmin = session?.user?.role === "admin";
 
   const category = await prisma.category.findUnique({
     where: { slug, deletedAt: null },
     include: {
       createdBy: true,
-      videos: true,
+      videos: {
+        where: isAdmin
+          ? {} // No filter for admins
+          : { published: true }, // Non-admins see only published videos,
+      },
     },
   });
-
-  // Filter videos: Show all videos if user is logged in, otherwise show only published videos
-  const visibleVideos = session?.user
-    ? category?.videos // Logged in users see all videos
-    : category?.videos.filter((video) => video.published); // Non-logged in users see only published videos
 
   return !category ? (
     <Container className="flex justify-center">
@@ -60,13 +62,13 @@ export default async function CategoryPage({
         </Link>
       }
     >
-      {visibleVideos && visibleVideos.length > 0 ? (
+      {category?.videos && category?.videos.length > 0 ? (
         <>
           <p className="text-xl font-bold mt-10">
             Videi u kategoriji {category.title.toLowerCase()}:
           </p>
           <div className="grid grid-cols-2 mt-3 gap-4">
-            {visibleVideos?.map((video) => (
+            {category?.videos?.map((video) => (
               <div key={video.id}>
                 <VideoDetail video={video} />
               </div>

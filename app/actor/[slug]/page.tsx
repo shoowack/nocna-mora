@@ -20,14 +20,20 @@ export default async function ActorPage({
       name: session.user.name,
       email: session.user.email,
       image: session.user.image,
+      role: session.user.role,
     };
   }
+
+  const isAdmin = session?.user?.role === "admin";
 
   const actor = await prisma.actor.findUnique({
     where: { slug, type: ActorType.MAIN },
     include: {
       createdBy: true,
       videos: {
+        where: isAdmin
+          ? {} // No filter for admins
+          : { published: true }, // Non-admins see only published videos,
         include: {
           categories: true,
         },
@@ -39,11 +45,6 @@ export default async function ActorPage({
     return <Container>Lik {slug} ne postoji</Container>;
   }
 
-  // Filter videos: Show all videos if user is logged in, otherwise show only published videos
-  const visibleVideos = session?.user
-    ? actor?.videos // Logged in users see all videos
-    : actor?.videos.filter((video) => video.published); // Non-logged in users see only published videos
-
   return (
     <TitleTemplate
       title={`${actor.firstName} ${actor.lastName} ${
@@ -52,7 +53,7 @@ export default async function ActorPage({
       description={actor.bio ? actor.bio : ""}
       contained
     >
-      {visibleVideos.length > 0 ? (
+      {actor.videos.length > 0 ? (
         <>
           <p className="text-xl font-bold mt-10">
             Videi u kojima se{" "}
@@ -62,7 +63,7 @@ export default async function ActorPage({
             pojavljuje:
           </p>
           <div className="grid grid-cols-2 mt-3 gap-4">
-            {visibleVideos.map((video) => (
+            {actor.videos.map((video) => (
               <VideoDetail key={video.id} video={video} showCategories />
             ))}
           </div>

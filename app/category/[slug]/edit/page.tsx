@@ -18,11 +18,18 @@ export default async function EditCategoryPage({
       name: session.user.name,
       email: session.user.email,
       image: session.user.image,
+      role: session.user.role,
     };
   }
 
   if (!session?.user) {
     redirect("/auth/signin");
+  }
+
+  const isAdmin = session?.user?.role === "admin";
+
+  if (!isAdmin) {
+    redirect("/");
   }
 
   const category = await prisma.category.findUnique({

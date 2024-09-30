@@ -22,6 +22,7 @@ export default async function VideoPage({
       name: session.user.name,
       email: session.user.email,
       image: session.user.image,
+      role: session.user.role,
     };
   }
 
@@ -34,18 +35,23 @@ export default async function VideoPage({
     },
   });
 
-  // TODO: Add role check - unpublished videos should be accessible for authenticated admin users only
-  if (!video || (!video.published && !session?.user)) {
+  const isAdmin = session?.user?.role === "admin";
+
+  // Unpublished videos should be accessible for authenticated admin users only
+  if (!video || (!video.published && !isAdmin)) {
     return (
       <Container className="text-center">
         <AlertTriangle className="mx-auto h-8 w-8 stroke-yellow-500 mb-5" />
-        <h1 className="text-2xl font-bold">Video nije pronađen</h1>
+        <h1 className="text-2xl font-bold">Video nije dostupan</h1>
         <p className="mt-5 text-balance">
           Nažalost, video koji tražite nije dostupan. Moguće je da je uklonjen
           ili da je došlo do greške u vezi. Molimo vas da provjerite URL ili
           pretražite druge videozapise klikom na gumb ispod.
         </p>
-        <Link href="/videos" className="mt-10">
+        {/*
+        // TODO: Add link to /videos page once it becomes available
+        <Link href="/videos" className="mt-10"> */}
+        <Link href="/" className="mt-10">
           <Button className="mt-10 flex items-center mx-auto">
             <ChevronLeft className="mr-2 h-4 w-4" />
             Povratak na videozapise

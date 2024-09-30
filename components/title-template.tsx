@@ -1,6 +1,6 @@
-import { Container } from "@/components/container";
-import { auth } from "auth";
 import { ReactNode } from "react";
+import { auth } from "auth";
+import { Container } from "@/components/container";
 
 export async function TitleTemplate({
   title,
@@ -24,8 +24,11 @@ export async function TitleTemplate({
       name: session.user.name,
       email: session.user.email,
       image: session.user.image,
+      role: session.user.role,
     };
   }
+
+  const isAdmin = session?.user?.role === "admin";
 
   return (
     <>
@@ -39,7 +42,7 @@ export async function TitleTemplate({
               )}
             </div>
 
-            {session?.user && button}
+            {isAdmin && button}
           </div>
         </Container>
       </div>

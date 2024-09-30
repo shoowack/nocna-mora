@@ -27,6 +27,15 @@ export const POST = auth(async (request: Request) => {
     return NextResponse.json({ message: "Not authenticated" }, { status: 401 });
   }
 
+  if (session?.user?.role !== "admin") {
+    return NextResponse.json(
+      {
+        message: "You do not have permission to perform this action.",
+      },
+      { status: 403 }
+    );
+  }
+
   try {
     const data = await request.json();
     const slug = generateSlug(data.title);

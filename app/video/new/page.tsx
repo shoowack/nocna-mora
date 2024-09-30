@@ -1,8 +1,8 @@
+import { auth } from "auth";
+import { redirect } from "next/navigation";
 import { VideoForm } from "@/components/video-form";
 import { TitleTemplate } from "@/components/title-template";
-import { auth } from "auth";
 import { SessionProvider } from "next-auth/react";
-import { redirect } from "next/navigation";
 
 export default async function NewVideoPage() {
   const session = await auth();
@@ -14,11 +14,18 @@ export default async function NewVideoPage() {
       name: session.user.name,
       email: session.user.email,
       image: session.user.image,
+      role: session.user.role,
     };
   }
 
   if (!session?.user) {
     redirect("/auth/signin");
+  }
+
+  const isAdmin = session?.user?.role === "admin";
+
+  if (!isAdmin) {
+    redirect("/");
   }
 
   return (
