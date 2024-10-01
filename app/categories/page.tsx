@@ -3,6 +3,7 @@ import Link from "next/link";
 import { TitleTemplate } from "@/components/title-template";
 import { Button } from "@/components/ui/button";
 import { CustomLink } from "@/components/custom-link";
+import { Library } from "lucide-react";
 
 export default async function CategoriesPage() {
   const categories = await prisma.category.findMany({
@@ -35,7 +36,10 @@ export default async function CategoriesPage() {
           ))}
         </div>
       ) : (
-        <div>Guests not found</div>
+        <div className="flex flex-col space-y-2 items-center h-[calc(100vh-23rem)] justify-center">
+          <Library className="size-12" strokeWidth={1.5} />
+          <div>Nema dostupnih kategorija</div>
+        </div>
       )}
     </TitleTemplate>
   );

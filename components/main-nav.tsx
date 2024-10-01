@@ -62,14 +62,16 @@ export function MainNav() {
                     Likovi
                   </NavigationMenuLink>
                 </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <NavigationMenuLink
-                    href="/categories"
-                    className={navigationMenuTriggerStyle()}
-                  >
-                    Kategorije
-                  </NavigationMenuLink>
-                </NavigationMenuItem>
+                {categories && categories.length > 0 && (
+                  <NavigationMenuItem>
+                    <NavigationMenuLink
+                      href="/categories"
+                      className={navigationMenuTriggerStyle()}
+                    >
+                      Kategorije
+                    </NavigationMenuLink>
+                  </NavigationMenuItem>
+                )}
                 <NavigationMenuItem className="opacity-50 pointer-events-none">
                   <NavigationMenuLink
                     // href="/memes"
@@ -117,32 +119,34 @@ export function MainNav() {
                     Likovi
                   </NavigationMenuLink>
                 </NavigationMenuItem>
-                <NavigationMenuItem>
-                  <NavigationMenuTrigger className="px-2">
-                    Kategorije
-                  </NavigationMenuTrigger>
-                  <NavigationMenuContent>
-                    <ul className="grid gap-3 p-6 pb-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
-                      {categories.map((category: Category) => (
-                        <ListItem
-                          key={category.id}
-                          href={`/category/${category.slug}`}
-                          title={category.title}
-                        >
-                          {category.description}
-                        </ListItem>
-                      ))}
-                    </ul>
-                    <Separator />
-                    <div className="flex justify-end p-3 bg-neutral-100">
-                      <Link href="/categories">
-                        <Button variant="outline" size={"sm"}>
-                          Sve kategorije
-                        </Button>
-                      </Link>
-                    </div>
-                  </NavigationMenuContent>
-                </NavigationMenuItem>
+                {categories && categories.length > 0 && (
+                  <NavigationMenuItem>
+                    <NavigationMenuTrigger className="px-2">
+                      Kategorije
+                    </NavigationMenuTrigger>
+                    <NavigationMenuContent>
+                      <ul className="grid gap-3 p-6 pb-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                        {categories.map((category: Category) => (
+                          <ListItem
+                            key={category.id}
+                            href={`/category/${category.slug}`}
+                            title={category.title}
+                          >
+                            {category.description}
+                          </ListItem>
+                        ))}
+                      </ul>
+                      <Separator />
+                      <div className="flex justify-end p-3 bg-neutral-100">
+                        <Link href="/categories">
+                          <Button variant="outline" size={"sm"}>
+                            Sve kategorije
+                          </Button>
+                        </Link>
+                      </div>
+                    </NavigationMenuContent>
+                  </NavigationMenuItem>
+                )}
                 <NavigationMenuItem className="opacity-50 pointer-events-none">
                   <NavigationMenuLink
                     // href="/memes"

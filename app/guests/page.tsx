@@ -7,6 +7,7 @@ import { CustomLink } from "@/components/custom-link";
 import { ActorType } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { TitleTemplate } from "@/components/title-template";
+import { Users2 } from "lucide-react";
 
 export default async function Actors() {
   const actors = await prisma.actor.findMany({
@@ -27,7 +28,7 @@ export default async function Actors() {
         </Link>
       }
     >
-      {actors ? (
+      {actors.length ? (
         <div className="flex flex-col space-y-10">
           {actors?.map((actor) => (
             <div key={actor.id} className="flex flex-col space-y-2">
@@ -44,7 +45,10 @@ export default async function Actors() {
           ))}
         </div>
       ) : (
-        <div>Guests not found</div>
+        <div className="flex flex-col space-y-2 items-center h-[calc(100vh-23rem)] justify-center">
+          <Users2 className="size-12" strokeWidth={1.5} />
+          <div>Nema dostupnih gostiju</div>
+        </div>
       )}
     </TitleTemplate>
   );
