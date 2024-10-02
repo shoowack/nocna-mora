@@ -42,7 +42,7 @@ export function MainNav() {
       <div className="absolute inset-y-0 left-2 flex items-center sm:hidden">
         <Popover open={isMobileMenuOpen} onOpenChange={setMobileMenuOpen}>
           {/* Mobile menu button */}
-          <PopoverTrigger className="text-black-400 relative inline-flex items-center justify-center rounded-md p-2 hover:bg-primary hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+          <PopoverTrigger className="relative inline-flex items-center justify-center rounded-md p-2 hover:bg-primary hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
             <span className="absolute -inset-0.5" />
             <span className="sr-only">Open main menu</span>
             {isMobileMenuOpen ? (

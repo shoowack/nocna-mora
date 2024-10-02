@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { FC, PropsWithChildren, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -31,6 +31,23 @@ import { cn } from "@/lib/utils";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { Switch } from "@/components/ui/switch";
 import { VideoProvider, Video, Actor, Category } from "@prisma/client";
+import { Separator } from "./ui/separator";
+
+const ItemGroup: FC<PropsWithChildren & { className?: string }> = ({
+  className,
+  children,
+}) => {
+  return (
+    <div
+      className={cn(
+        "col-span-full grid sm:grid-cols-subgrid sm:items-baseline sm:justify-items-end gap-2 sm:gap-3",
+        className
+      )}
+    >
+      {children}
+    </div>
+  );
+};
 
 export function VideoForm({
   video,
@@ -159,9 +176,12 @@ export function VideoForm({
   };
 
   return (
-    <form className="space-y-4" onSubmit={handleSubmit(onSubmit)}>
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="grid grid-flow-row grid-cols-2 gap-x-0 gap-y-5 sm:max-w-2xl sm:gap-4 lg:max-w-3xl"
+    >
       {/* Title */}
-      <div>
+      <ItemGroup>
         <Label htmlFor="title">Naslov</Label>
         <Input
           id="title"
@@ -169,10 +189,10 @@ export function VideoForm({
           placeholder="Upiši naslov videa"
         />
         {errors.title && <p className="text-red-500">{errors.title.message}</p>}
-      </div>
+      </ItemGroup>
 
       {/* Video ID */}
-      <div>
+      <ItemGroup>
         <Label htmlFor="videoId">Video ID</Label>
         <Input
           id="videoId"
@@ -182,27 +202,30 @@ export function VideoForm({
         {errors.videoId && (
           <p className="text-red-500">{errors.videoId.message}</p>
         )}
-      </div>
+      </ItemGroup>
 
       {/* Duration */}
-      <div>
+      <ItemGroup>
         <Label htmlFor="duration">Duljina (u sekundama)</Label>
         <Input
           id="duration"
           type="number"
           {...register("duration", {
             required: "Duration is required",
-            min: { value: 1, message: "Duration must be at least 1 second" },
+            min: {
+              value: 1,
+              message: "Duration must be at least 1 second",
+            },
           })}
           placeholder="Enter duration in seconds"
         />
         {errors.duration && (
           <p className="text-red-500">{errors.duration.message}</p>
         )}
-      </div>
+      </ItemGroup>
 
       {/* Aired Date */}
-      <div>
+      <ItemGroup>
         <Label htmlFor="airedDate">Datum emitiranja</Label>
         <Controller
           control={control}
@@ -252,10 +275,10 @@ export function VideoForm({
             </Popover>
           )}
         />
-      </div>
+      </ItemGroup>
 
       {/* Provider */}
-      <div>
+      <ItemGroup>
         <Label htmlFor="provider">Provider</Label>
         <Controller
           control={control}
@@ -279,9 +302,9 @@ export function VideoForm({
         {errors.provider && (
           <p className="text-red-500">{errors.provider.message}</p>
         )}
-      </div>
+      </ItemGroup>
 
-      <div>
+      <ItemGroup>
         <Label htmlFor="actors">Likovi</Label>
         <Controller
           control={control}
@@ -303,10 +326,10 @@ export function VideoForm({
             />
           )}
         />
-      </div>
+      </ItemGroup>
 
       {/* Categories */}
-      <div>
+      <ItemGroup>
         <Label htmlFor="categories">Kategorije</Label>
         <Controller
           control={control}
@@ -328,57 +351,65 @@ export function VideoForm({
             />
           )}
         />
-      </div>
-      <div className="flex items-center space-x-2">
+      </ItemGroup>
+      <ItemGroup className="my-4 flex items-center justify-center sm:my-0 sm:grid">
+        {/* col-span-full grid sm:grid-cols-subgrid sm:items-baseline sm:justify-items-end gap-2 sm:gap-3 */}
+        <Label htmlFor="published">Published</Label>
         <Controller
           control={control}
           name="published"
           render={({ field }) => (
             <Switch
+              className="justify-self-start"
               onCheckedChange={field.onChange}
               checked={field.value}
               id="published"
             />
           )}
         />
-        <Label htmlFor="published">Published</Label>
-      </div>
+      </ItemGroup>
 
-      {/* Display Server-Side Errors */}
-      {error && <p className="text-red-500">{error}</p>}
+      <Separator className="col-span-2 sm:mt-5 md:mt-10" />
 
       {/* Submit and Delete Buttons */}
-      <div className="flex space-x-4">
-        <Button
-          type="submit"
-          disabled={isSubmitting || loading}
-          className="flex items-center"
-        >
-          {isEditing ? (
-            <Save className="mr-2 size-4" />
-          ) : (
-            <Plus className="mr-2 size-4" />
-          )}
-          {isSubmitting || loading
-            ? "Submitting..."
-            : isEditing
-            ? "Ažuriraj Video"
-            : "Dodaj Video"}
-        </Button>
+      <ItemGroup>
+        {/* Display Server-Side Errors */}
+        <div>{error && <p className="text-red-500">{error}</p>}</div>
 
-        {/* Delete Button (Visible Only When Editing) */}
-        {isEditing && (
+        <div className="flex flex-col justify-items-start gap-3 sm:flex-row">
+          {/* Delete Button (Visible Only When Editing) */}
+          {isEditing && (
+            <Button
+              variant="destructive"
+              onClick={handleDelete}
+              disabled={isSubmitting || loading}
+              className="flex items-center"
+              size="sm"
+            >
+              <Trash2 className="mr-2 size-4" />
+              Obriši video
+            </Button>
+          )}
+
           <Button
-            variant="destructive"
-            onClick={handleDelete}
+            type="submit"
             disabled={isSubmitting || loading}
             className="flex items-center"
+            size="sm"
           >
-            <Trash2 className="mr-2 size-4" />
-            Obriši video
+            {isEditing ? (
+              <Save className="mr-2 size-4" />
+            ) : (
+              <Plus className="mr-2 size-4" />
+            )}
+            {isSubmitting || loading
+              ? "Submitting..."
+              : isEditing
+              ? "Ažuriraj Video"
+              : "Dodaj Video"}
           </Button>
-        )}
-      </div>
+        </div>
+      </ItemGroup>
     </form>
   );
 }
