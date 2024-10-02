@@ -312,7 +312,9 @@ export function VideoForm({
           render={({ field }) => (
             <MultiSelect
               options={actors.map((actors: any) => ({
-                label: `${actors.firstName} ${actors.lastName}`,
+                label: `${actors.firstName} ${actors.lastName}${
+                  actors.nickname && ` (${actors.nickname})`
+                }`,
                 value: actors.id.toString(),
                 // icon: ({ className }) => (
                 //   <Folder className={cn("size-4", className)} />
