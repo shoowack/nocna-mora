@@ -5,7 +5,7 @@ import { SessionProvider } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { TitleTemplate } from "@/components/title-template";
 
-export default async function NewActorPage() {
+export default async function NewGuestPage() {
   const session = await auth();
 
   if (session?.user) {

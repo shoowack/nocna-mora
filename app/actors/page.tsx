@@ -44,7 +44,7 @@ export default async function Actors() {
           ))}
         </div>
       ) : (
-        <div className="flex flex-col space-y-2 items-center h-[calc(100vh-23rem)] justify-center">
+        <div className="flex h-[calc(100vh-23rem)] flex-col items-center justify-center space-y-2">
           <User2 className="size-12" strokeWidth={1.5} />
           <div>Nema dostupnih likova</div>
         </div>

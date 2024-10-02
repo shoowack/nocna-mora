@@ -63,7 +63,9 @@ export const ActorForm = ({ guest }: { guest?: boolean }) => {
         const data = await response.json();
 
         // Redirect to the actor page
-        router.push(`/actor/${data.actor.slug}`);
+        router.push(
+          guest ? `/guest/${data.actor.slug}` : `/actor/${data.actor.slug}`
+        );
       } else {
         const errorData = await response.json();
         setError(errorData.message || "An error occurred.");

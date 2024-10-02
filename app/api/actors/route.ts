@@ -23,16 +23,14 @@ export const POST = auth(async (request: Request & { auth: any }) => {
         age: data.age,
         userId: data.userId,
         slug: slug,
+        type: data.type,
       },
     });
 
     return NextResponse.json({ actor: newActor }, { status: 201 });
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
-    return NextResponse.json(
-      { message: "Internal server error" },
-      { status: 500 }
-    );
+    return NextResponse.json({ message: error.message }, { status: 500 });
   }
 });
 
