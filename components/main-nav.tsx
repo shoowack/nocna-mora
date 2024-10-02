@@ -42,16 +42,16 @@ export function MainNav() {
       <div className="absolute inset-y-0 left-2 flex items-center sm:hidden">
         <Popover open={isMobileMenuOpen} onOpenChange={setMobileMenuOpen}>
           {/* Mobile menu button */}
-          <PopoverTrigger className="relative inline-flex items-center justify-center rounded-md p-2 text-black-400 hover:bg-primary hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+          <PopoverTrigger className="text-black-400 relative inline-flex items-center justify-center rounded-md p-2 hover:bg-primary hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
             <span className="absolute -inset-0.5" />
             <span className="sr-only">Open main menu</span>
             {isMobileMenuOpen ? (
-              <XIcon className="h-6 w-6" aria-hidden="true" />
+              <XIcon className="size-6" aria-hidden="true" />
             ) : (
-              <MenuIcon className="h-6 w-6" aria-hidden="true" />
+              <MenuIcon className="size-6" aria-hidden="true" />
             )}
           </PopoverTrigger>
-          <PopoverContent className="list-none w-full ml-2">
+          <PopoverContent className="ml-2 w-full list-none">
             <NavigationMenu>
               <NavigationMenuList className="flex flex-col">
                 <NavigationMenuItem>
@@ -60,6 +60,14 @@ export function MainNav() {
                     className={navigationMenuTriggerStyle()}
                   >
                     Likovi
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <NavigationMenuLink
+                    href="/guests"
+                    className={navigationMenuTriggerStyle()}
+                  >
+                    Gosti
                   </NavigationMenuLink>
                 </NavigationMenuItem>
                 {categories && categories.length > 0 && (
@@ -72,7 +80,7 @@ export function MainNav() {
                     </NavigationMenuLink>
                   </NavigationMenuItem>
                 )}
-                <NavigationMenuItem className="opacity-50 pointer-events-none">
+                <NavigationMenuItem className="pointer-events-none opacity-50">
                   <NavigationMenuLink
                     // href="/memes"
                     className={navigationMenuTriggerStyle()}
@@ -80,7 +88,7 @@ export function MainNav() {
                     Memes
                   </NavigationMenuLink>
                 </NavigationMenuItem>
-                <NavigationMenuItem className="opacity-50 pointer-events-none">
+                <NavigationMenuItem className="pointer-events-none opacity-50">
                   <NavigationMenuLink
                     // href="/timeline"
                     className={navigationMenuTriggerStyle()}
@@ -93,8 +101,8 @@ export function MainNav() {
           </PopoverContent>
         </Popover>
       </div>
-      <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
-        <div className="flex-shrink-0 flex items-center">
+      <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+        <div className="flex shrink-0 items-center">
           <CustomLink href="/">
             <Button variant="ghost" className="p-0">
               <Image
@@ -119,6 +127,14 @@ export function MainNav() {
                     Likovi
                   </NavigationMenuLink>
                 </NavigationMenuItem>
+                <NavigationMenuItem>
+                  <NavigationMenuLink
+                    href="/guests"
+                    className={navigationMenuTriggerStyle()}
+                  >
+                    Gosti
+                  </NavigationMenuLink>
+                </NavigationMenuItem>
                 {categories && categories.length > 0 && (
                   <NavigationMenuItem>
                     <NavigationMenuTrigger className="px-2">
@@ -137,7 +153,7 @@ export function MainNav() {
                         ))}
                       </ul>
                       <Separator />
-                      <div className="flex justify-end p-3 bg-neutral-100">
+                      <div className="flex justify-end bg-neutral-100 p-3">
                         <Link href="/categories">
                           <Button variant="outline" size={"sm"}>
                             Sve kategorije
@@ -147,7 +163,7 @@ export function MainNav() {
                     </NavigationMenuContent>
                   </NavigationMenuItem>
                 )}
-                <NavigationMenuItem className="opacity-50 pointer-events-none">
+                <NavigationMenuItem className="pointer-events-none opacity-50">
                   <NavigationMenuLink
                     // href="/memes"
                     className={navigationMenuTriggerStyle()}
@@ -155,7 +171,7 @@ export function MainNav() {
                     Memes
                   </NavigationMenuLink>
                 </NavigationMenuItem>
-                <NavigationMenuItem className="opacity-50 pointer-events-none">
+                <NavigationMenuItem className="pointer-events-none opacity-50">
                   <NavigationMenuLink
                     // href="/timeline"
                     className={navigationMenuTriggerStyle()}
@@ -188,7 +204,7 @@ const ListItem = React.forwardRef<
           {...props}
         >
           <div className="text-sm font-medium leading-none">{title}</div>
-          <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
+          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
             {children}
           </p>
         </a>
