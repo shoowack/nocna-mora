@@ -20,12 +20,12 @@ const VideoContent: FC<{
   showCategories?: boolean;
 }> = ({ singleVideo, video, showActors, showCategories }) => {
   return (
-    <div className="p-4 space-y-4">
+    <div className="space-y-4 p-4">
       {!video.published && (
         <Badge variant="destructive">Video nije javan</Badge>
       )}
       {!singleVideo && (
-        <p className="text-neutral-600 line-clamp-1">{video.title}</p>
+        <p className="line-clamp-1 text-neutral-600">{video.title}</p>
       )}
       {video.airedDate && singleVideo && <h2>Aired Date:</h2>}
       {video.airedDate ? (
@@ -44,7 +44,7 @@ const VideoContent: FC<{
       {video.actors && video.actors?.length > 0 && showActors && (
         <>
           {singleVideo && <h2>Actors:</h2>}
-          <div className="flex gap-x-1 flex-wrap">
+          <div className="flex flex-wrap gap-x-1">
             {video.actors.map((actor) => (
               <Link
                 key={actor.id}
@@ -67,7 +67,7 @@ const VideoContent: FC<{
       {video.categories && video.categories.length > 0 && showCategories && (
         <>
           {singleVideo && <h2>Categories:</h2>}
-          <div className="flex gap-x-1 flex-wrap">
+          <div className="flex flex-wrap gap-x-1">
             {video.categories?.map((category) => (
               <Link key={category.id} href={`/category/${category.slug}`}>
                 <Badge className="m-0 px-1.5">{category.title}</Badge>
@@ -148,7 +148,7 @@ export const VideoDetail: FC<VideoDetailProps> = ({
               />
             )}
             <PlayCircle
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 stroke-white size-14"
+              className="absolute left-1/2 top-1/2 z-20 size-14 -translate-x-1/2 -translate-y-1/2 stroke-white"
               strokeWidth={1}
             />
             {video.provider === "YOUTUBE" ? (

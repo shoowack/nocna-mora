@@ -222,7 +222,7 @@ export function VideoForm({
                   ) : (
                     <span>Pick a date</span>
                   )}
-                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                  <CalendarIcon className="ml-auto size-4 opacity-50" />
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
@@ -236,6 +236,17 @@ export function VideoForm({
                     date > new Date() || date < new Date("1900-01-01")
                   }
                   initialFocus
+                  captionLayout="dropdown"
+                  fromYear={1900}
+                  toYear={new Date().getFullYear()}
+                  classNames={
+                    {
+                      // caption:
+                      //   "flex justify-between pt-1 relative items-center gap-2 px-2",
+                      // caption_label: "text-sm font-medium capitalize",
+                      // caption_dropdowns: "flex justify-center gap-2",
+                    }
+                  }
                 />
               </PopoverContent>
             </Popover>
@@ -344,9 +355,9 @@ export function VideoForm({
           className="flex items-center"
         >
           {isEditing ? (
-            <Save className="size-4 mr-2" />
+            <Save className="mr-2 size-4" />
           ) : (
-            <Plus className="size-4 mr-2" />
+            <Plus className="mr-2 size-4" />
           )}
           {isSubmitting || loading
             ? "Submitting..."
@@ -363,7 +374,7 @@ export function VideoForm({
             disabled={isSubmitting || loading}
             className="flex items-center"
           >
-            <Trash2 className="size-4 mr-2" />
+            <Trash2 className="mr-2 size-4" />
             Obriši video
           </Button>
         )}
