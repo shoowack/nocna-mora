@@ -57,7 +57,13 @@ export const DynamicField = ({
           <div className="flex items-start gap-2">
             <FormLabel
               htmlFor={field.name}
-              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+              className={cn(
+                "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+                {
+                  "after:content-['*'] after:text-red-500 after:ml-0.5":
+                    field.required,
+                }
+              )}
             >
               {field.label}
             </FormLabel>

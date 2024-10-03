@@ -15,13 +15,14 @@ const formFields = [
     label: "Ime",
     type: "string",
     placeholder: "Mirko",
+    required: true,
   },
   {
     name: "lastName",
     label: "Prezime",
     type: "string",
     placeholder: "Fodor",
-    description: "Opcionalno",
+    required: true,
   },
   {
     name: "nickname",
@@ -41,6 +42,7 @@ const formFields = [
       { value: "other", label: "Ostalo" },
     ],
     placeholder: "Odaberi spol",
+    required: true,
   },
   {
     name: "birthDate",
@@ -56,6 +58,7 @@ const formFields = [
       { value: "MAIN", label: "Glavni lik" },
       { value: "GUEST", label: "Gost" },
     ],
+    required: true,
   },
 ];
 
@@ -73,6 +76,8 @@ export const ActorForm = ({
 
   const { data: session } = useSession();
 
+  const isEditing = Boolean(actorData);
+
   const form = useForm({
     defaultValues: {
       firstName: actorData?.firstName || "",
@@ -80,31 +85,31 @@ export const ActorForm = ({
       nickname: actorData?.nickname || "",
       bio: actorData?.bio || "",
       gender: actorData?.gender || "",
-      birthDate: actorData?.birthDate ? actorData.birthDate.split("T")[0] : "",
-      deathDate: actorData?.deathDate ? actorData.deathDate.split("T")[0] : "",
-      type: guest ? "GUEST" : actorData?.type || "MAIN", // Default to guest if passed
+      birthDate: actorData?.birthDate ? actorData.birthDate.toISOString() : "",
+      deathDate: actorData?.deathDate ? actorData.deathDate.toISOString() : "",
+      type: isEditing && guest ? "GUEST" : actorData?.type || "MAIN",
     },
   });
 
   const {
     handleSubmit,
     control,
-    setValue,
+    // setValue,
     formState: { errors, isSubmitting },
   } = form;
 
-  useEffect(() => {
-    if (actorData) {
-      Object.keys(actorData).forEach((key) => setValue(key, actorData[key]));
-    }
-  }, [actorData, setValue]);
+  // useEffect(() => {
+  //   if (actorData) {
+  //     Object.keys(actorData).forEach((key) => setValue(key, actorData[key]));
+  //   }
+  // }, [actorData, setValue]);
 
   const onSubmit = async (data: any) => {
     setLoading(true);
 
     try {
-      const method = actorData ? "PUT" : "POST";
-      const url = actorData
+      const method = isEditing ? "PUT" : "POST";
+      const url = isEditing
         ? `/api/actors/${actorData.slug}/edit`
         : "/api/actors";
 
@@ -151,7 +156,6 @@ export const ActorForm = ({
         ))}
 
         {/* Submit and Delete Buttons */}
-
         <div
           className={cn(
             "col-span-full grid sm:grid-cols-subgrid sm:items-baseline sm:justify-items-end gap-2 sm:gap-3"
@@ -188,25 +192,17 @@ export const ActorForm = ({
               <Plus className="mr-2 size-4" />
               {/* )} */}
               {isSubmitting || loading
-                ? "Submitting..."
-                : // : isEditing
-                pathname === "/guest/new"
+                ? "Spremam..."
+                : isEditing && pathname === `/guest/${actorData.slug}/edit`
+                ? "Ažuriraj gosta"
+                : isEditing && pathname === `/actor/${actorData.slug}/edit`
+                ? "Ažuriraj lika"
+                : pathname === "/guest/new"
                 ? "Dodaj gosta"
                 : "Dodaj lika"}
             </Button>
           </div>
         </div>
-
-        {/* 
-        {errors && <p className="text-red-500">{errors.message}</p>}
-
-        <Button type="submit" disabled={isSubmitting}>
-          {isSubmitting
-            ? "Submitting..."
-            : actorData
-            ? "Update Actor"
-            : "Add Actor"}
-        </Button> */}
       </form>
     </FormProvider>
   );

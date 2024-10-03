@@ -5,7 +5,11 @@ import { SessionProvider } from "next-auth/react";
 import { redirect } from "next/navigation";
 import { TitleTemplate } from "@/components/title-template";
 
-export default async function NewActorPage() {
+export default async function NewParticipantPage({
+  params: { participant },
+}: {
+  params: { participant: string };
+}) {
   const session = await auth();
 
   if (session?.user) {
@@ -33,8 +37,11 @@ export default async function NewActorPage() {
 
   return (
     <SessionProvider basePath={"/auth"} session={session}>
-      <TitleTemplate title="Dodaj novog lika" contained>
-        <ActorForm />
+      <TitleTemplate
+        title={`Dodaj novog ${participant === "actor" ? "lika" : "gosta"}`}
+        contained
+      >
+        <ActorForm guest={participant === "guest"} />
       </TitleTemplate>
     </SessionProvider>
   );

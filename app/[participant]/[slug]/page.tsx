@@ -1,17 +1,18 @@
 import prisma from "@/lib/prisma";
+import Link from "next/link";
 import { TitleTemplate } from "@/components/title-template";
 import { VideoDetail } from "@/components/video-detail";
 import { ActorType } from "@prisma/client";
 import { Container } from "@/components/container";
 import { auth } from "auth";
 import { calculateAge } from "@/lib/date";
+import { Button } from "@/components/ui/button";
 
-export default async function ActorPage({
-  params,
+export default async function ParticipantPage({
+  params: { slug, participant },
 }: {
-  params: { slug: string };
+  params: { participant: string; slug: string };
 }) {
-  const { slug } = params;
   const session = await auth();
 
   if (session?.user) {
@@ -28,7 +29,10 @@ export default async function ActorPage({
   const isAdmin = session?.user?.role === "admin";
 
   const actor = await prisma.actor.findUnique({
-    where: { slug, type: ActorType.MAIN },
+    where: {
+      slug,
+      type: participant === "actor" ? ActorType.MAIN : ActorType.GUEST,
+    },
     include: {
       createdBy: true,
       videos: {
@@ -57,6 +61,13 @@ export default async function ActorPage({
       }`}
       description={actor.bio ? actor.bio : ""}
       contained
+      button={
+        <Link href={`/${participant}/${actor.slug}/edit`}>
+          <Button>
+            Ažuriraj {`${participant === "actor" ? "lika" : "gosta"}`}
+          </Button>
+        </Link>
+      }
     >
       {actor.videos.length > 0 ? (
         <>
