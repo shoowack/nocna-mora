@@ -31,7 +31,7 @@ import { cn } from "@/lib/utils";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { Switch } from "@/components/ui/switch";
 import { VideoProvider, Video, Actor, Category } from "@prisma/client";
-import { Separator } from "./ui/separator";
+import { Separator } from "@/components/ui/separator";
 
 const ItemGroup: FC<PropsWithChildren & { className?: string }> = ({
   className,

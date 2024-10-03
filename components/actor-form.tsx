@@ -1,163 +1,213 @@
 "use client";
 
-import { useState, ChangeEvent, FormEvent } from "react";
+import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
+import { useForm, FormProvider } from "react-hook-form";
+import { DynamicField } from "@/components/dynamic-form/dynamic-field";
 import { useSession } from "next-auth/react";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-export const ActorForm = ({ guest }: { guest?: boolean }) => {
+const formFields = [
+  {
+    name: "firstName",
+    label: "Ime",
+    type: "string",
+    placeholder: "Mirko",
+  },
+  {
+    name: "lastName",
+    label: "Prezime",
+    type: "string",
+    placeholder: "Fodor",
+    description: "Opcionalno",
+  },
+  {
+    name: "nickname",
+    label: "Nadimak",
+    type: "string",
+    placeholder: "Mirkec",
+  },
+  { name: "bio", label: "Biografija", type: "text" },
+  {
+    name: "gender",
+    label: "Spol",
+    type: "select",
+    options: [
+      { value: "male", label: "Muško" },
+      { value: "female", label: "Žensko" },
+      { value: "transgender", label: "Transrodno" },
+      { value: "other", label: "Ostalo" },
+    ],
+    placeholder: "Odaberi spol",
+  },
+  {
+    name: "birthDate",
+    label: "Datum rođenja",
+    type: "date",
+  },
+  { name: "deathDate", label: "Datum smrti (opcionalno)", type: "date" },
+  {
+    name: "type",
+    label: "Tip",
+    type: "select",
+    options: [
+      { value: "MAIN", label: "Glavni lik" },
+      { value: "GUEST", label: "Gost" },
+    ],
+  },
+];
+
+export const ActorForm = ({
+  actorData,
+  guest,
+}: {
+  actorData?: any;
+  guest?: boolean;
+}) => {
+  const [loading, setLoading] = useState(false);
+
   const router = useRouter();
   const pathname = usePathname();
+
   const { data: session } = useSession();
 
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    nickname: "",
-    bio: "",
-    gender: "",
-    age: "",
-    type: guest ? "GUEST" : "MAIN",
+  const form = useForm({
+    defaultValues: {
+      firstName: actorData?.firstName || "",
+      lastName: actorData?.lastName || "",
+      nickname: actorData?.nickname || "",
+      bio: actorData?.bio || "",
+      gender: actorData?.gender || "",
+      birthDate: actorData?.birthDate ? actorData.birthDate.split("T")[0] : "",
+      deathDate: actorData?.deathDate ? actorData.deathDate.split("T")[0] : "",
+      type: guest ? "GUEST" : actorData?.type || "MAIN", // Default to guest if passed
+    },
   });
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
-  const handleChange = (
-    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
-  ) => {
-    const { name, value } = e.target;
+  const {
+    handleSubmit,
+    control,
+    setValue,
+    formState: { errors, isSubmitting },
+  } = form;
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  useEffect(() => {
+    if (actorData) {
+      Object.keys(actorData).forEach((key) => setValue(key, actorData[key]));
+    }
+  }, [actorData, setValue]);
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async (data: any) => {
     setLoading(true);
-    setError("");
 
     try {
-      const response = await fetch("/api/actors", {
-        method: "POST",
+      const method = actorData ? "PUT" : "POST";
+      const url = actorData
+        ? `/api/actors/${actorData.slug}/edit`
+        : "/api/actors";
+
+      const response = await fetch(url, {
+        method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          ...formData,
-          age: parseInt(formData.age, 10) || null,
+          ...data,
+          birthDate: data.birthDate
+            ? new Date(data.birthDate).toISOString()
+            : null,
+          deathDate: data.deathDate
+            ? new Date(data.deathDate).toISOString()
+            : null,
           userId: session?.user?.id,
         }),
       });
 
       if (response.ok) {
-        const data = await response.json();
+        const result = await response.json();
 
-        // Redirect to the actor page
         router.push(
-          guest ? `/guest/${data.actor.slug}` : `/actor/${data.actor.slug}`
+          guest ? `/guest/${result.actor.slug}` : `/actor/${result.actor.slug}`
         );
       } else {
         const errorData = await response.json();
-        setError(errorData.message || "An error occurred.");
+        console.error(errorData.message || "An error occurred.");
       }
     } catch (err) {
-      console.error(err);
-      setError("An error occurred while submitting the form.");
+      console.error("An error occurred while submitting the form.", err);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <form className="space-y-4" onSubmit={handleSubmit}>
-      {error && <p className="text-red-500">{error}</p>}
+    <FormProvider {...form}>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="grid grid-flow-row grid-cols-2 gap-x-0 gap-y-5 sm:max-w-2xl sm:gap-4 lg:max-w-3xl"
+      >
+        {formFields.map((field) => (
+          <DynamicField key={field.name} field={field} control={control} />
+        ))}
 
-      <div>
-        <Label htmlFor="firstName">Ime</Label>
-        <Input
-          name="firstName"
-          value={formData.firstName}
-          onChange={handleChange}
-          required
-        />
-      </div>
+        {/* Submit and Delete Buttons */}
 
-      <div>
-        <Label htmlFor="lastName">Prezime</Label>
-        <Input
-          name="lastName"
-          value={formData.lastName}
-          onChange={handleChange}
-          required
-        />
-      </div>
-
-      <div>
-        <Label htmlFor="nickname">Nadimak</Label>
-        <Input
-          name="nickname"
-          value={formData.nickname}
-          onChange={handleChange}
-        />
-      </div>
-
-      <div>
-        <Label htmlFor="bio">Biografija</Label>
-        <Textarea name="bio" value={formData.bio} onChange={handleChange} />
-      </div>
-
-      <div>
-        <Label htmlFor="gender">Spol</Label>
-
-        <Select
-          onValueChange={(e) =>
-            handleChange({
-              // TODO: Fix TS error
-              // @ts-ignore
-              target: { name: "gender", value: e },
-            })
-          }
-          defaultValue={formData.gender}
+        <div
+          className={cn(
+            "col-span-full grid sm:grid-cols-subgrid sm:items-baseline sm:justify-items-end gap-2 sm:gap-3"
+            // className
+          )}
         >
-          <SelectTrigger className="w-full">
-            <SelectValue placeholder="Spol" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="male">Muško</SelectItem>
-            <SelectItem value="female">Žensko</SelectItem>
-            <SelectItem value="transgender">Transgender</SelectItem>
-            <SelectItem value="other">Drugi</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+          {/* Display Server-Side Errors */}
+          {errors && <p className="text-red-500">{errors.message}</p>}
 
-      <div>
-        <Label htmlFor="age">Starost</Label>
-        <Input
-          type="number"
-          name="age"
-          value={formData.age}
-          onChange={handleChange}
-        />
-      </div>
+          <div className="flex flex-col justify-items-start gap-3 sm:flex-row">
+            {/* Delete Button (Visible Only When Editing) */}
+            {/* {isEditing && (
+              <Button
+                variant="destructive"
+                onClick={handleDelete}
+                disabled={isSubmitting || loading}
+                className="flex items-center"
+                size="sm"
+              >
+                <Trash2 className="mr-2 size-4" />
+                Obriši video
+              </Button>
+            )} */}
 
-      <Button type="submit" disabled={loading}>
-        {loading
-          ? "Submitting..."
-          : pathname === "/guest/new"
-          ? "Dodaj gosta"
-          : "Dodaj lika"}
-      </Button>
-    </form>
+            <Button
+              type="submit"
+              disabled={isSubmitting || loading}
+              className="flex items-center"
+              size="sm"
+            >
+              {/* {isEditing ? (
+                <Save className="mr-2 size-4" />
+              ) : ( */}
+              <Plus className="mr-2 size-4" />
+              {/* )} */}
+              {isSubmitting || loading
+                ? "Submitting..."
+                : // : isEditing
+                pathname === "/guest/new"
+                ? "Dodaj gosta"
+                : "Dodaj lika"}
+            </Button>
+          </div>
+        </div>
+
+        {/* 
+        {errors && <p className="text-red-500">{errors.message}</p>}
+
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting
+            ? "Submitting..."
+            : actorData
+            ? "Update Actor"
+            : "Add Actor"}
+        </Button> */}
+      </form>
+    </FormProvider>
   );
 };

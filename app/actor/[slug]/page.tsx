@@ -4,6 +4,7 @@ import { VideoDetail } from "@/components/video-detail";
 import { ActorType } from "@prisma/client";
 import { Container } from "@/components/container";
 import { auth } from "auth";
+import { calculateAge } from "@/lib/date";
 
 export default async function ActorPage({
   params,
@@ -49,20 +50,24 @@ export default async function ActorPage({
     <TitleTemplate
       title={`${actor.firstName} ${actor.lastName} ${
         actor.nickname ? ` - ${actor.nickname}` : ""
-      } ${actor.age ? ` (${actor.age})` : ""}`}
+      } ${
+        actor.birthDate
+          ? ` (${calculateAge(actor.birthDate, actor.deathDate)})`
+          : ""
+      }`}
       description={actor.bio ? actor.bio : ""}
       contained
     >
       {actor.videos.length > 0 ? (
         <>
-          <p className="text-xl font-bold mt-10">
+          <p className="mt-10 text-xl font-bold">
             Videi u kojima se{" "}
             {actor.nickname
               ? actor.nickname
               : `${actor.firstName} ${actor.lastName}`}{" "}
             pojavljuje:
           </p>
-          <div className="grid grid-cols-2 mt-3 gap-4">
+          <div className="mt-3 grid grid-cols-2 gap-4">
             {actor.videos.map((video) => (
               <VideoDetail key={video.id} video={video} showCategories />
             ))}
