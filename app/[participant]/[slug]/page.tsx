@@ -2,14 +2,14 @@ import prisma from "@/lib/prisma";
 import Link from "next/link";
 import { TitleTemplate } from "@/components/title-template";
 import { VideoDetail } from "@/components/video-detail";
-import { ActorType } from "@prisma/client";
+import { ParticipantType } from "@prisma/client";
 import { Container } from "@/components/container";
 import { auth } from "auth";
 import { calculateAge } from "@/lib/date";
 import { Button } from "@/components/ui/button";
 
 export default async function ParticipantPage({
-  params: { slug, participant },
+  params: { slug, participant: participantTypeProp },
 }: {
   params: { participant: string; slug: string };
 }) {
@@ -28,10 +28,13 @@ export default async function ParticipantPage({
 
   const isAdmin = session?.user?.role === "admin";
 
-  const actor = await prisma.actor.findUnique({
+  const participant = await prisma.participant.findUnique({
     where: {
       slug,
-      type: participant === "actor" ? ActorType.MAIN : ActorType.GUEST,
+      type:
+        participantTypeProp === "actor"
+          ? ParticipantType.MAIN
+          : ParticipantType.GUEST,
     },
     include: {
       createdBy: true,
@@ -46,40 +49,40 @@ export default async function ParticipantPage({
     },
   });
 
-  if (!actor) {
+  if (!participant) {
     return <Container>Lik {slug} ne postoji</Container>;
   }
 
   return (
     <TitleTemplate
-      title={`${actor.firstName} ${actor.lastName} ${
-        actor.nickname ? ` - ${actor.nickname}` : ""
+      title={`${participant.firstName} ${participant.lastName} ${
+        participant.nickname ? ` - ${participant.nickname}` : ""
       } ${
-        actor.birthDate
-          ? ` (${calculateAge(actor.birthDate, actor.deathDate)})`
+        participant.birthDate
+          ? ` (${calculateAge(participant.birthDate, participant.deathDate)})`
           : ""
       }`}
-      description={actor.bio ? actor.bio : ""}
+      description={participant.bio ? participant.bio : ""}
       contained
       button={
-        <Link href={`/${participant}/${actor.slug}/edit`}>
+        <Link href={`/${participantTypeProp}/${participant.slug}/edit`}>
           <Button>
-            Ažuriraj {`${participant === "actor" ? "lika" : "gosta"}`}
+            Ažuriraj {`${participantTypeProp === "actor" ? "lika" : "gosta"}`}
           </Button>
         </Link>
       }
     >
-      {actor.videos.length > 0 ? (
+      {participant.videos.length > 0 ? (
         <>
           <p className="mt-10 text-xl font-bold">
             Videi u kojima se{" "}
-            {actor.nickname
-              ? actor.nickname
-              : `${actor.firstName} ${actor.lastName}`}{" "}
+            {participant.nickname
+              ? participant.nickname
+              : `${participant.firstName} ${participant.lastName}`}{" "}
             pojavljuje:
           </p>
           <div className="mt-3 grid grid-cols-2 gap-4">
-            {actor.videos.map((video) => (
+            {participant.videos.map((video) => (
               <VideoDetail key={video.id} video={video} showCategories />
             ))}
           </div>

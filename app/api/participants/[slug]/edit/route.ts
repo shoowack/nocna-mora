@@ -20,7 +20,7 @@ export const PUT = auth(
 
       const updatedSlug = generateSlug(`${data.firstName} ${data.lastName}`);
 
-      const updatedActor = await prisma.actor.update({
+      const updatedParticipant = await prisma.participant.update({
         where: { slug: params.slug },
         data: {
           firstName: data.firstName,
@@ -35,7 +35,10 @@ export const PUT = auth(
         },
       });
 
-      return NextResponse.json({ actor: updatedActor }, { status: 200 });
+      return NextResponse.json(
+        { participant: updatedParticipant },
+        { status: 200 }
+      );
     } catch (error: any) {
       console.error(error);
       return NextResponse.json({ message: error.message }, { status: 500 });

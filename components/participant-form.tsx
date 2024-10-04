@@ -1,6 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import {
+  // useEffect,
+  useState,
+} from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useForm, FormProvider } from "react-hook-form";
 import { DynamicField } from "@/components/dynamic-form/dynamic-field";
@@ -62,13 +65,14 @@ const formFields = [
   },
 ];
 
-export const ActorForm = ({
-  actorData,
+export const ParticipantForm = ({
+  participantData,
   guest,
 }: {
-  actorData?: any;
+  participantData?: any;
   guest?: boolean;
 }) => {
+  console.log("participantData:", participantData);
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
@@ -76,18 +80,22 @@ export const ActorForm = ({
 
   const { data: session } = useSession();
 
-  const isEditing = Boolean(actorData);
+  const isEditing = Boolean(participantData);
 
   const form = useForm({
     defaultValues: {
-      firstName: actorData?.firstName || "",
-      lastName: actorData?.lastName || "",
-      nickname: actorData?.nickname || "",
-      bio: actorData?.bio || "",
-      gender: actorData?.gender || "",
-      birthDate: actorData?.birthDate ? actorData.birthDate.toISOString() : "",
-      deathDate: actorData?.deathDate ? actorData.deathDate.toISOString() : "",
-      type: isEditing && guest ? "GUEST" : actorData?.type || "MAIN",
+      firstName: participantData?.firstName || "",
+      lastName: participantData?.lastName || "",
+      nickname: participantData?.nickname || "",
+      bio: participantData?.bio || "",
+      gender: participantData?.gender || "",
+      birthDate: participantData?.birthDate
+        ? participantData.birthDate.toISOString()
+        : "",
+      deathDate: participantData?.deathDate
+        ? participantData.deathDate.toISOString()
+        : "",
+      type: isEditing && guest ? "GUEST" : participantData?.type || "MAIN",
     },
   });
 
@@ -99,10 +107,10 @@ export const ActorForm = ({
   } = form;
 
   // useEffect(() => {
-  //   if (actorData) {
-  //     Object.keys(actorData).forEach((key) => setValue(key, actorData[key]));
+  //   if (participantData) {
+  //     Object.keys(participantData).forEach((key) => setValue(key, participantData[key]));
   //   }
-  // }, [actorData, setValue]);
+  // }, [participantData, setValue]);
 
   const onSubmit = async (data: any) => {
     setLoading(true);
@@ -110,8 +118,8 @@ export const ActorForm = ({
     try {
       const method = isEditing ? "PUT" : "POST";
       const url = isEditing
-        ? `/api/actors/${actorData.slug}/edit`
-        : "/api/actors";
+        ? `/api/participants/${participantData.slug}/edit`
+        : "/api/participants";
 
       const response = await fetch(url, {
         method,
@@ -132,7 +140,9 @@ export const ActorForm = ({
         const result = await response.json();
 
         router.push(
-          guest ? `/guest/${result.actor.slug}` : `/actor/${result.actor.slug}`
+          guest
+            ? `/guest/${result.participant.slug}`
+            : `/actor/${result.participant.slug}`
         );
       } else {
         const errorData = await response.json();
@@ -193,9 +203,11 @@ export const ActorForm = ({
               {/* )} */}
               {isSubmitting || loading
                 ? "Spremam..."
-                : isEditing && pathname === `/guest/${actorData.slug}/edit`
+                : isEditing &&
+                  pathname === `/guest/${participantData.slug}/edit`
                 ? "Ažuriraj gosta"
-                : isEditing && pathname === `/actor/${actorData.slug}/edit`
+                : isEditing &&
+                  pathname === `/actor/${participantData.slug}/edit`
                 ? "Ažuriraj lika"
                 : pathname === "/guest/new"
                 ? "Dodaj gosta"

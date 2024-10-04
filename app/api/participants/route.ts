@@ -13,7 +13,7 @@ export const POST = auth(async (request: Request & { auth: any }) => {
 
     const slug = generateSlug(`${data.firstName} ${data.lastName}`);
 
-    const newActor = await prisma.actor.create({
+    const newParticipant = await prisma.participant.create({
       data: {
         firstName: data.firstName,
         lastName: data.lastName,
@@ -28,7 +28,7 @@ export const POST = auth(async (request: Request & { auth: any }) => {
       },
     });
 
-    return NextResponse.json({ actor: newActor }, { status: 201 });
+    return NextResponse.json({ participant: newParticipant }, { status: 201 });
   } catch (error: any) {
     console.error(error);
     return NextResponse.json({ message: error.message }, { status: 500 });
@@ -37,11 +37,11 @@ export const POST = auth(async (request: Request & { auth: any }) => {
 
 export const GET = auth(async () => {
   try {
-    const actors = await prisma.actor.findMany({
+    const participants = await prisma.participant.findMany({
       orderBy: { createdAt: "desc" },
     });
 
-    return NextResponse.json(actors, { status: 200 });
+    return NextResponse.json(participants, { status: 200 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(

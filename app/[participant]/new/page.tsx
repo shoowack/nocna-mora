@@ -1,4 +1,4 @@
-import { ActorForm } from "@/components/actor-form";
+import { ParticipantForm } from "@/components/participant-form";
 import { auth } from "auth";
 import { SessionProvider } from "next-auth/react";
 // import { AccessDenied } from "@/components/access-denied";
@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { TitleTemplate } from "@/components/title-template";
 
 export default async function NewParticipantPage({
-  params: { participant },
+  params: { participant: participantTypeProp },
 }: {
   params: { participant: string };
 }) {
@@ -38,10 +38,12 @@ export default async function NewParticipantPage({
   return (
     <SessionProvider basePath={"/auth"} session={session}>
       <TitleTemplate
-        title={`Dodaj novog ${participant === "actor" ? "lika" : "gosta"}`}
+        title={`Dodaj novog ${
+          participantTypeProp === "actor" ? "lika" : "gosta"
+        }`}
         contained
       >
-        <ActorForm guest={participant === "guest"} />
+        <ParticipantForm guest={participantTypeProp === "guest"} />
       </TitleTemplate>
     </SessionProvider>
   );

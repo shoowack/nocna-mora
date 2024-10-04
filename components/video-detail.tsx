@@ -5,16 +5,16 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { PlayCircle } from "lucide-react";
 import {
-  ActorType,
+  ParticipantType,
   VideoProvider,
   Video,
   Category,
-  Actor,
+  Participant,
 } from "@prisma/client";
 import { Container } from "@/components/container";
 
 const VideoContent: FC<{
-  video: Video & { actors?: Actor[]; categories?: Category[] };
+  video: Video & { participants?: Participant[]; categories?: Category[] };
   singleVideo?: boolean;
   showActors?: boolean;
   showCategories?: boolean;
@@ -41,28 +41,30 @@ const VideoContent: FC<{
       ) : singleVideo ? null : (
         <div className="h-5" />
       )}
-      {video.actors && video.actors?.length > 0 && showActors && (
+      {video.participants && video.participants?.length > 0 && showActors && (
         <>
-          {singleVideo && <h2>Actors:</h2>}
+          {singleVideo && <h2>Sudionici:</h2>}
           <div className="flex flex-wrap gap-x-1">
-            {video.actors.map((actor) => (
-              <Link
-                key={actor.id}
-                href={`/${actor.type === ActorType.GUEST ? "guest" : "actor"}/${
-                  actor.slug
-                }`}
-              >
-                <Badge className="m-0 px-1.5">{`${actor.firstName} ${actor.lastName}`}</Badge>
-              </Link>
-            ))}
+            {video.participants.map(
+              ({ id, type, slug, firstName, lastName }) => (
+                <Link
+                  key={id}
+                  href={`/${
+                    type === ParticipantType.GUEST ? "guest" : "actor"
+                  }/${slug}`}
+                >
+                  <Badge className="m-0 px-1.5">{`${firstName} ${lastName}`}</Badge>
+                </Link>
+              )
+            )}
           </div>
         </>
       )}
       {video.categories &&
         video.categories.length > 0 &&
         showCategories &&
-        video.actors &&
-        video.actors.length > 0 &&
+        video.participants &&
+        video.participants.length > 0 &&
         showActors && <Separator className="w-full bg-neutral-300" />}
       {video.categories && video.categories.length > 0 && showCategories && (
         <>

@@ -36,7 +36,7 @@ export default async function EditVideoPage({
     where: { id: params.id },
     include: {
       categories: true,
-      actors: true,
+      participants: true,
       createdBy: true,
     },
   });

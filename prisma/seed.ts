@@ -1,17 +1,17 @@
 import prisma from "@/lib/prisma";
 import { generateSlug } from "../lib/slugify";
-import { ActorType, VideoProvider } from "@prisma/client";
+import { ParticipantType, VideoProvider } from "@prisma/client";
 
 async function main() {
-  // Create a default user to associate with actors
+  // Create a default user to associate with participants
   const defaultUserEmail = "isuvak@gmail.com";
 
   const user = await prisma.user.findUnique({
     where: { email: defaultUserEmail },
   });
 
-  // Seed data for actors
-  const actorsData = [
+  // Seed data for participants
+  const participantsData = [
     {
       firstName: "Željko",
       lastName: "Malnar",
@@ -20,7 +20,7 @@ async function main() {
       bio: 'Željko Malnar is documentarist, TV author and writer. Educated at New Delhi University in mass communications. Made more then 100 documentary films about far east and tropical areas for which he has won awards. Co-author of the book U potrazi za staklenim gradom (In search for glass city). Author of TV series "Nightmare stage (OTV, 1992-1995) and series of interviews in Globus magazine.',
       gender: "Male",
       nickname: "Predsjednik",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
     {
       firstName: "Nediljko",
@@ -30,7 +30,7 @@ async function main() {
       bio: "Savjetnik za moral i ćudoređe Republike Pešćenice",
       gender: "Male",
       nickname: "Tarzan",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
     {
       firstName: "Zvonimir",
@@ -40,7 +40,7 @@ async function main() {
       bio: "Ministar obrane Republike Pešćenice",
       gender: "Male",
       nickname: "Ševa",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
     {
       firstName: "Emir",
@@ -50,7 +50,7 @@ async function main() {
       deathDate: null,
       bio: "Erotski pjesnik",
       gender: "male",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
     {
       firstName: "Sead",
@@ -60,7 +60,7 @@ async function main() {
       deathDate: null,
       bio: "Zastupnik romske nacionalne manjine",
       gender: "male",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
     {
       firstName: "Darko",
@@ -70,7 +70,7 @@ async function main() {
       deathDate: null,
       bio: "Hrvat koji želi postati Srbin",
       gender: "male",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
     {
       firstName: "Zoran",
@@ -80,7 +80,7 @@ async function main() {
       deathDate: null,
       bio: "Predstavlja TV Aukciju ukradenih slika u Noćnoj Mori.",
       gender: "male",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
     {
       firstName: "Darijan",
@@ -90,7 +90,7 @@ async function main() {
       deathDate: null,
       bio: "Najbolji izvođač pjesme 'Moj galebe' svih vremena",
       gender: "male",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
     {
       firstName: "Ivan",
@@ -100,7 +100,7 @@ async function main() {
       deathDate: null,
       bio: "Najbolji harmonikaš svih vremena. Bi bip!",
       gender: "male",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
     {
       firstName: "Vlado",
@@ -110,7 +110,7 @@ async function main() {
       deathDate: null,
       bio: "Obični novinar",
       gender: "male",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
     {
       firstName: "Remzo",
@@ -121,7 +121,7 @@ async function main() {
       deathDate: null,
       bio: "Urednik vijesti i narodni pjesnik. Dobio otkaz u Krašu.",
       gender: "male",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
     {
       firstName: "Nenad",
@@ -132,7 +132,7 @@ async function main() {
       deathDate: null,
       bio: "Pjevač i bivši boksački prvak",
       gender: "male",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
     {
       firstName: "Stanislav",
@@ -142,7 +142,7 @@ async function main() {
       deathDate: new Date(2018, 6, 17),
       bio: "Narodni tribun Republike Pešćenice",
       gender: "male",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
     {
       firstName: "Bruno",
@@ -152,7 +152,7 @@ async function main() {
       deathDate: null,
       bio: "Predsjednikovo sunce uneređeno",
       gender: "transgender",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
     {
       firstName: "Ivica",
@@ -162,7 +162,7 @@ async function main() {
       deathDate: new Date(2021, 8, 31),
       bio: "Plesač i ovisnik o marihuani",
       gender: "male",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
     {
       firstName: "Siniša",
@@ -172,7 +172,7 @@ async function main() {
       deathDate: null,
       bio: "Pjevač",
       gender: "male",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
     {
       firstName: "Darko",
@@ -182,7 +182,7 @@ async function main() {
       deathDate: null,
       bio: "Pjevač-imitator",
       gender: "male",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
     {
       firstName: "Krešimir",
@@ -192,7 +192,7 @@ async function main() {
       deathDate: null,
       bio: "Podvojena ličnost, perač prozora koji misli da je pilot",
       gender: "male",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
     {
       firstName: "Slađana",
@@ -202,7 +202,7 @@ async function main() {
       deathDate: null,
       bio: "",
       gender: "female",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
     {
       firstName: "Vesna",
@@ -212,7 +212,7 @@ async function main() {
       deathDate: null,
       bio: "",
       gender: "female",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
     {
       firstName: "Ljubomir",
@@ -222,7 +222,7 @@ async function main() {
       deathDate: null,
       bio: "Filozof i mudrac",
       gender: "male",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
     {
       firstName: "Ivo",
@@ -232,7 +232,7 @@ async function main() {
       deathDate: null,
       bio: "Ribar sa otoka Oliba, završio 3 fakulteta - ribarski, tesarski i soboslikarsaki.",
       gender: "male",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
     {
       firstName: "Ali",
@@ -242,7 +242,7 @@ async function main() {
       deathDate: null,
       bio: "Trbušni plesač",
       gender: "transgender",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
     {
       firstName: "Baka",
@@ -252,7 +252,7 @@ async function main() {
       deathDate: null,
       bio: "Prodavačica sa zagrebačkog placa",
       gender: "female",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
     {
       firstName: "Dubravka",
@@ -262,7 +262,7 @@ async function main() {
       deathDate: new Date(2024, 2, 19),
       bio: "Bivša Jaranova ljubav",
       gender: "female",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
     {
       firstName: "Husnija",
@@ -272,7 +272,7 @@ async function main() {
       deathDate: null,
       bio: "Voditeljica vremenske prognoze",
       gender: "female",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
     {
       firstName: "Hasan",
@@ -282,7 +282,7 @@ async function main() {
       deathDate: null,
       bio: "Husnijin sin",
       gender: "male",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
     {
       firstName: "Sandra",
@@ -292,7 +292,7 @@ async function main() {
       deathDate: null,
       bio: "Pjevačica i voditeljica 'Golih vijesti'",
       gender: "female",
-      type: ActorType.GUEST,
+      type: ParticipantType.GUEST,
     },
     {
       firstName: "Predrag",
@@ -302,7 +302,7 @@ async function main() {
       deathDate: null,
       bio: "Književnik",
       gender: "male",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
     {
       firstName: "Stjepan",
@@ -312,7 +312,7 @@ async function main() {
       deathDate: new Date(2004, 8, 21),
       bio: "Hrvatski poduzetnik i sportski djelatnik, predsjednik zagrebačkoga nogometnog kluba Hrvatski dragovoljac",
       gender: "male",
-      type: ActorType.GUEST,
+      type: ParticipantType.GUEST,
     },
     {
       firstName: "Milan",
@@ -322,7 +322,7 @@ async function main() {
       deathDate: new Date(2021, 2, 28),
       bio: "Dugogodišnji gradonačelnik grada Zagreba",
       gender: "male",
-      type: ActorType.GUEST,
+      type: ParticipantType.GUEST,
     },
     {
       firstName: "Nedjeljko",
@@ -332,42 +332,44 @@ async function main() {
       deathDate: new Date(2022, 11, 4),
       bio: "Desna ruka Željka Malnara, dugogodišnji producent Noćne More i brojnih drugih televizijskih formata. Začetnik najduhovitijih trenutaka koje smo imali prilike gledati tijekom trajanja Noćne More",
       gender: "male",
-      type: ActorType.MAIN,
+      type: ParticipantType.MAIN,
     },
   ];
 
-  for (const actorData of actorsData) {
-    const slug = generateSlug(`${actorData.firstName} ${actorData.lastName}`);
+  for (const participantData of participantsData) {
+    const slug = generateSlug(
+      `${participantData.firstName} ${participantData.lastName}`
+    );
 
-    await prisma.actor.upsert({
+    await prisma.participant.upsert({
       where: { slug: slug },
       update: {
-        firstName: actorData.firstName,
-        lastName: actorData.lastName,
-        birthDate: actorData.birthDate,
-        deathDate: actorData.deathDate,
-        bio: actorData.bio,
-        gender: actorData.gender,
-        nickname: actorData.nickname,
-        type: actorData.type,
+        firstName: participantData.firstName,
+        lastName: participantData.lastName,
+        birthDate: participantData.birthDate,
+        deathDate: participantData.deathDate,
+        bio: participantData.bio,
+        gender: participantData.gender,
+        nickname: participantData.nickname,
+        type: participantData.type,
       },
       // TODO: Fix TS error
       // @ts-ignore
       create: {
-        ...actorData,
+        ...participantData,
         slug: slug,
         userId: user?.id, // Associate with default user
       },
     });
   }
 
-  console.log("🕺🏻 Actors seeded successfully.");
+  console.log("🕺🏻 Participants seeded successfully.");
 
-  // Fetch existing actors
-  const actors = await prisma.actor.findMany();
+  // Fetch existing participants
+  const participants = await prisma.participant.findMany();
 
-  if (actors.length === 0) {
-    console.log("🚨 No actors found.");
+  if (participants.length === 0) {
+    console.log("🚨 No participants found.");
     return;
   }
 
@@ -430,7 +432,9 @@ async function main() {
       duration: 29,
       provider: VideoProvider.VIMEO,
       airedDate: new Date("2001-01-12"),
-      actors: actors.slice(0, 5).map((actor) => actor.id),
+      participants: participants
+        .slice(0, 5)
+        .map((participant) => participant.id),
       categories: categories
         .filter((category) => ["picolovka"].includes(category.slug))
         .map((category) => category.id),
@@ -441,13 +445,13 @@ async function main() {
       duration: 22340,
       provider: VideoProvider.YOUTUBE,
       airedDate: new Date("2001-01-12"),
-      actors: actors
-        .filter((actor) =>
+      participants: participants
+        .filter((participant) =>
           ["zeljko-malnar", "milan-bandic", "sead-hasanovic"].includes(
-            actor.slug
+            participant.slug
           )
         )
-        .map((actor) => actor.id),
+        .map((participant) => participant.id),
       categories: categories
         .filter((category) => ["gosti"].includes(category.slug))
         .map((category) => category.id),
@@ -457,7 +461,9 @@ async function main() {
       videoId: "PC0pzISCAQc",
       duration: 4571,
       provider: VideoProvider.YOUTUBE,
-      actors: actors.slice(0, 5).map((actor) => actor.id),
+      participants: participants
+        .slice(0, 5)
+        .map((participant) => participant.id),
       categories: categories
         .filter((category) => ["picolovka"].includes(category.slug))
         .map((category) => category.id),
@@ -468,7 +474,9 @@ async function main() {
       duration: 4121,
       provider: VideoProvider.YOUTUBE,
       airedDate: new Date("2005-11-20"),
-      actors: actors.slice(2, 9).map((actor) => actor.id),
+      participants: participants
+        .slice(2, 9)
+        .map((participant) => participant.id),
       categories: categories
         .filter((category) => ["picolovka"].includes(category.slug))
         .map((category) => category.id),
@@ -479,7 +487,9 @@ async function main() {
       duration: 4121,
       provider: VideoProvider.DAILYMOTION,
       airedDate: new Date("2005-11-20"),
-      actors: actors.slice(2, 9).map((actor) => actor.id),
+      participants: participants
+        .slice(2, 9)
+        .map((participant) => participant.id),
       categories: categories
         .filter((category) => ["picolovka"].includes(category.slug))
         .map((category) => category.id),
@@ -490,13 +500,13 @@ async function main() {
       duration: 2158,
       provider: VideoProvider.VIMEO,
       airedDate: new Date("2010-10-01"),
-      actors: actors
-        .filter((actor) =>
+      participants: participants
+        .filter((participant) =>
           ["zeljko-malnar", "milan-bandic", "sead-hasanovic"].includes(
-            actor.slug
+            participant.slug
           )
         )
-        .map((actor) => actor.id),
+        .map((participant) => participant.id),
       categories: categories
         .filter((category) => ["gosti"].includes(category.slug))
         .map((category) => category.id),
@@ -507,16 +517,16 @@ async function main() {
       duration: 2338,
       provider: VideoProvider.YOUTUBE,
       airedDate: new Date("2010-10-01"),
-      actors: actors
-        .filter((actor) =>
+      participants: participants
+        .filter((participant) =>
           [
             "vlado-matijevic",
             "remzo-krak",
             "stanko-hranovic",
             "sead-hasanovic",
-          ].includes(actor.slug)
+          ].includes(participant.slug)
         )
-        .map((actor) => actor.id),
+        .map((participant) => participant.id),
       categories: categories
         .filter((category) => ["picolovka"].includes(category.slug))
         .map((category) => category.id),
@@ -527,17 +537,17 @@ async function main() {
       duration: 3504,
       provider: VideoProvider.YOUTUBE,
       airedDate: new Date("2010-10-01"),
-      actors: actors
-        .filter((actor) =>
+      participants: participants
+        .filter((participant) =>
           [
             "nediljko-alagusic",
             "ivica-lako",
             "sead-hasanovic",
             "husnija-hrustic",
             "zvonimir-levacic",
-          ].includes(actor.slug)
+          ].includes(participant.slug)
         )
-        .map((actor) => actor.id),
+        .map((participant) => participant.id),
       categories: categories
         .filter((category) => ["picolovka"].includes(category.slug))
         .map((category) => category.id),
@@ -548,17 +558,17 @@ async function main() {
       duration: 3453,
       provider: VideoProvider.YOUTUBE,
       airedDate: new Date("2010-10-01"),
-      actors: actors
-        .filter((actor) =>
+      participants: participants
+        .filter((participant) =>
           [
             "stanko-hranovic",
             "ivica-lako",
             "sead-hasanovic",
             "hasan-hrustic",
             "zvonimir-levacic",
-          ].includes(actor.slug)
+          ].includes(participant.slug)
         )
-        .map((actor) => actor.id),
+        .map((participant) => participant.id),
       categories: categories
         .filter((category) => ["picolovka"].includes(category.slug))
         .map((category) => category.id),
@@ -570,9 +580,9 @@ async function main() {
       duration: 1800,
       provider: VideoProvider.YOUTUBE,
       airedDate: new Date("2010-10-01"),
-      actors: actors
-        .filter((actor) => ["zeljko-malnar"].includes(actor.slug))
-        .map((actor) => actor.id),
+      participants: participants
+        .filter((participant) => ["zeljko-malnar"].includes(participant.slug))
+        .map((participant) => participant.id),
       categories: categories
         .filter((category) => ["dokumentarci"].includes(category.slug))
         .map((category) => category.id),
@@ -588,8 +598,10 @@ async function main() {
         provider: videoData.provider,
         published: true,
         airedDate: videoData.airedDate,
-        actors: {
-          set: videoData.actors.map((actorId) => ({ id: actorId })),
+        participants: {
+          set: videoData.participants.map((participantId) => ({
+            id: participantId,
+          })),
         },
         categories: {
           set: videoData.categories.map((category) => ({ id: category })),
@@ -605,8 +617,10 @@ async function main() {
         createdBy: {
           connect: { id: user?.id },
         },
-        actors: {
-          connect: videoData.actors.map((actorId) => ({ id: actorId })),
+        participants: {
+          connect: videoData.participants.map((participantId) => ({
+            id: participantId,
+          })),
         },
         categories: {
           connect: videoData.categories.map((category) => ({

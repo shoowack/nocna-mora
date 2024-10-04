@@ -4,11 +4,11 @@ import { SessionProvider } from "next-auth/react";
 import { TitleTemplate } from "@/components/title-template";
 import { calculateAge } from "@/lib/date";
 // import { AccessDenied } from "@/components/access-denied";
-import { ActorForm } from "@/components/actor-form";
+import { ParticipantForm } from "@/components/participant-form";
 import { redirect } from "next/navigation";
 
 export default async function EditParticipantPage({
-  params: { participant, slug },
+  params: { participant: participantTypeProp, slug },
 }: {
   params: { participant: string; slug: string };
 }) {
@@ -35,12 +35,12 @@ export default async function EditParticipantPage({
     redirect("/");
   }
 
-  const actor = await prisma.actor.findUnique({
+  const participant = await prisma.participant.findUnique({
     where: { slug },
   });
 
-  if (!actor) {
-    return <div>Actor not found</div>;
+  if (!participant) {
+    return <div>Participant not found</div>;
   }
 
   // if (!session?.user) return <AccessDenied />;
@@ -48,16 +48,19 @@ export default async function EditParticipantPage({
   return (
     <SessionProvider basePath={"/auth"} session={session}>
       <TitleTemplate
-        title={`Ažuriraj ${actor.firstName} ${actor.lastName} ${
-          actor.nickname ? ` - ${actor.nickname}` : ""
+        title={`Ažuriraj ${participant.firstName} ${participant.lastName} ${
+          participant.nickname ? ` - ${participant.nickname}` : ""
         } ${
-          actor.birthDate
-            ? ` (${calculateAge(actor.birthDate, actor.deathDate)})`
+          participant.birthDate
+            ? ` (${calculateAge(participant.birthDate, participant.deathDate)})`
             : ""
         }`}
         contained
       >
-        <ActorForm actorData={actor} guest={participant === "guest"} />
+        <ParticipantForm
+          participantData={participant}
+          guest={participantTypeProp === "guest"}
+        />
       </TitleTemplate>
     </SessionProvider>
   );

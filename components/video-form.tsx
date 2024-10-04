@@ -30,7 +30,7 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { MultiSelect } from "@/components/ui/multi-select";
 import { Switch } from "@/components/ui/switch";
-import { VideoProvider, Video, Actor, Category } from "@prisma/client";
+import { VideoProvider, Video, Participant, Category } from "@prisma/client";
 import { Separator } from "@/components/ui/separator";
 
 const ItemGroup: FC<PropsWithChildren & { className?: string }> = ({
@@ -52,7 +52,7 @@ const ItemGroup: FC<PropsWithChildren & { className?: string }> = ({
 export function VideoForm({
   video,
 }: {
-  video?: Video & { actors?: Actor[]; categories?: Category[] };
+  video?: Video & { participants?: Participant[]; categories?: Category[] };
 }) {
   const router = useRouter();
 
@@ -63,7 +63,7 @@ export function VideoForm({
     formState: { errors, isSubmitting },
   } = useForm<
     Video & {
-      actors?: string[];
+      participants?: string[];
       categories?: string[];
     }
   >({
@@ -74,12 +74,13 @@ export function VideoForm({
       airedDate: video?.airedDate ? new Date(video.airedDate) : null,
       published: video?.published || false,
       provider: video?.provider,
-      actors: video?.actors?.map((actor) => actor.id) || [],
+      participants:
+        video?.participants?.map((participant) => participant.id) || [],
       categories: video?.categories?.map((category) => category.id) || [],
     },
   });
 
-  const [actors, setActors] = useState<any[]>([]);
+  const [participants, setParticipants] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState(false);
@@ -87,28 +88,28 @@ export function VideoForm({
   const isEditing = Boolean(video);
 
   useEffect(() => {
-    // Fetch actors and categories
+    // Fetch participants and categories
     async function fetchData() {
       try {
-        const [actorsRes, categoriesRes] = await Promise.all([
-          fetch("/api/actors"),
+        const [participantsRes, categoriesRes] = await Promise.all([
+          fetch("/api/participants"),
           fetch("/api/categories"),
         ]);
 
-        if (!actorsRes.ok || !categoriesRes.ok) {
-          throw new Error("Failed to fetch actors or categories.");
+        if (!participantsRes.ok || !categoriesRes.ok) {
+          throw new Error("Failed to fetch participants or categories.");
         }
 
-        const [actorsData, categoriesData] = await Promise.all([
-          actorsRes.json(),
+        const [participantsData, categoriesData] = await Promise.all([
+          participantsRes.json(),
           categoriesRes.json(),
         ]);
 
-        setActors(actorsData);
+        setParticipants(participantsData);
         setCategories(categoriesData);
       } catch (err) {
         console.error(err);
-        setError("Failed to load actors or categories.");
+        setError("Failed to load participants or categories.");
       }
     }
 
@@ -116,7 +117,7 @@ export function VideoForm({
   }, []);
 
   const onSubmit = async (
-    data: Video & { actors?: string[]; categories?: string[] }
+    data: Video & { participants?: string[]; categories?: string[] }
   ) => {
     setError("");
     setLoading(true);
@@ -134,7 +135,7 @@ export function VideoForm({
             airedDate: data.airedDate ? data.airedDate.toISOString() : null,
             provider: data.provider,
             published: data.published,
-            actors: data.actors,
+            participants: data.participants,
             categories: data.categories,
           }),
         }
@@ -305,17 +306,17 @@ export function VideoForm({
       </ItemGroup>
 
       <ItemGroup>
-        <Label htmlFor="actors">Likovi</Label>
+        <Label htmlFor="participants">Likovi</Label>
         <Controller
           control={control}
-          name="actors"
+          name="participants"
           render={({ field }) => (
             <MultiSelect
-              options={actors.map((actors: any) => ({
-                label: `${actors.firstName} ${actors.lastName}${
-                  actors.nickname && ` (${actors.nickname})`
+              options={participants.map((participants: any) => ({
+                label: `${participants.firstName} ${participants.lastName}${
+                  participants.nickname && ` (${participants.nickname})`
                 }`,
-                value: actors.id.toString(),
+                value: participants.id.toString(),
                 // icon: ({ className }) => (
                 //   <Folder className={cn("size-4", className)} />
                 // ),

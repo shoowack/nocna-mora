@@ -5,23 +5,23 @@
 
 ## Overview
 
-This project is a web application designed to manage actors, videos, and categories. It allows users to create, read, update, and delete (CRUD) actors and videos, associate actors with videos, and categorize videos. The application uses modern technologies like Next.js for server-side rendering, Prisma as an ORM for database interactions, and shadcn UI components for a consistent and accessible user interface.
+This project is a web application designed to manage participants, videos, and categories. It allows users to create, read, update, and delete (CRUD) participants and videos, associate participants with videos, and categorize videos. The application uses modern technologies like Next.js for server-side rendering, Prisma as an ORM for database interactions, and shadcn UI components for a consistent and accessible user interface.
 
 ### Features
 
 User Authentication: Secure login and registration using NextAuth.
-Actor Management:
-Create, edit, and delete actors.
-View actor profiles with associated videos.
+Participant Management:
+Create, edit, and delete participants.
+View participant profiles with associated videos.
 Video Management:
 Create, edit, and delete videos.
-Associate actors with videos.
+Associate participants with videos.
 Assign categories to videos.
 Category Management:
 Create, edit, and delete categories.
 Categorize videos for easy filtering and organization.
 Responsive UI: Built with shadcn UI components for a seamless user experience across devices.
-SEO-Friendly URLs: Slugs are generated for actors and categories for clean URLs.
+SEO-Friendly URLs: Slugs are generated for participants and categories for clean URLs.
 Database Seeding: Initial data can be seeded into the database for testing and development.
 
 ## Getting Started

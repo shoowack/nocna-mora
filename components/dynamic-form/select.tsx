@@ -13,6 +13,7 @@ export interface Option {
 
 interface SelectFieldProps {
   value: string;
+  // eslint-disable-next-line no-unused-vars
   onChange: (value: string) => void;
   options: Array<Option>;
   className?: string;

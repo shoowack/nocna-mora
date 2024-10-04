@@ -1,17 +1,14 @@
-// "use client";
-
-// import { useEffect, useState } from "react";
 import Link from "next/link";
 import prisma from "@/lib/prisma";
 import { CustomLink } from "@/components/custom-link";
-import { ActorType } from "@prisma/client";
+import { ParticipantType } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { TitleTemplate } from "@/components/title-template";
 import { Users2 } from "lucide-react";
 
-export default async function Actors() {
-  const actors = await prisma.actor.findMany({
-    where: { type: ActorType.GUEST },
+export default async function Guests() {
+  const participants = await prisma.participant.findMany({
+    where: { type: ParticipantType.GUEST },
     orderBy: {
       lastName: "asc",
     },
@@ -28,24 +25,24 @@ export default async function Actors() {
         </Link>
       }
     >
-      {actors.length ? (
+      {participants.length ? (
         <div className="flex flex-col space-y-10">
-          {actors?.map((actor) => (
-            <div key={actor.id} className="flex flex-col space-y-2">
+          {participants?.map((participant) => (
+            <div key={participant.id} className="flex flex-col space-y-2">
               <CustomLink
-                href={`/guest/${actor.slug}`}
+                href={`/guest/${participant.slug}`}
                 className="text-xl font-bold"
-                key={actor.id}
+                key={participant.id}
               >
-                {`${actor.firstName} ${actor.lastName}`}{" "}
-                {actor.nickname && `(${actor.nickname})`}
+                {`${participant.firstName} ${participant.lastName}`}{" "}
+                {participant.nickname && `(${participant.nickname})`}
               </CustomLink>
-              <p>{actor.bio}</p>
+              <p>{participant.bio}</p>
             </div>
           ))}
         </div>
       ) : (
-        <div className="flex flex-col space-y-2 items-center h-[calc(100vh-23rem)] justify-center">
+        <div className="flex h-[calc(100vh-23rem)] flex-col items-center justify-center space-y-2">
           <Users2 className="size-12" strokeWidth={1.5} />
           <div>Nema dostupnih gostiju</div>
         </div>

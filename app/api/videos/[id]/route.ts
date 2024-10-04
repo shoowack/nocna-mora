@@ -10,7 +10,7 @@ export const GET = async (
     const video = await prisma.video.findUnique({
       where: { id: params.id },
       include: {
-        actors: true,
+        participants: true,
         categories: true,
         createdBy: true,
       },
@@ -69,9 +69,9 @@ export const PUT = auth(async (request: Request, { params }: any) => {
         airedDate: data.airedDate,
         provider: data.provider,
         published: data.published,
-        actors: {
+        participants: {
           set: [], // Clear existing connections
-          connect: data.actors.map((id: number) => ({ id })),
+          connect: data.participants.map((id: number) => ({ id })),
         },
         categories: {
           set: [], // Clear existing connections

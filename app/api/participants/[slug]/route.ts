@@ -15,18 +15,18 @@ export const GET = auth(
     }
 
     try {
-      const actor = await prisma.actor.findUnique({
+      const participant = await prisma.participant.findUnique({
         where: { slug: params.slug },
       });
 
-      if (!actor) {
+      if (!participant) {
         return NextResponse.json(
-          { message: "Actor not found" },
+          { message: "Participant not found" },
           { status: 404 }
         );
       }
 
-      return NextResponse.json(actor, { status: 200 });
+      return NextResponse.json(participant, { status: 200 });
     } catch (error: any) {
       console.error(error);
       return NextResponse.json({ message: error.message }, { status: 500 });

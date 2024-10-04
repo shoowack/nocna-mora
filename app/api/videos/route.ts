@@ -5,7 +5,7 @@ import { auth } from "auth";
 export async function GET() {
   try {
     const videos = await prisma.video.findMany({
-      include: { createdBy: true, actors: true, categories: true },
+      include: { createdBy: true, participants: true, categories: true },
       orderBy: { createdAt: "desc" },
     });
 
@@ -56,8 +56,8 @@ export const POST = auth(async (request: Request) => {
         provider: data.provider,
         userId: session.user.id,
         published: data.published,
-        actors: {
-          connect: data.actors.map((id: number) => ({ id })),
+        participants: {
+          connect: data.participants.map((id: number) => ({ id })),
         },
         categories: {
           connect: data.categories.map((id: number) => ({ id })),

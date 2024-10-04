@@ -5,13 +5,13 @@ import prisma from "@/lib/prisma";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CustomLink } from "@/components/custom-link";
-import { ActorType } from "@prisma/client";
+import { ParticipantType } from "@prisma/client";
 import { TitleTemplate } from "@/components/title-template";
 import { User2 } from "lucide-react";
 
 export default async function Actors() {
-  const actors = await prisma.actor.findMany({
-    where: { type: ActorType.MAIN },
+  const participants = await prisma.participant.findMany({
+    where: { type: ParticipantType.MAIN },
     orderBy: {
       lastName: "asc",
     },
@@ -27,19 +27,19 @@ export default async function Actors() {
         </Link>
       }
     >
-      {actors.length ? (
+      {participants.length ? (
         <div className="flex flex-col space-y-10">
-          {actors?.map((actor) => (
-            <div key={actor.id} className="flex flex-col space-y-2">
+          {participants?.map((participant) => (
+            <div key={participant.id} className="flex flex-col space-y-2">
               <CustomLink
-                href={`/actor/${actor.slug}`}
+                href={`/actor/${participant.slug}`}
                 className="text-xl font-bold"
-                key={actor.id}
+                key={participant.id}
               >
-                {`${actor.firstName} ${actor.lastName}`}{" "}
-                {actor.nickname && `(${actor.nickname})`}
+                {`${participant.firstName} ${participant.lastName}`}{" "}
+                {participant.nickname && `(${participant.nickname})`}
               </CustomLink>
-              <p>{actor.bio}</p>
+              <p>{participant.bio}</p>
             </div>
           ))}
         </div>

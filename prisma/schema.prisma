@@ -49,21 +49,21 @@ model Session {
 }
 
 model User {
-  id            String       @id @default(cuid())
+  id            String          @id @default(cuid())
   name          String?
-  email         String?      @unique
+  email         String?         @unique
   emailVerified DateTime?
   image         String?
-  createdAt     DateTime     @default(now())
-  updatedAt     DateTime     @updatedAt
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
   role          String?
   accounts      Account[]
   sessions      Session[]
-  images        Image[]      @relation("UserImages")
-  memes         Meme[]       @relation("UserMemes")
-  videos        Video[]      @relation("UserVideos")
-  actors        Actor[]      @relation("UserActors")
-  categories    Category[]   @relation("UserCategories")
+  images        Image[]         @relation("UserImages")
+  memes         Meme[]          @relation("UserMemes")
+  videos        Video[]         @relation("UserVideos")
+  participants  Participant[]   @relation("UserParticipants")
+  categories    Category[]      @relation("UserCategories")
 
   @@map("users")
 }
@@ -78,25 +78,25 @@ model VerificationToken {
 }
 
 model Image {
-  id         String   @id @default(cuid())
-  url        String
-  title      String?
-  uploadedBy User     @relation("UserImages", fields: [userId], references: [id])
-  userId     String
-  memes      Meme[]   @relation("ImageMemes")
-  createdAt  DateTime @default(now())
-  actors     Actor[]  @relation("ActorImages")
+  id            String        @id @default(cuid())
+  url           String
+  title         String?
+  uploadedBy    User          @relation("UserImages", fields: [userId], references: [id])
+  userId        String
+  memes         Meme[]        @relation("ImageMemes")
+  createdAt     DateTime      @default(now())
+  participants  Participant[] @relation("ParticipantImages")
 
   @@map("images")
 }
 
-enum ActorType {
+enum ParticipantType {
   MAIN
   GUEST
 }
 
-model Actor {
-  id          String      @id @default(cuid())
+model Participant {
+  id          String            @id @default(cuid())
   firstName   String
   lastName    String
   nickname    String?
@@ -104,17 +104,17 @@ model Actor {
   gender      String?
   birthDate   DateTime?
   deathDate   DateTime?
-  slug        String      @unique
-  type        ActorType   @default(GUEST)
+  slug        String            @unique
+  type        ParticipantType   @default(GUEST)
 
-  createdAt   DateTime    @default(now())
+  createdAt   DateTime          @default(now())
   userId      String
-  createdBy   User        @relation("UserActors", fields: [userId], references: [id])
+  createdBy   User              @relation("UserParticipants", fields: [userId], references: [id])
 
-  videos      Video[]     @relation("ActorVideos")
-  images      Image[]     @relation("ActorImages")
+  videos      Video[]           @relation("ParticipantVideos")
+  images      Image[]           @relation("ParticipantImages")
 
-  @@map("actors")
+  @@map("participants")
 }
 
 enum VideoProvider {
@@ -124,21 +124,21 @@ enum VideoProvider {
 }
 
 model Video {
-  id          String     @id @default(cuid())
-  title       String
-  videoId     String     @unique
-  provider    VideoProvider
+  id              String          @id @default(cuid())
+  title           String
+  videoId         String          @unique
+  provider        VideoProvider
 
-  duration    Int
-  airedDate   DateTime?
-  published   Boolean    @default(false)
+  duration        Int
+  airedDate       DateTime?
+  published       Boolean         @default(false)
 
-  createdAt   DateTime   @default(now())
-  createdBy   User       @relation("UserVideos", fields: [userId], references: [id])
-  userId      String
+  createdAt       DateTime        @default(now())
+  createdBy       User            @relation("UserVideos", fields: [userId], references: [id])
+  userId          String
 
-  actors      Actor[]    @relation("ActorVideos")
-  categories  Category[] @relation("VideoCategories")
+  participants    Participant[]   @relation("ParticipantVideos")
+  categories      Category[]      @relation("VideoCategories")
 
   @@map("videos")
 }
@@ -160,18 +160,18 @@ model Meme {
 }
 
 model Category {
-  id          String   @id @default(cuid())
-  title       String   @unique
-  slug        String   @unique
+  id          String      @id @default(cuid())
+  title       String      @unique
+  slug        String      @unique
   description String?
-  videos      Video[]  @relation("VideoCategories")
+  videos      Video[]     @relation("VideoCategories")
 
-  createdAt   DateTime @default(now())
-  createdBy   User     @relation("UserCategories", fields: [userId], references: [id])
+  createdAt   DateTime    @default(now())
+  createdBy   User        @relation("UserCategories", fields: [userId], references: [id])
   deletedAt   DateTime? // soft delete
 
   userId      String
-  updatedAt   DateTime @updatedAt
+  updatedAt   DateTime    @updatedAt
 
   @@map("categories")
 }

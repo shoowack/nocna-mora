@@ -30,7 +30,7 @@ export default async function VideoPage({
     where: { id },
     include: {
       categories: true,
-      actors: true,
+      participants: true,
       createdBy: true,
     },
   });
@@ -41,7 +41,7 @@ export default async function VideoPage({
   if (!video || (!video.published && !isAdmin)) {
     return (
       <Container className="text-center">
-        <AlertTriangle className="mx-auto h-8 w-8 stroke-yellow-500 mb-5" />
+        <AlertTriangle className="mx-auto mb-5 size-8 stroke-yellow-500" />
         <h1 className="text-2xl font-bold">Video nije dostupan</h1>
         <p className="mt-5 text-balance">
           Nažalost, video koji tražite nije dostupan. Moguće je da je uklonjen
@@ -52,8 +52,8 @@ export default async function VideoPage({
         // TODO: Add link to /videos page once it becomes available
         <Link href="/videos" className="mt-10"> */}
         <Link href="/" className="mt-10">
-          <Button className="mt-10 flex items-center mx-auto">
-            <ChevronLeft className="mr-2 h-4 w-4" />
+          <Button className="mx-auto mt-10 flex items-center">
+            <ChevronLeft className="mr-2 size-4" />
             Povratak na videozapise
           </Button>
         </Link>
