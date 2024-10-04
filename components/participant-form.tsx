@@ -11,6 +11,7 @@ import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Separator } from "./ui/separator";
 
 const formFields = [
   {
@@ -72,8 +73,8 @@ export const ParticipantForm = ({
   participantData?: any;
   guest?: boolean;
 }) => {
-  console.log("participantData:", participantData);
   const [loading, setLoading] = useState(false);
+  const [serverError, setServerError] = useState<string | null>(null); // State for backend error
 
   const router = useRouter();
   const pathname = usePathname();
@@ -103,7 +104,10 @@ export const ParticipantForm = ({
     handleSubmit,
     control,
     // setValue,
-    formState: { errors, isSubmitting },
+    formState: {
+      // errors,
+      isSubmitting,
+    },
   } = form;
 
   // useEffect(() => {
@@ -114,6 +118,7 @@ export const ParticipantForm = ({
 
   const onSubmit = async (data: any) => {
     setLoading(true);
+    setServerError(null);
 
     try {
       const method = isEditing ? "PUT" : "POST";
@@ -146,9 +151,13 @@ export const ParticipantForm = ({
         );
       } else {
         const errorData = await response.json();
+        setServerError(errorData.message || "An error occurred.");
         console.error(errorData.message || "An error occurred.");
       }
-    } catch (err) {
+    } catch (err: any) {
+      setServerError(
+        err.message || "An error occurred while submitting the form."
+      );
       console.error("An error occurred while submitting the form.", err);
     } finally {
       setLoading(false);
@@ -165,6 +174,7 @@ export const ParticipantForm = ({
           <DynamicField key={field.name} field={field} control={control} />
         ))}
 
+        <Separator className="col-span-2 sm:mt-5 md:mt-10" />
         {/* Submit and Delete Buttons */}
         <div
           className={cn(
@@ -173,9 +183,11 @@ export const ParticipantForm = ({
           )}
         >
           {/* Display Server-Side Errors */}
-          {errors && <p className="text-red-500">{errors.message}</p>}
+          {serverError && (
+            <p className="col-span-full text-red-500">{serverError}</p>
+          )}
 
-          <div className="flex flex-col justify-items-start gap-3 sm:flex-row">
+          <div className="col-span-2 flex flex-col justify-items-start gap-3 sm:flex-row">
             {/* Delete Button (Visible Only When Editing) */}
             {/* {isEditing && (
               <Button

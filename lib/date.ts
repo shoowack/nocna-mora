@@ -1,6 +1,9 @@
 import { differenceInYears } from "date-fns";
 
-export const calculateAge = (birthDate, deathDate) => {
+export const calculateAge = (
+  birthDate: Date,
+  deathDate: Date | null = null
+) => {
   if (!birthDate) return;
 
   const today = new Date();

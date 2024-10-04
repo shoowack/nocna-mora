@@ -7,7 +7,7 @@ import { DatePicker } from "@/components/dynamic-form/datepicker";
 import { SwitchField } from "@/components/dynamic-form/switch";
 
 export type FieldType =
-  | "string"
+  | string
   | "text"
   | "integer"
   | "float"
