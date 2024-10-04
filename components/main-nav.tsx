@@ -88,9 +88,9 @@ export function MainNav() {
                     Memes
                   </NavigationMenuLink>
                 </NavigationMenuItem>
-                <NavigationMenuItem className="pointer-events-none opacity-50">
+                <NavigationMenuItem>
                   <NavigationMenuLink
-                    // href="/timeline"
+                    href="/timeline"
                     className={navigationMenuTriggerStyle()}
                   >
                     Vremenska linija
@@ -171,9 +171,9 @@ export function MainNav() {
                     Memes
                   </NavigationMenuLink>
                 </NavigationMenuItem>
-                <NavigationMenuItem className="pointer-events-none opacity-50">
+                <NavigationMenuItem>
                   <NavigationMenuLink
-                    // href="/timeline"
+                    href="/timeline"
                     className={navigationMenuTriggerStyle()}
                   >
                     Vremenska linija

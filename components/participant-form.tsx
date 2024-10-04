@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Separator } from "./ui/separator";
+import { ParticipantGender } from "@prisma/client";
 
 const formFields = [
   {
@@ -40,10 +41,10 @@ const formFields = [
     label: "Spol",
     type: "select",
     options: [
-      { value: "male", label: "Muško" },
-      { value: "female", label: "Žensko" },
-      { value: "transgender", label: "Transrodno" },
-      { value: "other", label: "Ostalo" },
+      { value: ParticipantGender.MALE, label: "Muško" },
+      { value: ParticipantGender.FEMALE, label: "Žensko" },
+      { value: ParticipantGender.TRANSGENDER, label: "Transrodno" },
+      { value: ParticipantGender.OTHER, label: "Ostalo" },
     ],
     placeholder: "Odaberi spol",
     required: true,

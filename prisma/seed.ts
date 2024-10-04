@@ -1,6 +1,10 @@
 import prisma from "@/lib/prisma";
 import { generateSlug } from "../lib/slugify";
-import { ParticipantType, VideoProvider } from "@prisma/client";
+import {
+  ParticipantType,
+  VideoProvider,
+  ParticipantGender,
+} from "@prisma/client";
 
 async function main() {
   // Create a default user to associate with participants
@@ -18,7 +22,7 @@ async function main() {
       birthDate: new Date(1944, 4, 12),
       deathDate: new Date(2013, 7, 9),
       bio: 'Željko Malnar is documentarist, TV author and writer. Educated at New Delhi University in mass communications. Made more then 100 documentary films about far east and tropical areas for which he has won awards. Co-author of the book U potrazi za staklenim gradom (In search for glass city). Author of TV series "Nightmare stage (OTV, 1992-1995) and series of interviews in Globus magazine.',
-      gender: "Male",
+      gender: ParticipantGender.MALE,
       nickname: "Predsjednik",
       type: ParticipantType.MAIN,
     },
@@ -28,7 +32,7 @@ async function main() {
       birthDate: null,
       deathDate: new Date(2020, 11, 1),
       bio: "Savjetnik za moral i ćudoređe Republike Pešćenice",
-      gender: "Male",
+      gender: ParticipantGender.MALE,
       nickname: "Tarzan",
       type: ParticipantType.MAIN,
     },
@@ -38,7 +42,7 @@ async function main() {
       birthDate: new Date(1943, 12, 12),
       deathDate: new Date(2010, 5, 5),
       bio: "Ministar obrane Republike Pešćenice",
-      gender: "Male",
+      gender: ParticipantGender.MALE,
       nickname: "Ševa",
       type: ParticipantType.MAIN,
     },
@@ -49,7 +53,7 @@ async function main() {
       birthDate: null,
       deathDate: null,
       bio: "Erotski pjesnik",
-      gender: "male",
+      gender: ParticipantGender.MALE,
       type: ParticipantType.MAIN,
     },
     {
@@ -59,7 +63,7 @@ async function main() {
       birthDate: new Date(1953, 8, 26),
       deathDate: null,
       bio: "Zastupnik romske nacionalne manjine",
-      gender: "male",
+      gender: ParticipantGender.MALE,
       type: ParticipantType.MAIN,
     },
     {
@@ -69,7 +73,7 @@ async function main() {
       birthDate: null,
       deathDate: null,
       bio: "Hrvat koji želi postati Srbin",
-      gender: "male",
+      gender: ParticipantGender.MALE,
       type: ParticipantType.MAIN,
     },
     {
@@ -79,7 +83,7 @@ async function main() {
       birthDate: null,
       deathDate: null,
       bio: "Predstavlja TV Aukciju ukradenih slika u Noćnoj Mori.",
-      gender: "male",
+      gender: ParticipantGender.MALE,
       type: ParticipantType.MAIN,
     },
     {
@@ -89,7 +93,7 @@ async function main() {
       birthDate: new Date(1966, 12, 21),
       deathDate: null,
       bio: "Najbolji izvođač pjesme 'Moj galebe' svih vremena",
-      gender: "male",
+      gender: ParticipantGender.MALE,
       type: ParticipantType.MAIN,
     },
     {
@@ -99,7 +103,7 @@ async function main() {
       birthDate: null,
       deathDate: null,
       bio: "Najbolji harmonikaš svih vremena. Bi bip!",
-      gender: "male",
+      gender: ParticipantGender.MALE,
       type: ParticipantType.MAIN,
     },
     {
@@ -109,7 +113,7 @@ async function main() {
       birthDate: new Date(1961, 2, 23),
       deathDate: null,
       bio: "Obični novinar",
-      gender: "male",
+      gender: ParticipantGender.MALE,
       type: ParticipantType.MAIN,
     },
     {
@@ -120,7 +124,7 @@ async function main() {
       birthDate: new Date(2023, 4, 29),
       deathDate: null,
       bio: "Urednik vijesti i narodni pjesnik. Dobio otkaz u Krašu.",
-      gender: "male",
+      gender: ParticipantGender.MALE,
       type: ParticipantType.MAIN,
     },
     {
@@ -131,7 +135,7 @@ async function main() {
       birthDate: new Date(2023, 6, 11),
       deathDate: null,
       bio: "Pjevač i bivši boksački prvak",
-      gender: "male",
+      gender: ParticipantGender.MALE,
       type: ParticipantType.MAIN,
     },
     {
@@ -141,7 +145,7 @@ async function main() {
       birthDate: new Date(1950, 2, 28),
       deathDate: new Date(2018, 6, 17),
       bio: "Narodni tribun Republike Pešćenice",
-      gender: "male",
+      gender: ParticipantGender.MALE,
       type: ParticipantType.MAIN,
     },
     {
@@ -151,7 +155,7 @@ async function main() {
       birthDate: null,
       deathDate: null,
       bio: "Predsjednikovo sunce uneređeno",
-      gender: "transgender",
+      gender: ParticipantGender.TRANSGENDER,
       type: ParticipantType.MAIN,
     },
     {
@@ -161,7 +165,7 @@ async function main() {
       birthDate: null,
       deathDate: new Date(2021, 8, 31),
       bio: "Plesač i ovisnik o marihuani",
-      gender: "male",
+      gender: ParticipantGender.MALE,
       type: ParticipantType.MAIN,
     },
     {
@@ -171,7 +175,7 @@ async function main() {
       birthDate: null,
       deathDate: null,
       bio: "Pjevač",
-      gender: "male",
+      gender: ParticipantGender.MALE,
       type: ParticipantType.MAIN,
     },
     {
@@ -181,7 +185,7 @@ async function main() {
       birthDate: null,
       deathDate: null,
       bio: "Pjevač-imitator",
-      gender: "male",
+      gender: ParticipantGender.MALE,
       type: ParticipantType.MAIN,
     },
     {
@@ -191,7 +195,7 @@ async function main() {
       birthDate: null,
       deathDate: null,
       bio: "Podvojena ličnost, perač prozora koji misli da je pilot",
-      gender: "male",
+      gender: ParticipantGender.MALE,
       type: ParticipantType.MAIN,
     },
     {
@@ -201,7 +205,7 @@ async function main() {
       birthDate: null,
       deathDate: null,
       bio: "",
-      gender: "female",
+      gender: ParticipantGender.FEMALE,
       type: ParticipantType.MAIN,
     },
     {
@@ -211,7 +215,7 @@ async function main() {
       birthDate: null,
       deathDate: null,
       bio: "",
-      gender: "female",
+      gender: ParticipantGender.FEMALE,
       type: ParticipantType.MAIN,
     },
     {
@@ -221,7 +225,7 @@ async function main() {
       birthDate: null,
       deathDate: null,
       bio: "Filozof i mudrac",
-      gender: "male",
+      gender: ParticipantGender.MALE,
       type: ParticipantType.MAIN,
     },
     {
@@ -231,7 +235,7 @@ async function main() {
       birthDate: null,
       deathDate: null,
       bio: "Ribar sa otoka Oliba, završio 3 fakulteta - ribarski, tesarski i soboslikarsaki.",
-      gender: "male",
+      gender: ParticipantGender.MALE,
       type: ParticipantType.MAIN,
     },
     {
@@ -241,7 +245,7 @@ async function main() {
       birthDate: null,
       deathDate: null,
       bio: "Trbušni plesač",
-      gender: "transgender",
+      gender: ParticipantGender.TRANSGENDER,
       type: ParticipantType.MAIN,
     },
     {
@@ -251,7 +255,7 @@ async function main() {
       birthDate: null,
       deathDate: null,
       bio: "Prodavačica sa zagrebačkog placa",
-      gender: "female",
+      gender: ParticipantGender.FEMALE,
       type: ParticipantType.MAIN,
     },
     {
@@ -261,7 +265,7 @@ async function main() {
       birthDate: null,
       deathDate: new Date(2024, 2, 19),
       bio: "Bivša Jaranova ljubav",
-      gender: "female",
+      gender: ParticipantGender.FEMALE,
       type: ParticipantType.MAIN,
     },
     {
@@ -271,7 +275,7 @@ async function main() {
       birthDate: null,
       deathDate: null,
       bio: "Voditeljica vremenske prognoze",
-      gender: "female",
+      gender: ParticipantGender.FEMALE,
       type: ParticipantType.MAIN,
     },
     {
@@ -281,7 +285,7 @@ async function main() {
       birthDate: null,
       deathDate: null,
       bio: "Husnijin sin",
-      gender: "male",
+      gender: ParticipantGender.MALE,
       type: ParticipantType.MAIN,
     },
     {
@@ -291,7 +295,7 @@ async function main() {
       birthDate: null,
       deathDate: null,
       bio: "Pjevačica i voditeljica 'Golih vijesti'",
-      gender: "female",
+      gender: ParticipantGender.FEMALE,
       type: ParticipantType.GUEST,
     },
     {
@@ -301,7 +305,7 @@ async function main() {
       birthDate: new Date(1951, 6, 23),
       deathDate: null,
       bio: "Književnik",
-      gender: "male",
+      gender: ParticipantGender.MALE,
       type: ParticipantType.MAIN,
     },
     {
@@ -311,7 +315,7 @@ async function main() {
       birthDate: new Date(1952, 4, 7),
       deathDate: new Date(2004, 8, 21),
       bio: "Hrvatski poduzetnik i sportski djelatnik, predsjednik zagrebačkoga nogometnog kluba Hrvatski dragovoljac",
-      gender: "male",
+      gender: ParticipantGender.MALE,
       type: ParticipantType.GUEST,
     },
     {
@@ -321,7 +325,7 @@ async function main() {
       birthDate: new Date(1955, 11, 22),
       deathDate: new Date(2021, 2, 28),
       bio: "Dugogodišnji gradonačelnik grada Zagreba",
-      gender: "male",
+      gender: ParticipantGender.MALE,
       type: ParticipantType.GUEST,
     },
     {
@@ -331,7 +335,7 @@ async function main() {
       birthDate: new Date(1953, 6, 1),
       deathDate: new Date(2022, 11, 4),
       bio: "Desna ruka Željka Malnara, dugogodišnji producent Noćne More i brojnih drugih televizijskih formata. Začetnik najduhovitijih trenutaka koje smo imali prilike gledati tijekom trajanja Noćne More",
-      gender: "male",
+      gender: ParticipantGender.MALE,
       type: ParticipantType.MAIN,
     },
   ];

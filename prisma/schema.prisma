@@ -95,13 +95,20 @@ enum ParticipantType {
   GUEST
 }
 
+enum ParticipantGender {
+  MALE
+  FEMALE
+  TRANSGENDER
+  OTHER
+}
+
 model Participant {
   id          String            @id @default(cuid())
   firstName   String
   lastName    String
   nickname    String?
   bio         String?
-  gender      String?
+  gender      ParticipantGender?
   birthDate   DateTime?
   deathDate   DateTime?
   slug        String            @unique
