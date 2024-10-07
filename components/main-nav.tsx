@@ -142,6 +142,7 @@ export function MainNav() {
                     </NavigationMenuTrigger>
                     <NavigationMenuContent>
                       <ul className="grid gap-3 p-6 pb-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+                        {/* Sort categories alphabetically */}
                         {categories.map((category: Category) => (
                           <ListItem
                             key={category.id}

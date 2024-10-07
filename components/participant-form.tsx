@@ -187,18 +187,16 @@ export const ParticipantForm = ({
         onSubmit={handleSubmit(onSubmit)}
         className="grid grid-flow-row grid-cols-2 gap-x-0 gap-y-5 sm:max-w-2xl sm:gap-4 lg:max-w-3xl"
       >
-        {formFields.map((field) => {
-          return (
-            <DynamicField
-              key={field.name}
-              field={field}
-              control={control}
-              {...(field.datepickerProps && {
-                datepickerProps: field.datepickerProps,
-              })}
-            />
-          );
-        })}
+        {formFields.map((field) => (
+          <DynamicField
+            key={field.name}
+            field={field}
+            control={control}
+            {...(field.datepickerProps && {
+              datepickerProps: field.datepickerProps,
+            })}
+          />
+        ))}
 
         <Separator className="col-span-2 sm:mt-5 md:mt-10" />
         {/* Submit and Delete Buttons */}

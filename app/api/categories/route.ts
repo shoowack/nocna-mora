@@ -6,7 +6,7 @@ import { auth } from "auth";
 export const GET = auth(async () => {
   try {
     const categories = await prisma.category.findMany({
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: "asc" },
       where: { deletedAt: null },
     });
 
@@ -38,6 +38,15 @@ export const POST = auth(async (request: Request) => {
 
   try {
     const data = await request.json();
+
+    // Validate title
+    if (!data.title || data.title.trim() === "") {
+      return NextResponse.json(
+        { message: "Title is required and cannot be empty." },
+        { status: 400 }
+      );
+    }
+
     const slug = generateSlug(data.title);
 
     const category = await prisma.category.create({

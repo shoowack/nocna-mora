@@ -7,6 +7,7 @@ import { Library } from "lucide-react";
 
 export default async function CategoriesPage() {
   const categories = await prisma.category.findMany({
+    orderBy: { title: "asc" },
     where: { deletedAt: null },
   });
 
