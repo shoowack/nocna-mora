@@ -5,6 +5,7 @@ import { Footer } from "@/components/footer";
 import { Header } from "@/components/header";
 import { BreakpointIndicator } from "@/components/breakpoint-indicator";
 import { PropsWithChildren } from "react";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -35,11 +36,12 @@ export default function RootLayout({ children }: PropsWithChildren) {
     <html lang="en">
       <body className={inter.className}>
         <BreakpointIndicator />
-        <div className="flex h-full min-h-screen w-full flex-col justify-between">
+        <div className="flex size-full min-h-screen flex-col justify-between">
           <Header />
           <main className="grow">{children}</main>
           <Footer />
         </div>
+        <Analytics />
       </body>
     </html>
   );
