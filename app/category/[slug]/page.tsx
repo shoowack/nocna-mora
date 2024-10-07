@@ -41,8 +41,8 @@ export default async function CategoryPage({
 
   return !category ? (
     <Container className="flex justify-center">
-      <div className="flex h-[calc(100vh-18rem)] justify-center items-center pt-20 pb-10 flex-col">
-        <div className="text-2xl mb-5">
+      <div className="flex h-[calc(100vh-18rem)] flex-col items-center justify-center pb-10 pt-20">
+        <div className="mb-5 text-2xl">
           Kategorija <span className="font-bold">&quot;{slug}&quot;</span> ne
           postoji
         </div>
@@ -58,16 +58,16 @@ export default async function CategoryPage({
       contained
       button={
         <Link href={`/category/${category?.slug}/edit`}>
-          <Button>Ažuriraj kategoriju</Button>
+          <Button className="w-full">Ažuriraj kategoriju</Button>
         </Link>
       }
     >
       {category?.videos && category?.videos.length > 0 ? (
         <>
-          <p className="text-xl font-bold mt-10">
+          <p className="mt-10 text-xl font-bold">
             Videi u kategoriji {category.title.toLowerCase()}:
           </p>
-          <div className="grid grid-cols-2 mt-3 gap-4">
+          <div className="mt-3 grid grid-cols-2 gap-4">
             {category?.videos?.map((video) => (
               <div key={video.id}>
                 <VideoDetail video={video} />
@@ -76,12 +76,12 @@ export default async function CategoryPage({
           </div>
         </>
       ) : (
-        <div className="flex h-[calc(100vh-26rem)] justify-center items-center pt-20 pb-10">
+        <div className="flex h-[calc(100vh-26rem)] items-center justify-center pb-10 pt-20">
           {/* Without this extra div, layout breaks. */}
           <div>
             Trenutno nema videa u ovoj kategoriji. Provjerite ponovno kasnije
             ili istražite
-            <Link href="/categories" className="underline ml-1">
+            <Link href="/categories" className="ml-1 underline">
               druge kategorije
             </Link>
             .

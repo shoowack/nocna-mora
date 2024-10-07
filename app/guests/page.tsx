@@ -22,7 +22,7 @@ export default async function Guests() {
       contained
       button={
         <Link href="/guest/new">
-          <Button>Novi gost</Button>
+          <Button className="w-full">Novi gost</Button>
         </Link>
       }
     >

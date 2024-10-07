@@ -188,8 +188,6 @@ export const ParticipantForm = ({
         className="grid grid-flow-row grid-cols-2 gap-x-0 gap-y-5 sm:max-w-2xl sm:gap-4 lg:max-w-3xl"
       >
         {formFields.map((field) => {
-          console.log("field:", field);
-
           return (
             <DynamicField
               key={field.name}

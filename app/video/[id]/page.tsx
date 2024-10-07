@@ -66,7 +66,7 @@ export default async function VideoPage({
       title={video.title}
       button={
         <Link href={`/video/${video?.id}/edit`}>
-          <Button>Ažuriraj video</Button>
+          <Button className="w-full">Ažuriraj video</Button>
         </Link>
       }
     >

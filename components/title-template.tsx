@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { auth } from "auth";
 import { Container } from "@/components/container";
+import { Separator } from "./ui/separator";
 
 export async function TitleTemplate({
   title,
@@ -34,13 +35,14 @@ export async function TitleTemplate({
     <>
       <div className="bg-neutral-100">
         <Container className="md:py-10">
-          <div className="flex justify-between">
+          <div className="flex flex-col justify-between sm:flex-row">
             <div className="flex flex-col">
               <h1 className="text-2xl font-bold">{title ? title : ""}</h1>
               {description && (
                 <p className="mt-2 text-sm">{description ? description : ""}</p>
               )}
             </div>
+            {button && <Separator className="my-4 block sm:hidden" />}
 
             {isAdmin && button}
           </div>

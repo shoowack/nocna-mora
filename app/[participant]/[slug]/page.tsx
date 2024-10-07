@@ -52,7 +52,6 @@ export default async function ParticipantPage({
   if (!participant) {
     return <Container>Lik {slug} ne postoji</Container>;
   }
-  console.log("participant:", participant);
 
   return (
     <TitleTemplate
@@ -61,7 +60,7 @@ export default async function ParticipantPage({
       contained
       button={
         <Link href={`/${participantTypeProp}/${participant.slug}/edit`}>
-          <Button>
+          <Button className="w-full">
             Ažuriraj {`${participantTypeProp === "actor" ? "lika" : "gosta"}`}
           </Button>
         </Link>

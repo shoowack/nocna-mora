@@ -16,7 +16,7 @@ export default async function CategoriesPage() {
       contained
       button={
         <Link href="/category/new">
-          <Button>Nova kategorija</Button>
+          <Button className="w-full">Nova kategorija</Button>
         </Link>
       }
     >
@@ -36,7 +36,7 @@ export default async function CategoriesPage() {
           ))}
         </div>
       ) : (
-        <div className="flex flex-col space-y-2 items-center h-[calc(100vh-23rem)] justify-center">
+        <div className="flex h-[calc(100vh-23rem)] flex-col items-center justify-center space-y-2">
           <Library className="size-12" strokeWidth={1.5} />
           <div>Nema dostupnih kategorija</div>
         </div>

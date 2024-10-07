@@ -24,7 +24,7 @@ export default async function Actors() {
       contained
       button={
         <Link href="/actor/new">
-          <Button>Novi lik</Button>
+          <Button className="w-full">Novi lik</Button>
         </Link>
       }
     >
