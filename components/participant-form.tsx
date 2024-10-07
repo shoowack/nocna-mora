@@ -53,8 +53,24 @@ const formFields = [
     name: "birthDate",
     label: "Datum rođenja",
     type: "date",
+    datepickerProps: {
+      captionLayout: "dropdown",
+      fromYear: 1900,
+      toYear: new Date().getFullYear(),
+      classNames: { caption_label: "hidden" },
+    },
   },
-  { name: "deathDate", label: "Datum smrti (opcionalno)", type: "date" },
+  {
+    name: "deathDate",
+    label: "Datum smrti (opcionalno)",
+    type: "date",
+    datepickerProps: {
+      captionLayout: "dropdown",
+      fromYear: 1900,
+      toYear: new Date().getFullYear(),
+      classNames: { caption_label: "hidden" },
+    },
+  },
   {
     name: "type",
     label: "Tip",
@@ -171,9 +187,20 @@ export const ParticipantForm = ({
         onSubmit={handleSubmit(onSubmit)}
         className="grid grid-flow-row grid-cols-2 gap-x-0 gap-y-5 sm:max-w-2xl sm:gap-4 lg:max-w-3xl"
       >
-        {formFields.map((field) => (
-          <DynamicField key={field.name} field={field} control={control} />
-        ))}
+        {formFields.map((field) => {
+          console.log("field:", field);
+
+          return (
+            <DynamicField
+              key={field.name}
+              field={field}
+              control={control}
+              {...(field.datepickerProps && {
+                datepickerProps: field.datepickerProps,
+              })}
+            />
+          );
+        })}
 
         <Separator className="col-span-2 sm:mt-5 md:mt-10" />
         {/* Submit and Delete Buttons */}

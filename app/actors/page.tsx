@@ -8,6 +8,7 @@ import { CustomLink } from "@/components/custom-link";
 import { ParticipantType } from "@prisma/client";
 import { TitleTemplate } from "@/components/title-template";
 import { User2 } from "lucide-react";
+import { NameAndAge } from "@/components/name-and-age";
 
 export default async function Actors() {
   const participants = await prisma.participant.findMany({
@@ -36,8 +37,7 @@ export default async function Actors() {
                 className="text-xl font-bold"
                 key={participant.id}
               >
-                {`${participant.firstName} ${participant.lastName}`}{" "}
-                {participant.nickname && `(${participant.nickname})`}
+                <NameAndAge {...participant} />
               </CustomLink>
               <p>{participant.bio}</p>
             </div>

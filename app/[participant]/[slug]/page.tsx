@@ -5,7 +5,7 @@ import { VideoDetail } from "@/components/video-detail";
 import { ParticipantType } from "@prisma/client";
 import { Container } from "@/components/container";
 import { auth } from "auth";
-import { calculateAge } from "@/lib/date";
+import { NameAndAge } from "@/components/name-and-age";
 import { Button } from "@/components/ui/button";
 
 export default async function ParticipantPage({
@@ -52,16 +52,11 @@ export default async function ParticipantPage({
   if (!participant) {
     return <Container>Lik {slug} ne postoji</Container>;
   }
+  console.log("participant:", participant);
 
   return (
     <TitleTemplate
-      title={`${participant.firstName} ${participant.lastName} ${
-        participant.nickname ? ` - ${participant.nickname}` : ""
-      } ${
-        participant.birthDate
-          ? ` (${calculateAge(participant.birthDate, participant.deathDate)})`
-          : ""
-      }`}
+      title={<NameAndAge {...participant} />}
       description={participant.bio ? participant.bio : ""}
       contained
       button={

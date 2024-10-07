@@ -9,7 +9,7 @@ export async function TitleTemplate({
   button,
   contained = false,
 }: {
-  title?: string;
+  title?: string | ReactNode;
   description?: string | null;
   children: ReactNode;
   button?: ReactNode;
@@ -38,7 +38,7 @@ export async function TitleTemplate({
             <div className="flex flex-col">
               <h1 className="text-2xl font-bold">{title ? title : ""}</h1>
               {description && (
-                <p className="text-sm mt-2">{description ? description : ""}</p>
+                <p className="mt-2 text-sm">{description ? description : ""}</p>
               )}
             </div>
 

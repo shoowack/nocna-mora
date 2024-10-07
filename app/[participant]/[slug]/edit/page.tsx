@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma";
 import { auth } from "auth";
 import { SessionProvider } from "next-auth/react";
 import { TitleTemplate } from "@/components/title-template";
-import { calculateAge } from "@/lib/date";
+import { NameAndAge } from "@/components/name-and-age";
 // import { AccessDenied } from "@/components/access-denied";
 import { ParticipantForm } from "@/components/participant-form";
 import { redirect } from "next/navigation";
@@ -47,16 +47,7 @@ export default async function EditParticipantPage({
 
   return (
     <SessionProvider basePath={"/auth"} session={session}>
-      <TitleTemplate
-        title={`Ažuriraj ${participant.firstName} ${participant.lastName} ${
-          participant.nickname ? ` - ${participant.nickname}` : ""
-        } ${
-          participant.birthDate
-            ? ` (${calculateAge(participant.birthDate, participant.deathDate)})`
-            : ""
-        }`}
-        contained
-      >
+      <TitleTemplate title={<NameAndAge {...participant} />} contained>
         <ParticipantForm
           participantData={participant}
           guest={participantTypeProp === "guest"}

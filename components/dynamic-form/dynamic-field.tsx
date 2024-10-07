@@ -26,12 +26,14 @@ interface DynamicFieldProps {
   field: Field;
   control: Control<any>;
   className?: string;
+  datepickerProps?: any;
 }
 
 export const DynamicField = ({
   field,
   control,
   className,
+  datepickerProps,
 }: DynamicFieldProps) => {
   const Component = FieldComponents[field.type]; // Lookup the component based on field type
 
@@ -80,6 +82,8 @@ export const DynamicField = ({
                   className={cn(
                     field.type === "boolean" && "justify-self-start"
                   )}
+                  {...(field.type === "date" &&
+                    datepickerProps && { ...datepickerProps })}
                 />
                 <FormMessage />
                 {field.description && (

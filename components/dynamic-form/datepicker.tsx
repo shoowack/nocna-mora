@@ -9,6 +9,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { format, parseISO } from "date-fns";
+import { CaptionLayout } from "react-day-picker";
 
 type DatePickerProps = {
   className: string;
@@ -16,6 +17,12 @@ type DatePickerProps = {
   // eslint-disable-next-line no-unused-vars
   onChange: (value: string | null) => void;
   placeholder?: string;
+  captionLayout?: CaptionLayout;
+  fromYear?: number;
+  toYear?: number;
+  classNames?: {
+    caption_label?: string;
+  };
 };
 
 export const DatePicker: FC<DatePickerProps> = forwardRef<
@@ -69,6 +76,10 @@ export const DatePicker: FC<DatePickerProps> = forwardRef<
           }}
           initialFocus
           defaultMonth={date ? new Date(date) : undefined}
+          {...(props.captionLayout && { captionLayout: props.captionLayout })}
+          {...(props.fromYear && { fromYear: props.fromYear })}
+          {...(props.toYear && { toYear: props.toYear })}
+          {...(props.classNames && { classNames: props.classNames })}
         />
       </PopoverContent>
     </Popover>

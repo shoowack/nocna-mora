@@ -5,6 +5,7 @@ import { ParticipantType } from "@prisma/client";
 import { Button } from "@/components/ui/button";
 import { TitleTemplate } from "@/components/title-template";
 import { Users2 } from "lucide-react";
+import { NameAndAge } from "@/components/name-and-age";
 
 export default async function Guests() {
   const participants = await prisma.participant.findMany({
@@ -34,8 +35,7 @@ export default async function Guests() {
                 className="text-xl font-bold"
                 key={participant.id}
               >
-                {`${participant.firstName} ${participant.lastName}`}{" "}
-                {participant.nickname && `(${participant.nickname})`}
+                <NameAndAge {...participant} />
               </CustomLink>
               <p>{participant.bio}</p>
             </div>
