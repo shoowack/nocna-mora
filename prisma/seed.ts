@@ -79,7 +79,7 @@ async function main() {
     {
       firstName: "Zoran",
       lastName: "Krivić",
-      nickname: "",
+      nickname: null,
       birthDate: null,
       deathDate: null,
       bio: "Predstavlja TV Aukciju ukradenih slika u Noćnoj Mori.",
@@ -204,17 +204,17 @@ async function main() {
       nickname: "Slađa",
       birthDate: null,
       deathDate: null,
-      bio: "",
+      bio: null,
       gender: ParticipantGender.FEMALE,
       type: ParticipantType.MAIN,
     },
     {
       firstName: "Vesna",
       lastName: "Klaić",
-      nickname: "",
+      nickname: null,
       birthDate: null,
       deathDate: null,
-      bio: "",
+      bio: null,
       gender: ParticipantGender.FEMALE,
       type: ParticipantType.MAIN,
     },
@@ -241,7 +241,7 @@ async function main() {
     {
       firstName: "Ali",
       lastName: "Milai",
-      nickname: "",
+      nickname: null,
       birthDate: null,
       deathDate: null,
       bio: "Trbušni plesač",
@@ -251,7 +251,7 @@ async function main() {
     {
       firstName: "Baka",
       lastName: "Milica",
-      nickname: "",
+      nickname: null,
       birthDate: null,
       deathDate: null,
       bio: "Prodavačica sa zagrebačkog placa",
@@ -261,7 +261,7 @@ async function main() {
     {
       firstName: "Dubravka",
       lastName: "Carić",
-      nickname: "",
+      nickname: null,
       birthDate: null,
       deathDate: new Date(Date.parse("02 19 2024 00:00:00 GMT")),
       bio: "Bivša Jaranova ljubav",
@@ -271,7 +271,7 @@ async function main() {
     {
       firstName: "Husnija",
       lastName: "Hrustić",
-      nickname: "",
+      nickname: null,
       birthDate: null,
       deathDate: null,
       bio: "Voditeljica vremenske prognoze",
@@ -301,7 +301,7 @@ async function main() {
     {
       firstName: "Predrag",
       lastName: "Raos",
-      nickname: "",
+      nickname: null,
       birthDate: new Date(Date.parse("06 23 1951 00:00:00 GMT")),
       deathDate: null,
       bio: "Književnik",
@@ -321,7 +321,7 @@ async function main() {
     {
       firstName: "Milan",
       lastName: "Bandić",
-      nickname: "",
+      nickname: null,
       birthDate: new Date(Date.parse("11 22 1955 00:00:00 GMT")),
       deathDate: new Date(Date.parse("02 28 2021 00:00:00 GMT")),
       bio: "Dugogodišnji gradonačelnik grada Zagreba",
@@ -337,6 +337,16 @@ async function main() {
       bio: "Desna ruka Željka Malnara, dugogodišnji producent Noćne More i brojnih drugih televizijskih formata. Začetnik najduhovitijih trenutaka koje smo imali prilike gledati tijekom trajanja Noćne More",
       gender: ParticipantGender.MALE,
       type: ParticipantType.MAIN,
+    },
+    {
+      firstName: "Mladen",
+      lastName: "Schwartz",
+      nickname: null,
+      birthDate: new Date(Date.parse("04 17 1947 00:00:00 GMT")),
+      deathDate: new Date(Date.parse("09 14 2017 00:00:00 GMT")),
+      bio: null,
+      gender: ParticipantGender.MALE,
+      type: ParticipantType.GUEST,
     },
   ];
 
@@ -397,6 +407,7 @@ async function main() {
       title: "Podcasts",
       description: "Podcastovi sa likovima Noćne more",
     },
+    { title: "Misli 21. stoljeća" },
   ];
 
   for (const categoryData of categoriesData) {
