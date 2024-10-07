@@ -20,7 +20,7 @@ export const NameAndAge = ({
   gender: ParticipantGender | null;
   firstName: string;
   lastName: string;
-  nickname?: string;
+  nickname: string | null;
 }) => {
   if (!birthDate)
     return `${firstName} ${lastName} ${nickname ? ` - ${nickname}` : ""}`;
