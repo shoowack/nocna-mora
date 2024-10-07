@@ -102,7 +102,7 @@ export default async function TimelinePage() {
   );
 
   return (
-    <TitleTemplate title="Timeline" contained>
+    <TitleTemplate title="Vremenska linija" contained>
       <div className="relative space-y-8 py-10 before:absolute before:inset-0 before:ml-5 before:h-full before:w-1 before:-translate-x-px before:[background-image:linear-gradient(to_bottom,transparent_0px,rgb(240_240_240)_30px,rgb(240_240_240)_calc(100%_-_30px),transparent_100%)] md:before:mx-auto md:before:translate-x-0">
         {timelineEvents.map((event, index) => {
           return (

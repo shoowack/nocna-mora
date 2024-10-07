@@ -75,7 +75,7 @@ export default async function ParticipantPage({
               : `${participant.firstName} ${participant.lastName}`}{" "}
             pojavljuje:
           </p>
-          <div className="mt-3 grid grid-cols-2 gap-4">
+          <div className="mt-3 grid gap-4 sm:grid-cols-2">
             {participant.videos.map((video) => (
               <VideoDetail key={video.id} video={video} showCategories />
             ))}

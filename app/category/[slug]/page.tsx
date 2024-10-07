@@ -67,7 +67,7 @@ export default async function CategoryPage({
           <p className="mt-10 text-xl font-bold">
             Videi u kategoriji {category.title.toLowerCase()}:
           </p>
-          <div className="mt-3 grid grid-cols-2 gap-4">
+          <div className="mt-3 grid gap-4 sm:grid-cols-2">
             {category?.videos?.map((video) => (
               <div key={video.id}>
                 <VideoDetail video={video} />
