@@ -37,7 +37,9 @@ export async function TitleTemplate({
         <Container className="md:py-10">
           <div className="flex flex-col justify-between sm:flex-row">
             <div className="flex flex-col">
-              <h1 className="text-2xl font-bold">{title ? title : ""}</h1>
+              {title && (
+                <h1 className="text-lg font-bold sm:text-2xl">{title}</h1>
+              )}
               {description && (
                 <p className="mt-2 text-sm">{description ? description : ""}</p>
               )}

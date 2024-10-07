@@ -34,12 +34,12 @@ export default async function Actors() {
             <div key={participant.id} className="flex flex-col space-y-2">
               <CustomLink
                 href={`/actor/${participant.slug}`}
-                className="text-xl font-bold"
+                className="text-lg font-bold sm:text-xl"
                 key={participant.id}
               >
                 <NameAndAge {...participant} />
               </CustomLink>
-              <p>{participant.bio}</p>
+              <p className="text-sm sm:text-base">{participant.bio}</p>
             </div>
           ))}
         </div>

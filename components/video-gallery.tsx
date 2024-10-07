@@ -47,9 +47,9 @@ export const VideoGallery = async () => {
         <div className="flex items-center justify-between">
           <div className="flex flex-row items-center gap-2.5">
             <Videotape className="size-6 stroke-red-600" strokeWidth={2} />
-            <p className="text-xl font-bold">Najnovije epizode</p>
+            <p className="text-lg font-bold sm:text-xl">Najnovije epizode</p>
           </div>
-          <Button size={"sm"} disabled>
+          <Button size="sm" disabled>
             Prikaži sve
           </Button>
         </div>

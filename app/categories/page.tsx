@@ -26,12 +26,12 @@ export default async function CategoriesPage() {
             <div key={category.id} className="flex flex-col space-y-2">
               <CustomLink
                 href={`/category/${category.slug}`}
-                className="text-xl font-bold"
+                className="text-lg font-bold sm:text-xl"
                 key={category.id}
               >
                 {category.title && category.title}
               </CustomLink>
-              <p>{category.description}</p>
+              <p className="text-sm sm:text-base">{category.description}</p>
             </div>
           ))}
         </div>
