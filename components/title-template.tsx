@@ -42,7 +42,9 @@ export async function TitleTemplate({
                 <p className="mt-2 text-sm">{description ? description : ""}</p>
               )}
             </div>
-            {button && <Separator className="my-4 block sm:hidden" />}
+            {isAdmin && button && (
+              <Separator className="my-4 block sm:hidden" />
+            )}
 
             {isAdmin && button}
           </div>
