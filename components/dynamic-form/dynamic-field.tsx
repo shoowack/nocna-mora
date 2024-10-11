@@ -79,11 +79,26 @@ export const DynamicField = ({
                   {...controllerField}
                   placeholder={field.placeholder}
                   options={field.options}
+                  type={field.type}
+                  required={field.required}
                   className={cn(
                     field.type === "boolean" && "justify-self-start"
                   )}
+                  onValueChange={(value: any) =>
+                    controllerField.onChange(value)
+                  }
+                  {...(field.type === "multiselect" && {
+                    defaultValue: controllerField.value,
+                  })}
+                  {...(field.type === "date" && {
+                    value: new Date(controllerField.value).toISOString(),
+                  })}
                   {...(field.type === "date" &&
                     datepickerProps && { ...datepickerProps })}
+                  {...(field.type === "multiselect" && {
+                    variant: "inverted",
+                    maxCount: 5,
+                  })}
                 />
                 <FormMessage />
                 {field.description && (

@@ -2,36 +2,13 @@
 
 import { FC, PropsWithChildren, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Controller, useForm } from "react-hook-form";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  CalendarIcon,
-  // Folder,
-  Plus,
-  Save,
-  Trash2,
-} from "lucide-react";
-import { format } from "date-fns";
+import { Plus, Save, Trash2, X } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { MultiSelect } from "@/components/ui/multi-select";
-import { Switch } from "@/components/ui/switch";
 import { VideoProvider, Video, Participant, Category } from "@prisma/client";
 import { Separator } from "@/components/ui/separator";
+import { DynamicField } from "./dynamic-form/dynamic-field";
+import { useForm, FormProvider } from "react-hook-form";
 
 const ItemGroup: FC<PropsWithChildren & { className?: string }> = ({
   className,
@@ -56,12 +33,7 @@ export function VideoForm({
 }) {
   const router = useRouter();
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors, isSubmitting },
-  } = useForm<
+  const form = useForm<
     Video & {
       participants?: string[];
       categories?: string[];
@@ -72,13 +44,20 @@ export function VideoForm({
       videoId: video?.videoId || "",
       duration: video?.duration || 0,
       airedDate: video?.airedDate ? new Date(video.airedDate) : null,
-      published: video?.published || false,
       provider: video?.provider,
       participants:
         video?.participants?.map((participant) => participant.id) || [],
       categories: video?.categories?.map((category) => category.id) || [],
+      published: video?.published || false,
     },
   });
+
+  const {
+    handleSubmit,
+    control,
+    // setValue,
+    formState: { isSubmitting },
+  } = form;
 
   const [participants, setParticipants] = useState<any[]>([]);
   const [categories, setCategories] = useState<any[]>([]);
@@ -86,6 +65,86 @@ export function VideoForm({
   const [loading, setLoading] = useState(false);
 
   const isEditing = Boolean(video);
+
+  const formFields = [
+    {
+      name: "title",
+      label: "Naziv",
+      type: "string",
+      placeholder: "Naziv videa",
+      required: true,
+    },
+    {
+      name: "videoId",
+      label: "Video ID",
+      type: "string",
+      placeholder: "ID videa",
+      required: true,
+    },
+    {
+      name: "duration",
+      label: "Trajanje (u sek.)",
+      type: "number",
+      placeholder: "Trajanje videa",
+      required: true,
+    },
+    {
+      name: "airedDate",
+      label: "Datum emitiranja",
+      type: "date",
+      placeholder: "Odaberi datum",
+      required: true,
+    },
+    {
+      name: "provider",
+      label: "Video platforma",
+      type: "select",
+      options: Object.values(VideoProvider).map((provider) => ({
+        value: provider,
+        label:
+          provider.charAt(0).toUpperCase() + provider.slice(1).toLowerCase(),
+        icon: <X className="size-4" />,
+      })),
+      description: "Odaberi platformu na kojoj je video objavljen.",
+      required: true,
+    },
+    {
+      name: "participants",
+      label: "Likovi",
+      placeholder: "Odaberi likove",
+      type: "multiselect",
+      options: participants.map((participants: any) => ({
+        label: `${participants.firstName} ${participants.lastName}${
+          participants.nickname && ` (${participants.nickname})`
+        }`,
+        value: participants.id.toString(),
+        // icon: ({ className }) => (
+        //   <Folder className={cn("size-4", className)} />
+        // ),
+      })),
+      description: "Odaberi likove koji se pojavljuju u videu.",
+    },
+    {
+      name: "categories",
+      label: "Kategorije",
+      placeholder: "Odaberi kategoriju/e",
+      type: "multiselect",
+      options: categories.map((category) => ({
+        label: category.title,
+        value: category.id.toString(),
+        // icon: ({ className }) => (
+        //   <Folder className={cn("size-4", className)} />
+        // ),
+      })),
+      description:
+        "Odaberi jednu ili više kategorija koje najbolje opisuju sadržaj videa.",
+    },
+    {
+      name: "published",
+      label: "Objavljen",
+      type: "boolean",
+    },
+  ];
 
   useEffect(() => {
     // Fetch participants and categories
@@ -157,7 +216,7 @@ export function VideoForm({
   };
 
   const handleDelete = async () => {
-    if (confirm("Are you sure you want to delete this video?")) {
+    if (confirm("Jeste li sigurni da želite izbrisati ovaj videozapis?")) {
       try {
         const response = await fetch(`/api/videos/${video?.id}`, {
           method: "DELETE",
@@ -177,242 +236,57 @@ export function VideoForm({
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="grid grid-flow-row grid-cols-2 gap-x-0 gap-y-5 sm:max-w-2xl sm:gap-4 lg:max-w-3xl"
-    >
-      {/* Title */}
-      <ItemGroup>
-        <Label htmlFor="title">Naslov</Label>
-        <Input
-          id="title"
-          {...register("title", { required: "Nasov je obavezan" })}
-          placeholder="Upiši naslov videa"
-        />
-        {errors.title && <p className="text-red-500">{errors.title.message}</p>}
-      </ItemGroup>
+    <FormProvider {...form}>
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="grid grid-flow-row grid-cols-2 gap-x-0 gap-y-5 sm:max-w-2xl sm:gap-4 lg:max-w-3xl"
+      >
+        {formFields.map((field) => (
+          <DynamicField key={field.name} field={field} control={control} />
+        ))}
 
-      {/* Video ID */}
-      <ItemGroup>
-        <Label htmlFor="videoId">Video ID</Label>
-        <Input
-          id="videoId"
-          {...register("videoId", { required: "Video ID is required" })}
-          placeholder="Enter video ID based on provider"
-        />
-        {errors.videoId && (
-          <p className="text-red-500">{errors.videoId.message}</p>
-        )}
-      </ItemGroup>
+        <Separator className="col-span-2 sm:mt-5 md:mt-10" />
 
-      {/* Duration */}
-      <ItemGroup>
-        <Label htmlFor="duration">Duljina (u sekundama)</Label>
-        <Input
-          id="duration"
-          type="number"
-          {...register("duration", {
-            required: "Duration is required",
-            min: {
-              value: 1,
-              message: "Duration must be at least 1 second",
-            },
-          })}
-          placeholder="Enter duration in seconds"
-        />
-        {errors.duration && (
-          <p className="text-red-500">{errors.duration.message}</p>
-        )}
-      </ItemGroup>
+        {/* Submit and Delete Buttons */}
+        <ItemGroup>
+          {/* Display Server-Side Errors */}
+          <div>{error && <p className="text-red-500">{error}</p>}</div>
 
-      {/* Aired Date */}
-      <ItemGroup>
-        <Label htmlFor="airedDate">Datum emitiranja</Label>
-        <Controller
-          control={control}
-          name="airedDate"
-          render={({ field }) => (
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant={"outline"}
-                  className={cn(
-                    "w-full pl-3 text-left font-normal",
-                    !field.value && "text-muted-foreground"
-                  )}
-                >
-                  {field.value ? (
-                    format(field.value, "PPP")
-                  ) : (
-                    <span>Pick a date</span>
-                  )}
-                  <CalendarIcon className="ml-auto size-4 opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  // TODO: Fix TS error
-                  // @ts-ignore
-                  selected={field.value}
-                  onSelect={(date) => field.onChange(date)}
-                  disabled={(date) =>
-                    date > new Date() || date < new Date("1900-01-01")
-                  }
-                  initialFocus
-                  captionLayout="dropdown"
-                  fromYear={1900}
-                  toYear={new Date().getFullYear()}
-                  classNames={
-                    {
-                      // caption:
-                      //   "flex justify-between pt-1 relative items-center gap-2 px-2",
-                      // caption_label: "text-sm font-medium capitalize",
-                      // caption_dropdowns: "flex justify-center gap-2",
-                    }
-                  }
-                />
-              </PopoverContent>
-            </Popover>
-          )}
-        />
-      </ItemGroup>
+          <div className="flex flex-col justify-items-start gap-3 sm:flex-row">
+            {/* Delete Button (Visible Only When Editing) */}
+            {isEditing && (
+              <Button
+                variant="destructive"
+                onClick={handleDelete}
+                disabled={isSubmitting || loading}
+                className="flex items-center"
+                size="sm"
+              >
+                <Trash2 className="mr-2 size-4" />
+                Obriši video
+              </Button>
+            )}
 
-      {/* Provider */}
-      <ItemGroup>
-        <Label htmlFor="provider">Provider</Label>
-        <Controller
-          control={control}
-          name="provider"
-          rules={{ required: "Provider is required" }}
-          render={({ field }) => (
-            <Select onValueChange={field.onChange} value={field.value}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select provider" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value={VideoProvider.YOUTUBE}>YouTube</SelectItem>
-                <SelectItem value={VideoProvider.VIMEO}>Vimeo</SelectItem>
-                <SelectItem value={VideoProvider.DAILYMOTION}>
-                  Dailymotion
-                </SelectItem>
-              </SelectContent>
-            </Select>
-          )}
-        />
-        {errors.provider && (
-          <p className="text-red-500">{errors.provider.message}</p>
-        )}
-      </ItemGroup>
-
-      <ItemGroup>
-        <Label htmlFor="participants">Likovi</Label>
-        <Controller
-          control={control}
-          name="participants"
-          render={({ field }) => (
-            <MultiSelect
-              options={participants.map((participants: any) => ({
-                label: `${participants.firstName} ${participants.lastName}${
-                  participants.nickname && ` (${participants.nickname})`
-                }`,
-                value: participants.id.toString(),
-                // icon: ({ className }) => (
-                //   <Folder className={cn("size-4", className)} />
-                // ),
-              }))}
-              onValueChange={field.onChange}
-              defaultValue={field.value}
-              placeholder="Odaberi likove"
-              variant="inverted"
-              maxCount={5}
-            />
-          )}
-        />
-      </ItemGroup>
-
-      {/* Categories */}
-      <ItemGroup>
-        <Label htmlFor="categories">Kategorije</Label>
-        <Controller
-          control={control}
-          name="categories"
-          render={({ field }) => (
-            <MultiSelect
-              options={categories.map((category) => ({
-                label: category.title,
-                value: category.id.toString(),
-                // icon: ({ className }) => (
-                //   <Folder className={cn("size-4", className)} />
-                // ),
-              }))}
-              onValueChange={field.onChange}
-              defaultValue={field.value}
-              placeholder="Odaberi kategoriju/e"
-              variant="inverted"
-              maxCount={5}
-            />
-          )}
-        />
-      </ItemGroup>
-      <ItemGroup className="my-4 flex items-center justify-center sm:my-0 sm:grid">
-        {/* col-span-full grid sm:grid-cols-subgrid sm:items-baseline sm:justify-items-end gap-2 sm:gap-3 */}
-        <Label htmlFor="published">Published</Label>
-        <Controller
-          control={control}
-          name="published"
-          render={({ field }) => (
-            <Switch
-              className="justify-self-start"
-              onCheckedChange={field.onChange}
-              checked={field.value}
-              id="published"
-            />
-          )}
-        />
-      </ItemGroup>
-
-      <Separator className="col-span-2 sm:mt-5 md:mt-10" />
-
-      {/* Submit and Delete Buttons */}
-      <ItemGroup>
-        {/* Display Server-Side Errors */}
-        <div>{error && <p className="text-red-500">{error}</p>}</div>
-
-        <div className="flex flex-col justify-items-start gap-3 sm:flex-row">
-          {/* Delete Button (Visible Only When Editing) */}
-          {isEditing && (
             <Button
-              variant="destructive"
-              onClick={handleDelete}
+              type="submit"
               disabled={isSubmitting || loading}
               className="flex items-center"
               size="sm"
             >
-              <Trash2 className="mr-2 size-4" />
-              Obriši video
+              {isEditing ? (
+                <Save className="mr-2 size-4" />
+              ) : (
+                <Plus className="mr-2 size-4" />
+              )}
+              {isSubmitting || loading
+                ? "Submitting..."
+                : isEditing
+                ? "Ažuriraj Video"
+                : "Dodaj Video"}
             </Button>
-          )}
-
-          <Button
-            type="submit"
-            disabled={isSubmitting || loading}
-            className="flex items-center"
-            size="sm"
-          >
-            {isEditing ? (
-              <Save className="mr-2 size-4" />
-            ) : (
-              <Plus className="mr-2 size-4" />
-            )}
-            {isSubmitting || loading
-              ? "Submitting..."
-              : isEditing
-              ? "Ažuriraj Video"
-              : "Dodaj Video"}
-          </Button>
-        </div>
-      </ItemGroup>
-    </form>
+          </div>
+        </ItemGroup>
+      </form>
+    </FormProvider>
   );
 }
