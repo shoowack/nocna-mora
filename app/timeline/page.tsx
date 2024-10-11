@@ -135,7 +135,7 @@ export default async function TimelinePage() {
 
               <div
                 className={cn(
-                  "w-[calc(100%-4rem)] rounded-xl bg-neutral-100 p-4 md:w-[calc(50%-2.5rem)] relative",
+                  "w-[calc(100%-4rem)] rounded-xl bg-stone-100 p-4 md:w-[calc(50%-2.5rem)] relative",
                   {
                     "bg-slate-200 text-slate-900": event.type === "death",
                     "bg-blue-100/50 text-blue-800 ": event.type === "birth",

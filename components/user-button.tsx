@@ -28,8 +28,8 @@ export const UserButton = async () => {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="relative h-8 w-16 rounded-full">
-            <ChevronDown className="h-4 w-4 stroke-neutral-900 min-w-4 mx-2" />
-            <Avatar className="h-8 w-8">
+            <ChevronDown className="mx-2 size-4 min-w-4 stroke-stone-900" />
+            <Avatar className="size-8">
               <AvatarImage
                 src={
                   session.user.image ??
@@ -43,12 +43,12 @@ export const UserButton = async () => {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" align="end" forceMount>
-          <DropdownMenuLabel className="font-normal p-3">
+          <DropdownMenuLabel className="p-3 font-normal">
             <div className="flex flex-col space-y-1.5">
               <p className="text-sm font-medium leading-none">
                 {session.user.name}
               </p>
-              <p className="text-muted-foreground text-xs leading-none">
+              <p className="text-xs leading-none text-stone-500">
                 {session.user.email}
               </p>
             </div>

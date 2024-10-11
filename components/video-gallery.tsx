@@ -42,7 +42,7 @@ export const VideoGallery = async () => {
   }
 
   return (
-    <div className="bg-neutral-100">
+    <div className="bg-stone-100">
       <Container>
         <div className="flex items-center justify-between">
           <div className="flex flex-row items-center gap-2.5">
@@ -59,7 +59,7 @@ export const VideoGallery = async () => {
           {videos.map((video: Video) => (
             <div
               key={video.id}
-              className="overflow-hidden rounded-lg bg-neutral-200"
+              className="overflow-hidden rounded-lg bg-stone-200"
             >
               <VideoDetail video={video} showActors showCategories />
             </div>

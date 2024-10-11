@@ -50,7 +50,7 @@ export const DatePicker: FC<DatePickerProps> = forwardRef<
             "w-full justify-start text-left font-normal",
             className,
             !date &&
-              "text-neutral-500 hover:text-neutral-500 dark:text-neutral-400 dark:hover:text-neutral-400"
+              "text-stone-500 hover:text-stone-500 dark:text-stone-400 dark:hover:text-stone-400"
           )}
         >
           <CalendarIcon className="mr-2 size-4" />

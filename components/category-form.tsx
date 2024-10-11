@@ -85,7 +85,7 @@ export function CategoryForm({ category }: { category?: Category }) {
 
   // Delete Handler
   const handleDelete = async () => {
-    if (confirm("Are you sure you want to delete this category?")) {
+    if (confirm("Jeste li sigurni da želite izbrisati ovu kategoriju?")) {
       try {
         const response = await fetch(`/api/categories/${category?.slug}`, {
           method: "DELETE",

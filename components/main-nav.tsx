@@ -154,7 +154,7 @@ export function MainNav() {
                         ))}
                       </ul>
                       <Separator />
-                      <div className="flex justify-end bg-neutral-100 p-3">
+                      <div className="flex justify-end bg-stone-100 p-3">
                         <Link href="/categories">
                           <Button variant="outline" size={"sm"}>
                             Sve kategorije
@@ -205,7 +205,7 @@ const ListItem = React.forwardRef<
           {...props}
         >
           <div className="text-sm font-medium leading-none">{title}</div>
-          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+          <p className="line-clamp-2 text-sm leading-snug text-stone-500">
             {children}
           </p>
         </a>

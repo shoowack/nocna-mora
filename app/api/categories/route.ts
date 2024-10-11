@@ -53,7 +53,6 @@ export const POST = auth(async (request: Request) => {
       data: {
         title: data.title,
         slug: slug,
-        // createdBy: session.user.id,
         createdBy: { connect: { email: session.user.email } },
       },
     });

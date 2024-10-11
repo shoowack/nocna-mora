@@ -25,7 +25,7 @@ const VideoContent: FC<{
         <Badge variant="destructive">Video nije javan</Badge>
       )}
       {!singleVideo && (
-        <p className="line-clamp-1 text-neutral-600">{video.title}</p>
+        <p className="line-clamp-1 text-stone-600">{video.title}</p>
       )}
       {video.airedDate && singleVideo && <h2>Aired Date:</h2>}
       {video.airedDate ? (
@@ -65,7 +65,7 @@ const VideoContent: FC<{
         showCategories &&
         video.participants &&
         video.participants.length > 0 &&
-        showActors && <Separator className="w-full bg-neutral-300" />}
+        showActors && <Separator className="w-full bg-stone-300" />}
       {video.categories && video.categories.length > 0 && showCategories && (
         <>
           {singleVideo && <h2>Categories:</h2>}

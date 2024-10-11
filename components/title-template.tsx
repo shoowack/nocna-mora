@@ -33,7 +33,7 @@ export async function TitleTemplate({
 
   return (
     <>
-      <div className="bg-neutral-100">
+      <div className="bg-stone-100">
         <Container className="md:py-10">
           <div className="flex flex-col justify-between sm:flex-row">
             <div className="flex flex-col">
