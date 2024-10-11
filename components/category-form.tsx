@@ -1,9 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Plus, Save, Trash2 } from "lucide-react";
 import { Category } from "@prisma/client";
@@ -27,7 +25,6 @@ export function CategoryForm({ category }: { category?: Category }) {
   const [serverError, setServerError] = useState<string | null>(null); // State for backend error
 
   const router = useRouter();
-  const pathname = usePathname();
 
   const isEditing = Boolean(category);
 
@@ -41,12 +38,7 @@ export function CategoryForm({ category }: { category?: Category }) {
   const {
     handleSubmit,
     control,
-    register,
-    // setValue,
-    formState: {
-      // errors,
-      isSubmitting,
-    },
+    formState: { isSubmitting },
   } = form;
 
   // Submit Handler
