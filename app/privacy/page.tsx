@@ -29,7 +29,7 @@ export default function PrivacyPolicy() {
         </p>
         <h3 className="text-xl font-bold">Definitions</h3>
         <p>For the purposes of this Privacy Policy:</p>
-        <ul className="list-disc pl-10 space-y-4">
+        <ul className="list-disc space-y-4 pl-10">
           <li>
             <p>
               <strong>Account</strong> means a unique account created for You to
@@ -109,13 +109,13 @@ export default function PrivacyPolicy() {
           </li>
           <li>
             <p>
-              <strong>Website</strong> refers to Nocna Mora, accessible from{" "}
+              <strong>Website</strong> refers to Noćna Mora, accessible from{" "}
               <a
-                href="https://nocna-mora.vercel.app"
+                href="https://nocna-mora.com"
                 rel="external nofollow noopener"
                 target="_blank"
               >
-                https://nocna-mora.vercel.app
+                https://nocna-mora.com
               </a>
             </p>
           </li>
@@ -138,7 +138,7 @@ export default function PrivacyPolicy() {
           identify You. Personally identifiable information may include, but is
           not limited to:
         </p>
-        <ul className="list-disc pl-10 space-y-4">
+        <ul className="list-disc space-y-4 pl-10">
           <li>
             <p>Email address</p>
           </li>
@@ -176,7 +176,7 @@ export default function PrivacyPolicy() {
           The Company allows You to create an account and log in to use the
           Service through the following Third-party Social Media Services:
         </p>
-        <ul className="list-disc pl-10 space-y-4">
+        <ul className="list-disc space-y-4 pl-10">
           <li>Google</li>
           <li>Facebook</li>
           <li>Instagram</li>
@@ -206,7 +206,7 @@ export default function PrivacyPolicy() {
           and to improve and analyze Our Service. The technologies We use may
           include:
         </p>
-        <ul className="list-disc pl-10 space-y-4">
+        <ul className="list-disc space-y-4 pl-10">
           <li>
             <strong>Cookies or Browser Cookies.</strong> A cookie is a small
             file placed on Your Device. You can instruct Your browser to refuse
@@ -235,7 +235,7 @@ export default function PrivacyPolicy() {
           We use both Session and Persistent Cookies for the purposes set out
           below:
         </p>
-        <ul className="list-disc pl-10 space-y-4">
+        <ul className="list-disc space-y-4 pl-10">
           <li>
             <p>
               <strong>Necessary / Essential Cookies</strong>
@@ -284,7 +284,7 @@ export default function PrivacyPolicy() {
         </p>
         <h3 className="text-xl font-bold">Use of Your Personal Data</h3>
         <p>The Company may use Personal Data for the following purposes:</p>
-        <ul className="list-disc pl-10 space-y-4">
+        <ul className="list-disc space-y-4 pl-10">
           <li>
             <p>
               <strong>To provide and maintain our Service</strong>, including to
@@ -357,7 +357,7 @@ export default function PrivacyPolicy() {
         <p>
           We may share Your personal information in the following situations:
         </p>
-        <ul className="list-disc pl-10 space-y-4">
+        <ul className="list-disc space-y-4 pl-10">
           <li>
             <strong>With Service Providers:</strong> We may share Your personal
             information with Service Providers to monitor and analyze the use of
@@ -473,7 +473,7 @@ export default function PrivacyPolicy() {
           The Company may disclose Your Personal Data in the good faith belief
           that such action is necessary to:
         </p>
-        <ul className="list-disc pl-10 space-y-4">
+        <ul className="list-disc space-y-4 pl-10">
           <li>Comply with a legal obligation</li>
           <li>Protect and defend the rights or property of the Company</li>
           <li>
@@ -540,7 +540,7 @@ export default function PrivacyPolicy() {
           If you have any questions about this Privacy Policy, You can contact
           us:
         </p>
-        <ul className="list-disc pl-10 space-y-4">
+        <ul className="list-disc space-y-4 pl-10">
           <li>
             By email:
             &#105;&#115;&#117;&#118;&#097;&#107;&#064;&#103;&#109;&#097;&#105;&#108;&#046;&#099;&#111;&#109;

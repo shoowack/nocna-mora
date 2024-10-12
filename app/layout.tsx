@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     title: "Noćna Mora",
     description:
       "Dobrodošli na arhivsku stranicu Noćne More! Pregledajte i istražite ovu jedinstvenu kolekciju emisija koje su ostavile traga u povijesti hrvatske televizije.",
-    url: "https://nocna-mora.vercel.app",
+    url: "https://nocna-mora.com",
     siteName: "Noćna Mora",
     images: [
       {

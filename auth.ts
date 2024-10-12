@@ -2,11 +2,11 @@ import NextAuth, { type DefaultSession } from "next-auth";
 import "next-auth/jwt";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
-import FacebookProvider, {
-  FacebookProfile,
-} from "next-auth/providers/facebook";
+// import FacebookProvider, {
+//   FacebookProfile,
+// } from "next-auth/providers/facebook";
 import GoogleProvider, { GoogleProfile } from "next-auth/providers/google";
-import GitHub, { GitHubProfile } from "next-auth/providers/github";
+// import GitHub, { GitHubProfile } from "next-auth/providers/github";
 import type { NextAuthConfig } from "next-auth";
 
 const prisma = new PrismaClient();
@@ -14,17 +14,17 @@ const prisma = new PrismaClient();
 const config = {
   theme: { logo: "/nocna-mora-logo-alt.svg" },
   providers: [
-    GitHub({
-      profile(profile: GitHubProfile) {
-        return {
-          id: profile.id.toString(),
-          role: "user",
-          email: profile.email,
-          name: profile.name,
-          image: profile.avatar_url,
-        };
-      },
-    }),
+    // GitHub({
+    //   profile(profile: GitHubProfile) {
+    //     return {
+    //       id: profile.id.toString(),
+    //       role: "user",
+    //       email: profile.email,
+    //       name: profile.name,
+    //       image: profile.avatar_url,
+    //     };
+    //   },
+    // }),
     GoogleProvider({
       profile(profile: GoogleProfile) {
         return {
@@ -36,17 +36,17 @@ const config = {
         };
       },
     }),
-    FacebookProvider({
-      profile(profile: FacebookProfile) {
-        return {
-          id: profile.id.toString(),
-          role: "user",
-          email: profile.email,
-          name: profile.name,
-          image: profile.picture.data.url,
-        };
-      },
-    }),
+    // FacebookProvider({
+    //   profile(profile: FacebookProfile) {
+    //     return {
+    //       id: profile.id.toString(),
+    //       role: "user",
+    //       email: profile.email,
+    //       name: profile.name,
+    //       image: profile.picture.data.url,
+    //     };
+    //   },
+    // }),
   ],
   adapter: PrismaAdapter(prisma),
   basePath: "/auth",
