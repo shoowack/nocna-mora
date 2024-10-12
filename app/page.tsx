@@ -1,5 +1,43 @@
 import { VideoGallery } from "@/components/video-gallery";
 import { Container } from "@/components/container";
+import { Suspense } from "react";
+import { Separator } from "@/components/ui/separator";
+import { Videotape } from "lucide-react";
+
+const VideoGallerySkeleton = () => {
+  return (
+    <div className="bg-stone-100">
+      <Container>
+        <div className="flex items-center justify-between">
+          <div className="flex flex-row items-center gap-2.5">
+            <Videotape className="size-6 stroke-red-600" strokeWidth={2} />
+            <p className="text-lg font-bold sm:text-xl">Najnovije epizode</p>
+          </div>
+          <div className="h-9 w-24 animate-pulse rounded-md bg-stone-200" />
+        </div>
+        <Separator className="mb-10 mt-2" />
+
+        <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+          {Array.from(Array(4)).map((id) => (
+            <div
+              key={id}
+              className="w-full animate-pulse overflow-hidden rounded-lg bg-stone-200/50"
+            >
+              <div className="h-36 w-full bg-stone-200" />
+              <div className="space-y-4 p-4">
+                <div className="h-7 w-full rounded-md bg-stone-100" />
+                <div className="h-5 w-3/4 rounded-md bg-stone-100" />
+                <div className="h-5 w-1/2 rounded-md bg-stone-100" />
+                <Separator className="w-full bg-stone-100" />
+                <div className="h-5 w-1/2 rounded-md bg-stone-100" />
+              </div>
+            </div>
+          ))}
+        </div>
+      </Container>
+    </div>
+  );
+};
 
 export default async function Index() {
   return (
@@ -21,7 +59,9 @@ export default async function Index() {
           način koristeći pretragu.
         </p>
       </Container>
-      <VideoGallery />
+      <Suspense fallback={<VideoGallerySkeleton />}>
+        <VideoGallery />
+      </Suspense>
     </>
   );
 }
