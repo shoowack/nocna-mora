@@ -9,12 +9,14 @@ export async function TitleTemplate({
   children,
   button,
   contained = false,
+  containedClassNames,
 }: {
   title?: string | ReactNode;
   description?: string | null;
   children: ReactNode;
   button?: ReactNode;
   contained?: boolean;
+  containedClassNames?: string;
 }) {
   const session = await auth();
 
@@ -52,7 +54,11 @@ export async function TitleTemplate({
           </div>
         </Container>
       </div>
-      {contained ? <Container>{children}</Container> : children}
+      {contained ? (
+        <Container className={containedClassNames}>{children}</Container>
+      ) : (
+        children
+      )}
     </>
   );
 }

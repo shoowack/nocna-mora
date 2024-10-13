@@ -106,6 +106,11 @@ interface MultiSelectProps
    * Optional, can be used to add custom styles.
    */
   className?: string;
+
+  /**
+   * Placeholder for the input search field above the list of options in the dropdown.
+   */
+  searchInputPlaceholder?: string;
 }
 
 export const MultiSelect = React.forwardRef<
@@ -123,6 +128,7 @@ export const MultiSelect = React.forwardRef<
       modalPopover = false,
       // asChild = false,
       className,
+      searchInputPlaceholder,
       ...props
     },
     ref
@@ -269,7 +275,7 @@ export const MultiSelect = React.forwardRef<
         >
           <Command>
             <CommandInput
-              placeholder="Search..."
+              placeholder={searchInputPlaceholder || "Traži..."}
               onKeyDown={handleInputKeyDown}
             />
             <CommandList>

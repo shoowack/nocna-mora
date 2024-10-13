@@ -408,6 +408,7 @@ async function main() {
       description: "Podcastovi sa likovima Noćne more",
     },
     { title: "Misli 21. stoljeća" },
+    { title: "Dabog da imao, pa nemao" },
   ];
 
   for (const categoryData of categoriesData) {
@@ -600,6 +601,33 @@ async function main() {
         .map((participant) => participant.id),
       categories: categories
         .filter((category) => ["dokumentarci"].includes(category.slug))
+        .map((category) => category.id),
+    },
+    {
+      title: "PREDRAG RAOS - DOKUMENTARNI FILM (2024)",
+      videoId: "trDjBr2SNmw",
+      duration: 13113,
+      provider: VideoProvider.YOUTUBE,
+      airedDate: new Date("2024-03-01"),
+      participants: participants
+        .filter((participant) => ["predrag-raos"].includes(participant.slug))
+        .map((participant) => participant.id),
+      categories: categories
+        .filter((category) => ["dokumentarci"].includes(category.slug))
+        .map((category) => category.id),
+    },
+    {
+      title:
+        "Dalibor Trojak Show#133 Remzo Krak Sirotković Legenda Noćne More I Nemoguće Emisije",
+      videoId: "7egdtOI0J2U",
+      duration: 1844,
+      provider: VideoProvider.YOUTUBE,
+      airedDate: new Date("2023-10-01"),
+      participants: participants
+        .filter((participant) => ["remzo-krak"].includes(participant.slug))
+        .map((participant) => participant.id),
+      categories: categories
+        .filter((category) => ["podcasts"].includes(category.slug))
         .map((category) => category.id),
     },
   ];

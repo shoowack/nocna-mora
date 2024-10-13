@@ -3,7 +3,7 @@
 import { FC, PropsWithChildren, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Plus, Save, Trash2, X } from "lucide-react";
+import { Loader2, Plus, Save, Trash2, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { VideoProvider, Video, Participant, Category } from "@prisma/client";
 import { Separator } from "@/components/ui/separator";
@@ -115,7 +115,7 @@ export function VideoForm({
       type: "multiselect",
       options: participants.map((participants: any) => ({
         label: `${participants.firstName} ${participants.lastName}${
-          participants.nickname && ` (${participants.nickname})`
+          participants.nickname ? ` (${participants.nickname})` : ""
         }`,
         value: participants.id.toString(),
         // icon: ({ className }) => (
@@ -260,7 +260,6 @@ export function VideoForm({
                 onClick={handleDelete}
                 disabled={isSubmitting || loading}
                 className="flex items-center"
-                size="sm"
               >
                 <Trash2 className="mr-2 size-4" />
                 Obriši video
@@ -271,15 +270,16 @@ export function VideoForm({
               type="submit"
               disabled={isSubmitting || loading}
               className="flex items-center"
-              size="sm"
             >
-              {isEditing ? (
+              {isSubmitting || loading ? (
+                <Loader2 className="mr-2 size-4 animate-spin " />
+              ) : isEditing ? (
                 <Save className="mr-2 size-4" />
               ) : (
                 <Plus className="mr-2 size-4" />
               )}
               {isSubmitting || loading
-                ? "Submitting..."
+                ? "Spremam..."
                 : isEditing
                 ? "Ažuriraj Video"
                 : "Dodaj Video"}

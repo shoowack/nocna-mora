@@ -128,7 +128,6 @@ export function CategoryForm({ category }: { category?: Category }) {
                 onClick={handleDelete}
                 disabled={isSubmitting || loading}
                 className="flex items-center"
-                size="sm"
               >
                 <Trash2 className="mr-2 size-4" />
                 Obriši kategoriju
@@ -139,7 +138,6 @@ export function CategoryForm({ category }: { category?: Category }) {
               type="submit"
               disabled={isSubmitting || loading}
               className="flex items-center"
-              size="sm"
             >
               {isEditing ? (
                 <Save className="mr-2 size-4" />

@@ -9,7 +9,7 @@ import { useForm, FormProvider } from "react-hook-form";
 import { DynamicField } from "@/components/dynamic-form/dynamic-field";
 import { useSession } from "next-auth/react";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Loader2, Plus, Save } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Separator } from "./ui/separator";
 import { ParticipantGender } from "@prisma/client";
@@ -108,11 +108,11 @@ export const ParticipantForm = ({
       bio: participantData?.bio || "",
       gender: participantData?.gender || "",
       birthDate: participantData?.birthDate
-        ? participantData.birthDate.toISOString()
-        : "",
+        ? new Date(participantData.birthDate)
+        : null,
       deathDate: participantData?.deathDate
-        ? participantData.deathDate.toISOString()
-        : "",
+        ? new Date(participantData.deathDate)
+        : null,
       type: isEditing && guest ? "GUEST" : participantData?.type || "MAIN",
     },
   });
@@ -219,7 +219,6 @@ export const ParticipantForm = ({
                 onClick={handleDelete}
                 disabled={isSubmitting || loading}
                 className="flex items-center"
-                size="sm"
               >
                 <Trash2 className="mr-2 size-4" />
                 Obriši video
@@ -230,13 +229,14 @@ export const ParticipantForm = ({
               type="submit"
               disabled={isSubmitting || loading}
               className="flex items-center"
-              size="sm"
             >
-              {/* {isEditing ? (
+              {isSubmitting || loading ? (
+                <Loader2 className="mr-2 size-4 animate-spin " />
+              ) : isEditing ? (
                 <Save className="mr-2 size-4" />
-              ) : ( */}
-              <Plus className="mr-2 size-4" />
-              {/* )} */}
+              ) : (
+                <Plus className="mr-2 size-4" />
+              )}
               {isSubmitting || loading
                 ? "Spremam..."
                 : isEditing &&

@@ -38,7 +38,7 @@ export default function RootLayout({ children }: PropsWithChildren) {
         <BreakpointIndicator />
         <div className="flex size-full min-h-screen flex-col justify-between">
           <Header />
-          <main className="grow">{children}</main>
+          <main className="flex grow flex-col">{children}</main>
           <Footer />
         </div>
         <Analytics />

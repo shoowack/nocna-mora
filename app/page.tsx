@@ -42,7 +42,7 @@ const VideoGallerySkeleton = () => {
 export default async function Index() {
   return (
     <>
-      <Container className="space-y-4">
+      <Container className="flex-none space-y-4">
         <h1 className="text-xl font-bold sm:text-3xl">
           Dobrodošli na arhivsku stranicu Noćne More!
         </h1>

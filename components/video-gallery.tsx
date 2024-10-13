@@ -49,9 +49,7 @@ export const VideoGallery = async () => {
             <Videotape className="size-6 stroke-red-600" strokeWidth={2} />
             <p className="text-lg font-bold sm:text-xl">Najnovije epizode</p>
           </div>
-          <Button size="sm" disabled>
-            Prikaži sve
-          </Button>
+          <Button disabled>Prikaži sve</Button>
         </div>
         <Separator className="mb-10 mt-2" />
 
