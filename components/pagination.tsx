@@ -17,7 +17,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { pageSizeConstants } from "@/app/constants/page-size-constants";
-import { cn } from "@/lib/utils";
 
 export function Pagination({
   currentPage,
