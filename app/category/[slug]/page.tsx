@@ -179,10 +179,7 @@ export default async function CategoryPage({
         </div>
       ) : (
         <div className="flex w-full flex-col justify-stretch">
-          <FilterControls
-            initialParticipants={participants}
-            showDetails={showDetails}
-          />
+          <FilterControls initialParticipants={participants} />
           {totalVideos === 0 ? (
             // No videos matching the filter/search criteria
             <div className="flex grow items-center justify-center pb-10 pt-20">
