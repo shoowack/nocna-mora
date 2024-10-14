@@ -57,7 +57,7 @@ export default async function TimelinePage() {
             ? "Preminuo"
             : "Preminula"
         } ${participant.firstName} ${participant.lastName} ${
-          participant.nickname && ` (${participant.nickname})`
+          participant.nickname ? ` (${participant.nickname})` : ""
         }`,
       });
     }
