@@ -5,7 +5,6 @@ import { VideoDetail } from "@/components/video-detail";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/container";
 import { Pagination } from "@/components/pagination";
-import { Search } from "@/components/search";
 import { FilterControls } from "@/components/filter-controls";
 import { auth } from "auth";
 import { VideoProvider } from "@prisma/client";
@@ -23,6 +22,7 @@ export default async function CategoryPage({
     duration?: string;
     participants?: string;
     pageSize?: string;
+    showDetails?: string;
   };
 }) {
   const { slug } = params;
@@ -34,6 +34,7 @@ export default async function CategoryPage({
     ? searchParams.participants.split(",")
     : [];
   const pageSize = Number(searchParams?.pageSize) || pageSizeConstants[0];
+  const showDetails = searchParams?.showDetails === "false";
 
   const session = await auth();
 
@@ -66,6 +67,7 @@ export default async function CategoryPage({
         videos: {
           include: {
             participants: true,
+            categories: true,
           },
           where: {
             published: isAdmin ? undefined : true,
@@ -177,10 +179,10 @@ export default async function CategoryPage({
         </div>
       ) : (
         <div className="flex w-full flex-col justify-stretch">
-          <div className="flex items-center justify-between gap-2">
-            <Search placeholder="Search videos..." />
-            <FilterControls initialParticipants={participants} />
-          </div>
+          <FilterControls
+            initialParticipants={participants}
+            showDetails={showDetails}
+          />
           {totalVideos === 0 ? (
             // No videos matching the filter/search criteria
             <div className="flex grow items-center justify-center pb-10 pt-20">
@@ -202,7 +204,11 @@ export default async function CategoryPage({
               <div className="mt-3 grid flex-1 gap-4 sm:grid-cols-2">
                 {category.videos.map((video) => (
                   <div key={video.id}>
-                    <VideoDetail video={video} showActors />
+                    <VideoDetail
+                      video={video}
+                      showActors={!showDetails}
+                      showCategories={!showDetails}
+                    />
                   </div>
                 ))}
               </div>

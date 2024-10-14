@@ -5,7 +5,13 @@ import { Input } from "@/components/ui/input";
 import { SearchIcon } from "lucide-react";
 import { useDebouncedCallback } from "use-debounce";
 
-export function Search({ placeholder }: { placeholder: string }) {
+export function Search({
+  placeholder,
+  className,
+}: {
+  placeholder?: string;
+  className?: string;
+}) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
@@ -30,7 +36,7 @@ export function Search({ placeholder }: { placeholder: string }) {
       <Input
         type="search"
         id="search"
-        className="h-9"
+        className={className}
         placeholder={placeholder}
         defaultValue={searchParams.get("query") ?? ""}
         onChange={(e) => handleSearch(e.target.value)}

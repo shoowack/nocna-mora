@@ -36,7 +36,7 @@ export const CustomLink = ({
       {...rest}
     >
       <span>{children}</span>
-      <ExternalLink className="ml-0.5 inline-block h-4 w-4" />
+      <ExternalLink className="ml-0.5 inline-block size-4" />
     </Link>
   );
 };

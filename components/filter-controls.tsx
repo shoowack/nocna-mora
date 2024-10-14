@@ -10,6 +10,15 @@ import {
 } from "@/components/ui/select";
 import { MultiSelect } from "./ui/multi-select";
 import { useEffect, useState } from "react";
+import { Search } from "./search";
+import { Button } from "./ui/button";
+import { LayoutList } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export const FilterControls = ({
   initialParticipants = [],
@@ -66,8 +75,33 @@ export const FilterControls = ({
     router.push(`${pathname}?${params.toString()}`);
   }
 
+  // Check if 'showDetails' parameter is present on initial load
+  useEffect(() => {
+    if (!searchParams.has("showDetails")) {
+      const params = new URLSearchParams(searchParams);
+
+      params.set("showDetails", "false");
+
+      router.replace(`${pathname}?${params.toString()}`);
+    }
+  }, [searchParams, pathname, router]);
+
+  const handleToggleShowDetails = () => {
+    const params = new URLSearchParams(searchParams);
+
+    if (params.get("showDetails") === "false" || !params.has("showDetails")) {
+      params.set("showDetails", "true");
+    } else {
+      params.set("showDetails", "false");
+    }
+
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
   return (
-    <div className="flex space-x-4 items-center">
+    <div className="flex items-center gap-2">
+      {/* Search field */}
+      <Search placeholder="Traži po naslovu..." className="h-9 w-auto grow" />
       {/* Provider Filter */}
       <Select
         defaultValue={searchParams.get("provider") ?? ""}
@@ -103,7 +137,7 @@ export const FilterControls = ({
 
       {/* Participants Filter */}
       <MultiSelect
-        className="w-[370px] min-h-9 max-h-9"
+        className="max-h-9 min-h-9 w-[370px]"
         options={participants.map((participants: any) => ({
           label: `${participants.firstName} ${participants.lastName}`,
           value: participants.slug,
@@ -120,6 +154,30 @@ export const FilterControls = ({
         variant="inverted"
         maxCount={1}
       />
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Button
+              variant={
+                searchParams.get("showDetails") === "true"
+                  ? "default"
+                  : "outline"
+              }
+              className="size-9 p-0"
+              onClick={handleToggleShowDetails}
+            >
+              <LayoutList className="size-4" />
+            </Button>
+          </TooltipTrigger>
+          <TooltipContent className="w-40 text-center">
+            <p>
+              {searchParams.get("showDetails") === "true"
+                ? "Sakrij informacije ispod svakog videa"
+                : "Pokaži više informacija ispod svakog videa"}
+            </p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     </div>
   );
 };

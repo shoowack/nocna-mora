@@ -13,14 +13,14 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       <div
         ref={ref}
         className={cn(
-          "flex h-10 w-full items-center rounded-md border border-neutral-200 bg-transparent px-3 py-1 shadow-sm transition duration-150 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-within:outline-none focus-within:ring-2 focus-within:ring-neutral-500 focus-within:ring-offset-2 focus-within:duration-150 disabled:cursor-not-allowed disabled:opacity-50 dark:border-neutral-800 dark:focus-within:ring-neutral-500",
+          "flex h-10 w-full items-center rounded-md border border-stone-200 bg-transparent px-3 py-1 shadow-sm transition duration-150 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-within:outline-none focus-within:ring-2 focus-within:ring-stone-500 focus-within:ring-offset-2 focus-within:duration-150 disabled:cursor-not-allowed disabled:opacity-50 dark:border-stone-800 dark:focus-within:ring-stone-500",
           className
         )}
       >
         {prependIcon}
         <input
           type={type}
-          className="h-10 w-full bg-transparent text-sm outline-none placeholder:text-neutral-500 disabled:cursor-not-allowed disabled:opacity-50 dark:placeholder:text-neutral-400"
+          className="h-10 w-full bg-transparent text-sm outline-none placeholder:text-stone-500 disabled:cursor-not-allowed disabled:opacity-50 dark:placeholder:text-stone-400"
           {...props}
         />
         {appendIcon}
