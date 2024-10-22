@@ -1,11 +1,21 @@
 import prisma from "@/lib/prisma";
 import Link from "next/link";
+import Image from "next/image";
+import { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { TitleTemplate } from "@/components/title-template";
 import { ParticipantGender } from "@prisma/client";
 import { Baby, Calendar, Play, Skull, Youtube } from "lucide-react";
-import Image from "next/image";
+
+type TimelineEvent = {
+  type: "birth" | "death" | "video" | "custom";
+  date: Date | null;
+  title: string;
+  id?: string;
+  icon?: ReactNode;
+  description?: ReactNode;
+};
 
 export default async function TimelinePage() {
   const participants = await prisma.participant.findMany({
@@ -29,38 +39,40 @@ export default async function TimelinePage() {
   });
 
   // Map participants' birth and death into events
-  const participantEvents = participants.flatMap((participant) => {
-    const events = [];
+  const participantEvents: TimelineEvent[] = participants.flatMap(
+    (participant) => {
+      const events: TimelineEvent[] = [];
 
-    if (participant.birthDate) {
-      events.push({
-        type: "birth",
-        date: participant.birthDate,
-        title: `${
-          participant.gender === ParticipantGender.MALE ? "Rođen" : "Rođena"
-        } ${participant.firstName} ${participant.lastName} ${
-          participant.nickname ? ` (${participant.nickname})` : ""
-        }`,
-      });
+      if (participant.birthDate) {
+        events.push({
+          type: "birth",
+          date: participant.birthDate,
+          title: `${
+            participant.gender === ParticipantGender.MALE ? "Rođen" : "Rođena"
+          } ${participant.firstName} ${participant.lastName} ${
+            participant.nickname ? ` (${participant.nickname})` : ""
+          }`,
+        });
+      }
+      if (participant.deathDate) {
+        events.push({
+          type: "death",
+          date: participant.deathDate,
+          title: `${
+            participant.gender === ParticipantGender.MALE
+              ? "Preminuo"
+              : "Preminula"
+          } ${participant.firstName} ${participant.lastName} ${
+            participant.nickname ? ` (${participant.nickname})` : ""
+          }`,
+        });
+      }
+      return events;
     }
-    if (participant.deathDate) {
-      events.push({
-        type: "death",
-        date: participant.deathDate,
-        title: `${
-          participant.gender === ParticipantGender.MALE
-            ? "Preminuo"
-            : "Preminula"
-        } ${participant.firstName} ${participant.lastName} ${
-          participant.nickname ? ` (${participant.nickname})` : ""
-        }`,
-      });
-    }
-    return events;
-  });
+  );
 
   // Map videos into events
-  const videoEvents = videos.map((video) => ({
+  const videoEvents: TimelineEvent[] = videos.map((video) => ({
     type: "video",
     date: video.airedDate,
     title: `"${video.title}" emisija emitirana`,
