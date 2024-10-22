@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { auth } from "auth";
+import { VideoProvider } from "@prisma/client";
 
 export async function GET() {
   try {
@@ -39,7 +40,8 @@ export const POST = auth(async (request: Request) => {
     const data = await request.json();
 
     // Validate provider
-    const validProviders = ["YOUTUBE", "VIMEO", "DAILYMOTION"];
+    const validProviders = Object.values(VideoProvider);
+
     if (!validProviders.includes(data.provider)) {
       return NextResponse.json(
         { message: "Invalid video provider" },

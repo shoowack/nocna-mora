@@ -104,6 +104,8 @@ export const VideoDetail: FC<VideoDetailProps> = ({
         return `https://player.vimeo.com/video/${video.videoId}`;
       case VideoProvider.DAILYMOTION:
         return `https://geo.dailymotion.com/player.html?video=${video.videoId}`;
+      case VideoProvider.FACEBOOK:
+        return `https://www.facebook.com/plugins/video.php?height=280&href=https%3A%2F%2Fwww.facebook.com%2F${video.videoId}%2F&show_text=false&t=0`;
       default:
         return "";
     }
@@ -117,6 +119,12 @@ export const VideoDetail: FC<VideoDetailProps> = ({
         return `https://vumbnail.com/${video.videoId}_1920x1080.jpg`;
       case VideoProvider.DAILYMOTION:
         return `https://www.dailymotion.com/thumbnail/video/${video.videoId}`;
+      case VideoProvider.FACEBOOK: {
+        // TODO: Either get FB graph credentials or use iframe as thumbnail
+        // Assuming the video.videoId is in the format 'pageId/videos/videoId'
+        const videoId = video.videoId.split("/").pop(); // Extract the last part (videoId)
+        return `https://graph.facebook.com/${videoId}/picture`;
+      }
       default:
         return "";
     }

@@ -13,7 +13,7 @@ export function SignIn({
         await signIn(provider);
       }}
     >
-      <Button {...props}>Sign In</Button>
+      <Button {...props}>Prijava</Button>
     </form>
   );
 }
@@ -28,7 +28,7 @@ export function SignOut(props: ComponentPropsWithRef<typeof Button>) {
       className="w-full"
     >
       <Button variant="ghost" className="h-8 w-full p-0" {...props}>
-        Sign Out
+        Odjava
       </Button>
     </form>
   );

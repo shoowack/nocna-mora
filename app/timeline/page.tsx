@@ -4,13 +4,8 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { TitleTemplate } from "@/components/title-template";
 import { ParticipantGender } from "@prisma/client";
-import {
-  Baby,
-  Play,
-  // Settings,
-  Skull,
-  Youtube,
-} from "lucide-react";
+import { Baby, Calendar, Play, Skull, Youtube } from "lucide-react";
+import Image from "next/image";
 
 export default async function TimelinePage() {
   const participants = await prisma.participant.findMany({
@@ -44,7 +39,7 @@ export default async function TimelinePage() {
         title: `${
           participant.gender === ParticipantGender.MALE ? "Rođen" : "Rođena"
         } ${participant.firstName} ${participant.lastName} ${
-          participant.nickname && ` (${participant.nickname})`
+          participant.nickname ? ` (${participant.nickname})` : ""
         }`,
       });
     }
@@ -72,13 +67,31 @@ export default async function TimelinePage() {
     id: video.id,
   }));
 
-  // eslint-disable-next-line no-unused-vars
   const customEvents = [
+    {
+      type: "custom",
+      date: new Date("11 19 2020"),
+      id: "today",
+      title:
+        "Zagreb: Navijači Dinama na Knežiji izradili mural u čast Ševi iz Noćne More",
+      icon: <Calendar className="size-4" />,
+      description: (
+        <div className="relative mt-5 h-[350px] min-w-full">
+          <Image
+            src="/timeline/seva-mural.jpg"
+            alt="Zagreb: Navijači Dinama na Knežiji izradili mural u čast Ševi iz Noćne More"
+            objectFit="cover"
+            fill
+          />
+        </div>
+      ),
+    },
+    // Video example
     // {
     //   type: "custom",
     //   date: new Date(),
     //   id: "today",
-    //   icon: <Settings className="size-4" />,
+    //   icon: <Calendar className="size-4" />,
     //   description: (
     //     <iframe
     //       className="aspect-video w-full"
@@ -96,7 +109,7 @@ export default async function TimelinePage() {
   const timelineEvents = [
     ...participantEvents,
     ...videoEvents,
-    // ...customEvents,
+    ...customEvents,
   ].sort(
     (a, b) => new Date(b.date ?? 0).getTime() - new Date(a.date ?? 0).getTime() // Ensure non-null dates
   );
@@ -112,9 +125,9 @@ export default async function TimelinePage() {
             >
               <div
                 className={cn(
-                  "flex size-10 shrink-0 items-center justify-center rounded-full ring-4 ring-white bg-slate-300 text-slate-500 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2",
+                  "flex size-10 shrink-0 items-center justify-center rounded-full ring-4 ring-white bg-stone-200 text-stone-500 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2",
                   {
-                    "bg-slate-800 text-slate-100": event.type === "death",
+                    "bg-stone-800 text-stone-100": event.type === "death",
                     "bg-blue-200 text-blue-800 ": event.type === "birth",
                     "bg-red-200 text-red-800 ": event.type === "video",
                   }
@@ -126,9 +139,9 @@ export default async function TimelinePage() {
                   <Skull className="size-5" strokeWidth={2} />
                 ) : event.type === "video" ? (
                   <Youtube className="size-5" strokeWidth={2} />
+                ) : event.icon ? (
+                  event.icon
                 ) : (
-                  // ) : event.icon ? (
-                  //   event.icon
                   ""
                 )}
               </div>
@@ -137,7 +150,7 @@ export default async function TimelinePage() {
                 className={cn(
                   "w-[calc(100%-4rem)] rounded-xl bg-stone-100 p-4 md:w-[calc(50%-2.5rem)] relative",
                   {
-                    "bg-slate-200 text-slate-900": event.type === "death",
+                    "bg-stone-200 text-stone-900": event.type === "death",
                     "bg-blue-100/50 text-blue-800 ": event.type === "birth",
                     "bg-red-100/50 text-red-800 ": event.type === "video",
                   }
@@ -157,8 +170,8 @@ export default async function TimelinePage() {
                     </time>
                   )}
                 </div>
-                <div className="text-slate-500">
-                  {/* {event.description && <p>{event.description}</p>} */}
+                <div className="text-stone-500">
+                  {event.description && event.description}
                   {event.type === "video" && (
                     // @ts-ignore next-line
                     <Link href={`/video/${event.id}`}>

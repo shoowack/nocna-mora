@@ -99,15 +99,18 @@ export const FilterControls = ({
   };
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex flex-col items-stretch gap-2 md:flex-row md:items-center">
       {/* Search field */}
-      <Search placeholder="Traži po naslovu..." className="h-9 w-auto grow" />
+      <Search
+        placeholder="Traži po naslovu..."
+        className="h-9 grow md:w-auto"
+      />
       {/* Provider Filter */}
       <Select
         defaultValue={searchParams.get("provider") ?? ""}
         onValueChange={(e) => handleFilterChange("provider", e)}
       >
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className="md:w-[180px]">
           <SelectValue placeholder={"Video servis"} />
         </SelectTrigger>
         <SelectContent>
@@ -116,6 +119,7 @@ export const FilterControls = ({
           <SelectItem value="YOUTUBE">YouTube</SelectItem>
           <SelectItem value="VIMEO">Vimeo</SelectItem>
           <SelectItem value="DAILYMOTION">Dailymotion</SelectItem>
+          <SelectItem value="FACEBOOK">Facebook</SelectItem>
         </SelectContent>
       </Select>
 
@@ -124,7 +128,7 @@ export const FilterControls = ({
         defaultValue={searchParams.get("duration") ?? ""}
         onValueChange={(e) => handleFilterChange("duration", e)}
       >
-        <SelectTrigger className="w-[180px]">
+        <SelectTrigger className="md:w-[180px]">
           <SelectValue placeholder={"Dužina videa"} />
         </SelectTrigger>
         <SelectContent>
@@ -137,7 +141,7 @@ export const FilterControls = ({
 
       {/* Participants Filter */}
       <MultiSelect
-        className="max-h-9 min-h-9 w-[370px]"
+        className="max-h-9 min-h-9 md:w-[370px]"
         options={participants.map((participants: any) => ({
           label: `${participants.firstName} ${participants.lastName}`,
           value: participants.slug,
@@ -163,13 +167,18 @@ export const FilterControls = ({
                   ? "default"
                   : "outline"
               }
-              className="size-9 p-0"
+              className="min-w-9 md:size-9 md:p-0"
               onClick={handleToggleShowDetails}
             >
-              <LayoutList className="size-4" />
+              <LayoutList className="mr-2 hidden size-4 sm:block md:mr-0" />
+              <p className="block text-balance md:hidden">
+                {searchParams.get("showDetails") === "true"
+                  ? "Sakrij informacije ispod svakog videa"
+                  : "Pokaži više informacija ispod svakog videa"}
+              </p>
             </Button>
           </TooltipTrigger>
-          <TooltipContent className="w-40 text-center">
+          <TooltipContent className="hidden w-40 text-center md:block">
             <p>
               {searchParams.get("showDetails") === "true"
                 ? "Sakrij informacije ispod svakog videa"

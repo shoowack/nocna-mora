@@ -128,6 +128,7 @@ enum VideoProvider {
   YOUTUBE
   VIMEO
   DAILYMOTION
+  FACEBOOK
 }
 
 model Video {

@@ -13,18 +13,16 @@ import { useForm, FormProvider } from "react-hook-form";
 const ItemGroup: FC<PropsWithChildren & { className?: string }> = ({
   className,
   children,
-}) => {
-  return (
-    <div
-      className={cn(
-        "col-span-full grid sm:grid-cols-subgrid sm:items-baseline sm:justify-items-end gap-2 sm:gap-3",
-        className
-      )}
-    >
-      {children}
-    </div>
-  );
-};
+}) => (
+  <div
+    className={cn(
+      "col-span-full grid sm:grid-cols-subgrid sm:items-baseline sm:justify-items-end gap-2 sm:gap-3",
+      className
+    )}
+  >
+    {children}
+  </div>
+);
 
 export function VideoForm({
   video,

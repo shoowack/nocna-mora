@@ -50,12 +50,12 @@ export function Pagination({
   };
 
   return (
-    <div className="flex w-full items-center justify-between px-2">
+    <div className="flex w-full flex-col items-center justify-between gap-3 px-2 sm:flex-row">
       <div className="text-sm font-medium">
         {totalVideos} rezultat
         {totalVideos % 10 === 1 && totalVideos % 100 !== 11 ? "" : "a"}
       </div>
-      <div className="flex items-center space-x-6 lg:space-x-8">
+      <div className="flex flex-col items-center gap-3 space-x-6 sm:flex-row lg:space-x-8">
         <div className="flex items-center space-x-2">
           <p className="text-sm font-medium">Videa po stranici</p>
           <Select
@@ -74,32 +74,33 @@ export function Pagination({
             </SelectContent>
           </Select>
         </div>
-        <div className="flex items-center justify-center text-sm font-medium">
-          Stranica {currentPage} od {totalPages}
-        </div>
-        <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            className="hidden size-8 p-0 lg:flex"
-            onClick={() => handlePageChange(1)}
-            disabled={currentPage <= 1}
-            size="sm"
-          >
-            <span className="sr-only">Go to first page</span>
-            <DoubleArrowLeftIcon className="size-4" />
-          </Button>
-          <Button
-            variant="outline"
-            className="size-8 p-0"
-            onClick={() => handlePageChange(currentPage - 1)}
-            disabled={currentPage <= 1}
-            size="sm"
-          >
-            <span className="sr-only">Go to previous page</span>
-            <ChevronLeftIcon className="size-4" />
-          </Button>
-          {/* Page buttons */}
-          {/* {Array.from({ length: totalPages }, (_, index) => (
+        <div className="flex flex-row sm:flex-row">
+          <div className="flex items-center justify-center text-sm font-medium">
+            Stranica {currentPage} od {totalPages}
+          </div>
+          <div className="flex items-center space-x-2">
+            <Button
+              variant="outline"
+              className="hidden size-8 p-0 lg:flex"
+              onClick={() => handlePageChange(1)}
+              disabled={currentPage <= 1}
+              size="sm"
+            >
+              <span className="sr-only">Go to first page</span>
+              <DoubleArrowLeftIcon className="size-4" />
+            </Button>
+            <Button
+              variant="outline"
+              className="size-8 p-0"
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage <= 1}
+              size="sm"
+            >
+              <span className="sr-only">Go to previous page</span>
+              <ChevronLeftIcon className="size-4" />
+            </Button>
+            {/* Page buttons */}
+            {/* {Array.from({ length: totalPages }, (_, index) => (
             <Button
               key={index}
               onClick={() => handlePageChange(index + 1)}
@@ -113,26 +114,27 @@ export function Pagination({
               {index + 1}
             </Button>
           ))} */}
-          <Button
-            variant="outline"
-            className="size-8 p-0"
-            onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage >= totalPages}
-            size="sm"
-          >
-            <span className="sr-only">Go to next page</span>
-            <ChevronRightIcon className="size-4" />
-          </Button>
-          <Button
-            variant="outline"
-            className="hidden size-8 p-0 lg:flex"
-            onClick={() => handlePageChange(totalPages)}
-            disabled={currentPage >= totalPages}
-            size="sm"
-          >
-            <span className="sr-only">Go to last page</span>
-            <DoubleArrowRightIcon className="size-4" />
-          </Button>
+            <Button
+              variant="outline"
+              className="size-8 p-0"
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage >= totalPages}
+              size="sm"
+            >
+              <span className="sr-only">Go to next page</span>
+              <ChevronRightIcon className="size-4" />
+            </Button>
+            <Button
+              variant="outline"
+              className="hidden size-8 p-0 lg:flex"
+              onClick={() => handlePageChange(totalPages)}
+              disabled={currentPage >= totalPages}
+              size="sm"
+            >
+              <span className="sr-only">Go to last page</span>
+              <DoubleArrowRightIcon className="size-4" />
+            </Button>
+          </div>
         </div>
       </div>
     </div>

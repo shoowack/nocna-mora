@@ -179,9 +179,9 @@ async function main() {
       type: ParticipantType.MAIN,
     },
     {
-      firstName: "Darko",
-      lastName: "Djugumović",
-      nickname: "Darko",
+      firstName: "Dario",
+      lastName: "Đugumović",
+      nickname: null,
       birthDate: null,
       deathDate: null,
       bio: "Pjevač-imitator",
@@ -348,6 +348,26 @@ async function main() {
       gender: ParticipantGender.MALE,
       type: ParticipantType.GUEST,
     },
+    {
+      firstName: "Slaven",
+      lastName: "Letica",
+      nickname: "Ban Letica",
+      birthDate: new Date(Date.parse("06 28 1947 00:00:00 GMT")),
+      deathDate: new Date(Date.parse("10 25 2020 00:00:00 GMT")),
+      bio: "Hrvatski sociolog, kolumnist, publicist, političar i sveučilišni profesor.",
+      gender: ParticipantGender.MALE,
+      type: ParticipantType.GUEST,
+    },
+    {
+      firstName: "Davor",
+      lastName: "Štern",
+      nickname: null,
+      birthDate: new Date(Date.parse("06 18 1947 00:00:00 GMT")),
+      deathDate: null,
+      bio: "Bivši hrvatski ministar gospodarstva, poduzetnik i trenutno zastupnik u gradskoj skupštini Grada Zagreba",
+      gender: ParticipantGender.MALE,
+      type: ParticipantType.GUEST,
+    },
   ];
 
   for (const participantData of participantsData) {
@@ -409,6 +429,7 @@ async function main() {
     },
     { title: "Misli 21. stoljeća" },
     { title: "Dabog da imao, pa nemao" },
+    { title: "Ševa vicevi" },
   ];
 
   for (const categoryData of categoriesData) {
@@ -620,11 +641,40 @@ async function main() {
       title:
         "Dalibor Trojak Show#133 Remzo Krak Sirotković Legenda Noćne More I Nemoguće Emisije",
       videoId: "7egdtOI0J2U",
-      duration: 1844,
+      duration: 68,
       provider: VideoProvider.YOUTUBE,
-      airedDate: new Date("2023-10-01"),
+      airedDate: null,
       participants: participants
         .filter((participant) => ["remzo-krak"].includes(participant.slug))
+        .map((participant) => participant.id),
+      categories: categories
+        .filter((category) => ["podcasts"].includes(category.slug))
+        .map((category) => category.id),
+    },
+    {
+      title: "Jericho: Priča o Željku Malnaru (Trailer)",
+      videoId: "253218248",
+      duration: 96,
+      provider: VideoProvider.VIMEO,
+      airedDate: new Date("2018-01-29"),
+      participants: participants
+        // TODO: Add other participants
+        .filter((participant) => ["zeljko-malnar"].includes(participant.slug))
+        .map((participant) => participant.id),
+      categories: categories
+        .filter((category) => ["documentarci"].includes(category.slug))
+        .map((category) => category.id),
+    },
+    {
+      title: "Stankec i Davor Štern",
+      videoId: "263530297042978/videos/2715845905223275",
+      duration: 1844,
+      provider: VideoProvider.FACEBOOK,
+      airedDate: new Date("2006-02-18"),
+      participants: participants
+        .filter((participant) =>
+          ["stanko-hranovic", "davor-stern"].includes(participant.slug)
+        )
         .map((participant) => participant.id),
       categories: categories
         .filter((category) => ["podcasts"].includes(category.slug))
