@@ -1,7 +1,7 @@
+import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { generateSlug } from "@/lib/slugify";
 import { auth } from "auth";
-import prisma from "@/lib/prisma";
 
 export const POST = auth(async (request: Request & { auth: any }) => {
   if (!request.auth) {

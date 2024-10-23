@@ -1,11 +1,13 @@
 import prisma from "@/lib/prisma";
+import Link from "next/link";
 import { TitleTemplate } from "@/components/title-template";
 import { VideoDetail } from "@/components/video-detail";
 import { Container } from "@/components/container";
 import { AlertTriangle, ChevronLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { auth } from "auth";
-import Link from "next/link";
+import { Separator } from "@/components/ui/separator";
+import { CommentSection } from "@/components/comment-section";
 
 export default async function VideoPage({
   params,
@@ -26,16 +28,75 @@ export default async function VideoPage({
     };
   }
 
+  const isAdmin = session?.user?.role === "admin";
+
   const video = await prisma.video.findUnique({
     where: { id },
-    include: {
-      categories: true,
+    select: {
+      id: true,
+      title: true,
+      videoId: true,
+      provider: true,
+      duration: true,
+      airedDate: true,
+      published: true,
+      createdAt: true,
+      userId: true,
+      createdBy: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          emailVerified: true,
+          image: true,
+          createdAt: true,
+          updatedAt: true,
+          role: true,
+        },
+      },
       participants: true,
-      createdBy: true,
+      categories: true,
+      comments: {
+        where: isAdmin ? {} : { approved: true, deletedAt: null },
+        select: {
+          id: true,
+          content: true,
+          createdAt: true,
+          updatedAt: true,
+          approved: true,
+          deletedAt: true,
+          videoId: true,
+          createdById: true,
+          createdBy: {
+            select: {
+              name: true,
+              email: true,
+              image: true,
+            },
+          },
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      },
     },
   });
 
-  const isAdmin = session?.user?.role === "admin";
+  const totalApprovedComments = await prisma.comment.count({
+    where: {
+      videoId: id,
+      approved: true,
+      deletedAt: null, // Exclude soft-deleted comments
+    },
+  });
+
+  const totalUnapprovedComments = await prisma.comment.count({
+    where: {
+      videoId: id,
+      approved: false,
+      deletedAt: null, // Exclude soft-deleted comments
+    },
+  });
 
   // Unpublished videos should be accessible for authenticated admin users only
   if (!video || (!video.published && !isAdmin)) {
@@ -71,6 +132,26 @@ export default async function VideoPage({
       }
     >
       <VideoDetail video={video} singleVideo showCategories showActors />
+      <Container className="md:py-0">
+        <Separator />
+        <CommentSection
+          videoId={video.id}
+          comments={video.comments}
+          isAdmin={isAdmin}
+          user={
+            session?.user
+              ? {
+                  name: session.user.name ?? "",
+                  email: session.user.email ?? "",
+                  image: session.user.image ?? "",
+                  role: session.user.role ?? "",
+                }
+              : undefined
+          }
+          totalApprovedComments={totalApprovedComments}
+          totalUnapprovedComments={totalUnapprovedComments}
+        />
+      </Container>
     </TitleTemplate>
   );
 }
