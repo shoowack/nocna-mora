@@ -198,47 +198,47 @@ export const CommentSection = ({
         </div>
       )}
 
-      {totalApprovedComments > 0 ||
-        (((isAdmin && totalUnapprovedComments > 0) ||
-          (isAdmin && totalDeletedComments > 0)) && (
-          <>
-            <Separator className="my-8" />
+      {(totalApprovedComments > 0 ||
+        (isAdmin && totalUnapprovedComments > 0) ||
+        (isAdmin && totalDeletedComments > 0)) && (
+        <>
+          <Separator className="my-8" />
 
-            <div className="flex flex-col items-center justify-between gap-y-3 md:flex-row md:gap-y-0">
-              <div className="flex flex-col items-start gap-4 self-start md:flex-row md:items-center">
-                <h2 className="text-xl font-bold">Komentari</h2>
-                <div className="flex items-center gap-2">
-                  <Badge variant="secondary" className="rounded-full">
-                    {totalApprovedComments}
+          <div className="flex flex-col items-center justify-between gap-y-3 md:flex-row md:gap-y-0">
+            <div className="flex flex-col items-start gap-4 self-start md:flex-row md:items-center">
+              <h2 className="text-xl font-bold">Komentari</h2>
+              <div className="flex items-center gap-2">
+                <Badge variant="secondary" className="rounded-full">
+                  {totalApprovedComments}
+                </Badge>
+                {isAdmin && totalUnapprovedComments > 0 && (
+                  <Badge variant="outline" className="rounded-full">
+                    Neodobreni: {totalUnapprovedComments}
                   </Badge>
-                  {isAdmin && totalUnapprovedComments > 0 && (
-                    <Badge variant="outline" className="rounded-full">
-                      Neodobreni: {totalUnapprovedComments}
-                    </Badge>
-                  )}
-                  {isAdmin && totalDeletedComments > 0 && (
-                    <Badge
-                      variant="destructive"
-                      className="rounded-full bg-red-100 text-red-800 shadow-none"
-                    >
-                      Obrisani: {totalDeletedComments}
-                    </Badge>
-                  )}
-                </div>
+                )}
+                {isAdmin && totalDeletedComments > 0 && (
+                  <Badge
+                    variant="destructive"
+                    className="rounded-full bg-red-100 text-red-800 shadow-none"
+                  >
+                    Obrisani: {totalDeletedComments}
+                  </Badge>
+                )}
               </div>
-              <Select disabled>
-                <SelectTrigger className="h-7 md:w-auto">
-                  <SelectValue placeholder="Sortiraj" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="light">Najnoviji</SelectItem>
-                  <SelectItem value="dark">Najstariji</SelectItem>
-                  <SelectItem value="system">Najpopularniji</SelectItem>
-                </SelectContent>
-              </Select>
             </div>
-          </>
-        ))}
+            <Select disabled>
+              <SelectTrigger className="h-7 md:w-auto">
+                <SelectValue placeholder="Sortiraj" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="light">Najnoviji</SelectItem>
+                <SelectItem value="dark">Najstariji</SelectItem>
+                <SelectItem value="system">Najpopularniji</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </>
+      )}
 
       <div className="my-6 mb-0 divide-y md:divide-y-0">
         {comments.map((comment) => {
