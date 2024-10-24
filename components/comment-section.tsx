@@ -36,6 +36,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Separator } from "./ui/separator";
+import { useDebounce } from "use-debounce";
 
 interface CommentSectionProps {
   videoId: string;
@@ -71,6 +72,7 @@ export const CommentSection = ({
   totalDeletedComments,
 }: CommentSectionProps) => {
   const [newComment, setNewComment] = useState("");
+  const [debouncedComment] = useDebounce(newComment, 300);
   const [loading, setLoading] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null); // State for backend error
 
@@ -99,7 +101,7 @@ export const CommentSection = ({
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           videoId,
-          content: newComment,
+          content: debouncedComment,
         }),
       });
 
@@ -171,20 +173,26 @@ export const CommentSection = ({
                 setNewComment(e.target.value)
               }
               className="w-full border-none bg-transparent px-4 py-3 focus-visible:ring-0 focus-visible:ring-offset-0"
+              maxLength={500}
             />
 
-            {/* Display Server-Side Errors */}
-            {serverError && (
-              <p className="col-span-full text-red-500">{serverError}</p>
-            )}
+            <div className="flex w-full flex-col items-center justify-end gap-x-4 gap-y-2 p-4 md:flex-row">
+              {/* Display Server-Side Errors */}
+              {serverError && (
+                <p className="col-span-full text-balance text-center text-sm text-red-500">
+                  {serverError}
+                </p>
+              )}
 
-            <Button
-              type="submit"
-              disabled={isSubmitting || loading}
-              className="m-4"
-            >
-              Dodaj komentar
-            </Button>
+              <div className="flex items-center gap-4">
+                <p className="text-sm text-gray-500">
+                  {debouncedComment.length}/500 znakova
+                </p>
+                <Button type="submit" disabled={isSubmitting || loading}>
+                  Dodaj komentar
+                </Button>
+              </div>
+            </div>
           </form>
         </FormProvider>
       ) : (

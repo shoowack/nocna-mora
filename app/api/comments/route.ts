@@ -28,6 +28,13 @@ export const POST = auth(async (request: Request) => {
       );
     }
 
+    if (data.content.length > 500) {
+      return NextResponse.json(
+        { message: "Comment cannot exceed 500 characters." },
+        { status: 400 }
+      );
+    }
+
     const category = await prisma.comment.create({
       data: {
         content: data.content,
