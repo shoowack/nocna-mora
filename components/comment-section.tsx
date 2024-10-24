@@ -198,41 +198,47 @@ export const CommentSection = ({
         </div>
       )}
 
-      <Separator className="my-8" />
+      {totalApprovedComments > 0 ||
+        (((isAdmin && totalUnapprovedComments > 0) ||
+          (isAdmin && totalDeletedComments > 0)) && (
+          <>
+            <Separator className="my-8" />
 
-      <div className="flex flex-col items-center justify-between gap-y-3 md:flex-row md:gap-y-0">
-        <div className="flex flex-col items-start gap-4 self-start md:items-center">
-          <h2 className="text-xl font-bold">Komentari</h2>
-          <div className="flex items-center gap-2">
-            <Badge variant="secondary" className="rounded-full">
-              {totalApprovedComments}
-            </Badge>
-            {isAdmin && totalUnapprovedComments > 0 && (
-              <Badge variant="outline" className="rounded-full">
-                Neodobreni: {totalUnapprovedComments}
-              </Badge>
-            )}
-            {isAdmin && totalDeletedComments > 0 && (
-              <Badge
-                variant="destructive"
-                className="rounded-full bg-red-100 text-red-800 shadow-none"
-              >
-                Obrisani: {totalDeletedComments}
-              </Badge>
-            )}
-          </div>
-        </div>
-        <Select disabled>
-          <SelectTrigger className="h-7 md:w-auto">
-            <SelectValue placeholder="Sortiraj" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="light">Najnoviji</SelectItem>
-            <SelectItem value="dark">Najstariji</SelectItem>
-            <SelectItem value="system">Najpopularniji</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+            <div className="flex flex-col items-center justify-between gap-y-3 md:flex-row md:gap-y-0">
+              <div className="flex flex-col items-start gap-4 self-start md:flex-row md:items-center">
+                <h2 className="text-xl font-bold">Komentari</h2>
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary" className="rounded-full">
+                    {totalApprovedComments}
+                  </Badge>
+                  {isAdmin && totalUnapprovedComments > 0 && (
+                    <Badge variant="outline" className="rounded-full">
+                      Neodobreni: {totalUnapprovedComments}
+                    </Badge>
+                  )}
+                  {isAdmin && totalDeletedComments > 0 && (
+                    <Badge
+                      variant="destructive"
+                      className="rounded-full bg-red-100 text-red-800 shadow-none"
+                    >
+                      Obrisani: {totalDeletedComments}
+                    </Badge>
+                  )}
+                </div>
+              </div>
+              <Select disabled>
+                <SelectTrigger className="h-7 md:w-auto">
+                  <SelectValue placeholder="Sortiraj" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="light">Najnoviji</SelectItem>
+                  <SelectItem value="dark">Najstariji</SelectItem>
+                  <SelectItem value="system">Najpopularniji</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </>
+        ))}
 
       <div className="my-6 mb-0 divide-y md:divide-y-0">
         {comments.map((comment) => {
@@ -245,7 +251,7 @@ export const CommentSection = ({
                 <Avatar
                   className={cn(
                     "size-7 text-xs",
-                    (comment.deletedAt || isPending) && "opacity-50"
+                    (comment.deletedAt || !comment.approved) && "opacity-50"
                   )}
                 >
                   <AvatarImage
@@ -262,7 +268,7 @@ export const CommentSection = ({
                 <div
                   className={cn(
                     "flex flex-col md:flex-row md:items-center flex-1 ",
-                    (comment.deletedAt || isPending) && "opacity-50"
+                    (comment.deletedAt || !comment.approved) && "opacity-50"
                   )}
                 >
                   <span className="line-clamp-1 break-all font-semibold">
@@ -340,7 +346,7 @@ export const CommentSection = ({
               <p
                 className={cn(
                   "md:ml-11",
-                  (comment.deletedAt || isPending) && "opacity-50"
+                  (comment.deletedAt || !comment.approved) && "opacity-50"
                 )}
               >
                 {comment.content}
