@@ -21,6 +21,7 @@ export default async function VideoPage({
     // TODO: Look into https://react.dev/reference/react/experimental_taintObjectReference
     // filter out sensitive data before passing to client.
     session.user = {
+      id: session.user.id,
       name: session.user.name,
       email: session.user.email,
       image: session.user.image,
@@ -57,7 +58,20 @@ export default async function VideoPage({
       participants: true,
       categories: true,
       comments: {
-        where: isAdmin ? {} : { approved: true, deletedAt: null },
+        where: isAdmin
+          ? {} // Admins see all comments, including deleted ones
+          : session?.user
+          ? {
+              deletedAt: null, // Exclude deleted comments for non-admins
+              OR: [
+                { approved: true }, // Approved comments from others
+                { approved: false, createdById: session?.user?.id }, // Their own unapproved comments
+              ],
+            }
+          : {
+              deletedAt: null, // Exclude deleted comments for non-admins
+              approved: true, // Approved comments from others
+            },
         select: {
           id: true,
           content: true,
@@ -85,8 +99,7 @@ export default async function VideoPage({
   const totalApprovedComments = await prisma.comment.count({
     where: {
       videoId: id,
-      approved: true,
-      deletedAt: null, // Exclude soft-deleted comments
+      ...(isAdmin ? {} : { deletedAt: null, approved: true }), // Exclude deleted comments for non-admins
     },
   });
 
@@ -94,7 +107,16 @@ export default async function VideoPage({
     where: {
       videoId: id,
       approved: false,
-      deletedAt: null, // Exclude soft-deleted comments
+      deletedAt: null,
+    },
+  });
+
+  const totalDeletedComments = await prisma.comment.count({
+    where: {
+      videoId: id,
+      deletedAt: {
+        not: null,
+      },
     },
   });
 
@@ -150,6 +172,7 @@ export default async function VideoPage({
           }
           totalApprovedComments={totalApprovedComments}
           totalUnapprovedComments={totalUnapprovedComments}
+          totalDeletedComments={totalDeletedComments}
         />
       </Container>
     </TitleTemplate>

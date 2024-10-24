@@ -42,7 +42,7 @@ export const UserButton = async () => {
             </Avatar>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="w-56" align="end" forceMount>
+        <DropdownMenuContent className="z-[101] w-56" align="end" forceMount>
           <DropdownMenuLabel className="p-3 font-normal">
             <div className="flex flex-col space-y-1.5">
               <p className="text-sm font-medium leading-none">

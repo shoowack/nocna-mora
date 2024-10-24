@@ -7,9 +7,35 @@ import { useForm, FormProvider } from "react-hook-form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
 import { formatDistance } from "date-fns";
+import { hr } from "date-fns/locale/hr";
+
 import { User, Comment } from "@prisma/client";
 import { Badge } from "./ui/badge";
 import { cn } from "@/lib/utils";
+import {
+  Check,
+  Clock,
+  Dot,
+  MoreVertical,
+  RotateCcw,
+  Trash2,
+} from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Separator } from "./ui/separator";
 
 interface CommentSectionProps {
   videoId: string;
@@ -32,6 +58,7 @@ interface CommentSectionProps {
   user?: Pick<User, "name" | "email" | "image" | "role">;
   totalApprovedComments: number;
   totalUnapprovedComments: number;
+  totalDeletedComments: number;
 }
 
 export const CommentSection = ({
@@ -41,6 +68,7 @@ export const CommentSection = ({
   user,
   totalApprovedComments,
   totalUnapprovedComments,
+  totalDeletedComments,
 }: CommentSectionProps) => {
   const [newComment, setNewComment] = useState("");
   const [loading, setLoading] = useState(false);
@@ -129,24 +157,12 @@ export const CommentSection = ({
   };
 
   return (
-    <div className="mt-10 p-4">
-      <div className="flex items-center gap-2">
-        <h2 className="text-xl font-bold">Komentari</h2>
-        <Badge variant="secondary" className="rounded-full">
-          {totalApprovedComments}
-        </Badge>
-        {isAdmin && totalUnapprovedComments > 0 && (
-          <Badge variant="destructive" className="rounded-full">
-            Neodobreni: {totalUnapprovedComments}
-          </Badge>
-        )}
-      </div>
-
+    <div className="mx-4 mb-0 mt-8 md:mb-8 md:mt-10">
       {user ? (
         <FormProvider {...form}>
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="mt-4 flex flex-col items-end rounded-lg bg-neutral-100"
+            className="flex flex-col items-end rounded-lg bg-neutral-100"
           >
             <AutosizeTextarea
               placeholder="Dodaj komentar..."
@@ -172,89 +188,166 @@ export const CommentSection = ({
           </form>
         </FormProvider>
       ) : (
-        <p className="mt-4 text-gray-600">
-          Prijavite se da biste dodali komentar.
-        </p>
+        <div className="flex flex-col items-end rounded-lg bg-neutral-100">
+          <p className="mx-4 my-3 self-start text-sm text-neutral-400">
+            Prijavite se da biste dodali komentar.
+          </p>
+          <Button disabled className="m-4">
+            Dodaj komentar
+          </Button>
+        </div>
       )}
 
-      <div className="my-6 space-y-4">
-        {comments.map((comment) => (
-          <div key={comment.id} className={cn("p-4 rounded-lg")}>
-            <div
-              className={cn(
-                "mb-2 flex items-center gap-2",
-                comment.deletedAt && "opacity-50"
-              )}
-            >
-              <Avatar className="size-7 text-xs">
-                <AvatarImage
-                  src={comment.createdBy.image || "/default-avatar.png"}
-                  alt={`${comment.createdBy.name} avatar`}
-                />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
+      <Separator className="my-8" />
 
-              <span className="font-semibold">{comment.createdBy.name}</span>
-              <time
-                className="ml-1 mt-px text-xs text-gray-500"
-                dateTime={comment.createdAt.toISOString()}
-              >
-                {formatDistance(comment.createdAt, new Date(), {
-                  addSuffix: true,
-                })}
-              </time>
-            </div>
-            <p className={cn("ml-9", comment.deletedAt && "opacity-50")}>
-              {comment.content}
-            </p>
-            {isAdmin && (
-              <div className="mt-2 flex space-x-2">
-                {!comment.deletedAt && (
-                  <>
-                    <Button
-                      variant="outline"
-                      onClick={() => handleApproveComment(comment.id)}
-                      disabled={comment.approved}
-                    >
-                      Odobri
-                    </Button>
-                    <Button
-                      variant="destructive"
-                      onClick={() => handleDeleteComment(comment.id)}
-                    >
-                      Izbriši
-                    </Button>
-                  </>
-                )}
-                {comment.deletedAt && (
-                  <Button
-                    variant="secondary"
-                    onClick={() => handleRestoreComment(comment.id)}
-                  >
-                    Vrati
-                  </Button>
-                )}
-              </div>
+      <div className="flex flex-col items-center justify-between gap-y-3 md:flex-row md:gap-y-0">
+        <div className="flex flex-col items-start gap-4 self-start md:items-center">
+          <h2 className="text-xl font-bold">Komentari</h2>
+          <div className="flex items-center gap-2">
+            <Badge variant="secondary" className="rounded-full">
+              {totalApprovedComments}
+            </Badge>
+            {isAdmin && totalUnapprovedComments > 0 && (
+              <Badge variant="outline" className="rounded-full">
+                Neodobreni: {totalUnapprovedComments}
+              </Badge>
             )}
-            {/* {isAdmin && (
-              <div className="mt-2 flex space-x-2">
-                <Button
-                  variant="outline"
-                  onClick={() => handleApproveComment(comment.id)}
-                  disabled={comment.approved}
-                >
-                  Odobri
-                </Button>
-                <Button
-                  variant="destructive"
-                  onClick={() => handleDeleteComment(comment.id)}
-                >
-                  Izbriši
-                </Button>
-              </div>
-            )} */}
+            {isAdmin && totalDeletedComments > 0 && (
+              <Badge
+                variant="destructive"
+                className="rounded-full bg-red-100 text-red-800 shadow-none"
+              >
+                Obrisani: {totalDeletedComments}
+              </Badge>
+            )}
           </div>
-        ))}
+        </div>
+        <Select disabled>
+          <SelectTrigger className="h-7 md:w-auto">
+            <SelectValue placeholder="Sortiraj" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="light">Najnoviji</SelectItem>
+            <SelectItem value="dark">Najstariji</SelectItem>
+            <SelectItem value="system">Najpopularniji</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="my-6 mb-0 divide-y md:divide-y-0">
+        {comments.map((comment) => {
+          const isPending =
+            !comment.approved && comment.createdBy.email === user?.email;
+
+          return (
+            <div key={comment.id} className="py-4">
+              <div className="mb-2 flex items-center justify-between gap-4">
+                <Avatar
+                  className={cn(
+                    "size-7 text-xs",
+                    (comment.deletedAt || isPending) && "opacity-50"
+                  )}
+                >
+                  <AvatarImage
+                    src={comment.createdBy.image || "/default-avatar.png"}
+                    alt={`${comment.createdBy.name} avatar`}
+                  />
+                  <AvatarFallback>
+                    {comment.createdBy.name
+                      ?.split(" ")
+                      .map((name: string) => name[0].toUpperCase())
+                      .join("")}
+                  </AvatarFallback>
+                </Avatar>
+                <div
+                  className={cn(
+                    "flex flex-col md:flex-row md:items-center flex-1 ",
+                    (comment.deletedAt || isPending) && "opacity-50"
+                  )}
+                >
+                  <span className="line-clamp-1 break-all font-semibold">
+                    {comment.createdBy.name}
+                  </span>
+                  <Dot className="mt-px hidden min-h-5 min-w-5 text-gray-500 md:flex" />
+                  <time
+                    className="mt-px whitespace-nowrap text-xs  text-gray-500"
+                    dateTime={comment.createdAt.toISOString()}
+                  >
+                    {formatDistance(comment.createdAt, new Date(), {
+                      addSuffix: true,
+                      locale: hr,
+                    })}
+                  </time>
+                </div>
+
+                <div className="flex items-center gap-1">
+                  {!comment.approved && !comment.deletedAt && (
+                    <Badge variant="secondary" className="ml-2 p-1 md:px-2.5">
+                      <Clock className="size-4 md:mr-1 md:size-3" />
+                      <p className="hidden md:flex">Čeka odobrenje</p>
+                    </Badge>
+                  )}
+                  {comment.deletedAt && (
+                    <Badge
+                      variant="destructive"
+                      className="ml-2 bg-red-100 p-1 text-red-800 shadow-none md:px-2.5"
+                    >
+                      <Trash2 className="size-4 md:mr-1 md:size-3" />
+                      <p className="hidden md:flex">Obrisan</p>
+                    </Badge>
+                  )}
+                  {(isAdmin || isPending) && (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="ghost" className="min-h-6 p-1">
+                          <MoreVertical className="size-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent>
+                        <DropdownMenuLabel>Opcije komentara</DropdownMenuLabel>
+                        <DropdownMenuSeparator />
+                        {!comment.deletedAt && isAdmin && (
+                          <DropdownMenuItem
+                            onClick={() => handleApproveComment(comment.id)}
+                            disabled={comment.approved}
+                          >
+                            <Check className="size-4" />
+                            Odobri
+                          </DropdownMenuItem>
+                        )}
+                        {(!comment.deletedAt || (!isAdmin && isPending)) && (
+                          <DropdownMenuItem
+                            onClick={() => handleDeleteComment(comment.id)}
+                            className="!text-red-600 focus:!bg-red-100/50 dark:focus:!bg-red-950/50"
+                          >
+                            <Trash2 className="size-4" />
+                            Izbriši
+                          </DropdownMenuItem>
+                        )}
+                        {comment.deletedAt && isAdmin && (
+                          <DropdownMenuItem
+                            onClick={() => handleRestoreComment(comment.id)}
+                          >
+                            <RotateCcw className="size-4" />
+                            Vrati
+                          </DropdownMenuItem>
+                        )}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  )}
+                </div>
+              </div>
+              <p
+                className={cn(
+                  "md:ml-11",
+                  (comment.deletedAt || isPending) && "opacity-50"
+                )}
+              >
+                {comment.content}
+              </p>
+            </div>
+          );
+        })}
       </div>
     </div>
   );

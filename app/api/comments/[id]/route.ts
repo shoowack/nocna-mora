@@ -9,15 +9,6 @@ export const DELETE = auth(async (request: Request, { params }: any) => {
     return NextResponse.json({ message: "Not authenticated" }, { status: 401 });
   }
 
-  if (session?.user?.role !== "admin") {
-    return NextResponse.json(
-      {
-        message: "You do not have permission to perform this action.",
-      },
-      { status: 403 }
-    );
-  }
-
   try {
     const { id } = params;
 
@@ -50,13 +41,32 @@ export const DELETE = auth(async (request: Request, { params }: any) => {
       );
     }
 
-    // Soft delete: set deletedAt to current timestamp
-    await prisma.comment.update({
-      where: { id: id },
-      data: { deletedAt: new Date() },
-    });
+    if (session.user.role === "admin") {
+      // Soft delete for admins: set deletedAt to current timestamp
+      await prisma.comment.update({
+        where: { id: id },
+        data: { deletedAt: new Date() },
+      });
+      return NextResponse.json(
+        { message: "Comment soft deleted." },
+        { status: 200 }
+      );
+    } else if (comment.createdById === session.user.id) {
+      // Hard delete for regular users
+      await prisma.comment.delete({
+        where: { id: id },
+      });
+      return NextResponse.json(
+        { message: "Comment deleted." },
+        { status: 200 }
+      );
+    }
 
-    return NextResponse.json({ message: "Comment deleted." }, { status: 200 });
+    // Fallback response if nothing matched
+    return NextResponse.json(
+      { message: "Action could not be completed." },
+      { status: 400 }
+    );
   } catch (error) {
     console.error("Failed to delete comment:", error);
     return NextResponse.json(
