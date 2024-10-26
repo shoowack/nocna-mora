@@ -74,7 +74,7 @@ export function Pagination({
             </SelectContent>
           </Select>
         </div>
-        <div className="flex flex-row sm:flex-row">
+        <div className="flex flex-row sm:flex-row gap-x-2">
           <div className="flex items-center justify-center text-sm font-medium">
             Stranica {currentPage} od {totalPages}
           </div>

@@ -62,12 +62,13 @@ export const Reactions = ({ videoId, userReaction }: ReactionProps) => {
   };
 
   return (
-    <div className="flex items-center space-x-2">
+    <div className="mb-4 flex flex-col items-center gap-2 md:mb-0 md:flex-row">
       {Object.values(ReactionType).map((type) => (
         <Button
           key={type}
           onClick={() => handleReaction(ReactionType[type])}
           disabled={loading || reaction === ReactionType[type]}
+          className="w-full md:w-auto"
         >
           {reactionIcons[type]}{" "}
           {type.charAt(0).toUpperCase() + type.slice(1).toLowerCase()}

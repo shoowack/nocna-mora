@@ -59,42 +59,6 @@ export default async function VideoPage({
       },
       participants: true,
       categories: true,
-      comments: {
-        where: isAdmin
-          ? {} // Admins see all comments, including deleted ones
-          : session?.user
-          ? {
-              deletedAt: null, // Exclude deleted comments for non-admins
-              OR: [
-                { approved: true }, // Approved comments from others
-                { approved: false, createdById: session?.user?.id }, // Their own unapproved comments
-              ],
-            }
-          : {
-              deletedAt: null, // Exclude deleted comments for non-admins
-              approved: true, // Approved comments from others
-            },
-        select: {
-          id: true,
-          content: true,
-          createdAt: true,
-          updatedAt: true,
-          approved: true,
-          deletedAt: true,
-          videoId: true,
-          createdById: true,
-          createdBy: {
-            select: {
-              name: true,
-              email: true,
-              image: true,
-            },
-          },
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-      },
       reactions: {
         where: {
           userId: session?.user?.id,
@@ -107,30 +71,6 @@ export default async function VideoPage({
     },
   });
   const userReaction = video?.reactions?.length ? video.reactions[0] : null;
-
-  const totalApprovedComments = await prisma.comment.count({
-    where: {
-      videoId: id,
-      ...(isAdmin ? {} : { deletedAt: null, approved: true }), // Exclude deleted comments for non-admins
-    },
-  });
-
-  const totalUnapprovedComments = await prisma.comment.count({
-    where: {
-      videoId: id,
-      approved: false,
-      deletedAt: null,
-    },
-  });
-
-  const totalDeletedComments = await prisma.comment.count({
-    where: {
-      videoId: id,
-      deletedAt: {
-        not: null,
-      },
-    },
-  });
 
   const reactions = await prisma.reaction.groupBy({
     by: ["type"],
@@ -195,7 +135,6 @@ export default async function VideoPage({
         <Separator />
         <CommentSection
           videoId={video.id}
-          comments={video.comments}
           isAdmin={isAdmin}
           user={
             session?.user
@@ -207,9 +146,6 @@ export default async function VideoPage({
                 }
               : undefined
           }
-          totalApprovedComments={totalApprovedComments}
-          totalUnapprovedComments={totalUnapprovedComments}
-          totalDeletedComments={totalDeletedComments}
         />
       </Container>
     </TitleTemplate>

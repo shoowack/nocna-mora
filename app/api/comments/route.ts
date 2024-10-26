@@ -53,3 +53,134 @@ export const POST = auth(async (request: Request) => {
     );
   }
 });
+
+export const GET = auth(async (request: Request) => {
+  const session = (request as any).auth;
+
+  try {
+    const url = new URL(request.url);
+    const videoId = url.searchParams.get("videoId");
+    const page = parseInt(url.searchParams.get("page") || "1", 10);
+    const limit = parseInt(url.searchParams.get("limit") || "10", 10);
+    const sort = url.searchParams.get("sort") || "desc";
+
+    if (!videoId) {
+      return NextResponse.json(
+        { message: "Video ID is required." },
+        { status: 400 }
+      );
+    }
+
+    const isAdmin = session?.user?.role === "admin";
+    const offset = (page - 1) * limit;
+
+    // Fetch paginated comments with sorting
+    const comments = await prisma.comment.findMany({
+      where: isAdmin
+        ? { videoId } // Admins see all comments, including deleted ones
+        : session?.user
+        ? {
+            videoId,
+            deletedAt: null, // Exclude deleted comments for non-admins
+            OR: [
+              { approved: true }, // Approved comments from others
+              { approved: false, createdById: session?.user?.id }, // Their own unapproved comments
+            ],
+          }
+        : {
+            videoId,
+            deletedAt: null, // Exclude deleted comments
+            approved: true, // Only approved comments from others
+          },
+      skip: offset,
+      take: limit,
+      orderBy: [
+        {
+          createdAt: sort === "desc" ? "desc" : "asc",
+        },
+      ],
+      select: {
+        id: true,
+        content: true,
+        createdAt: true,
+        updatedAt: true,
+        approved: true,
+        deletedAt: true,
+        videoId: true,
+        createdById: true,
+        createdBy: {
+          select: {
+            name: true,
+            email: true,
+            image: true,
+          },
+        },
+      },
+    });
+
+    // Count total approved comments
+    const totalApprovedComments = await prisma.comment.count({
+      where: {
+        videoId,
+        deletedAt: null,
+        approved: true,
+      },
+    });
+
+    // Count total unapproved comments (only visible to admin)
+    const totalUnapprovedComments = isAdmin
+      ? await prisma.comment.count({
+          where: {
+            videoId,
+            deletedAt: null,
+            approved: false,
+          },
+        })
+      : 0;
+
+    // Count total deleted comments (only visible to admin)
+    const totalDeletedComments = isAdmin
+      ? await prisma.comment.count({
+          where: {
+            videoId,
+            deletedAt: {
+              not: null,
+            },
+          },
+        })
+      : 0;
+
+    const totalUnapprovedCommentsForUser = await prisma.comment.count({
+      where: {
+        videoId,
+        deletedAt: null,
+        approved: false,
+        createdById: session?.user?.id,
+      },
+    });
+
+    return NextResponse.json({
+      comments,
+      totalApprovedComments,
+      totalUnapprovedComments,
+      totalUnapprovedCommentsForUser,
+      totalDeletedComments,
+      currentPage: page,
+      totalPages: Math.ceil(
+        (isAdmin
+          ? totalApprovedComments +
+            totalUnapprovedComments +
+            totalDeletedComments
+          : session?.user
+          ? totalApprovedComments + totalUnapprovedCommentsForUser
+          : totalApprovedComments) / limit
+      ), // Assuming pagination is based on approved comments
+    });
+  } catch (error) {
+    console.error("Failed to get comments:", error);
+    return NextResponse.json(
+      { message: "Internal server error" },
+      { status: 500 }
+    );
+  }
+});

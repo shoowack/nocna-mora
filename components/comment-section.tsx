@@ -1,14 +1,12 @@
 "use client";
 
-import { useState, ChangeEvent } from "react";
-import { useRouter } from "next/navigation";
+import { useState, ChangeEvent, useEffect } from "react";
 import { Button } from "./ui/button";
 import { useForm, FormProvider } from "react-hook-form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { AutosizeTextarea } from "@/components/ui/autosize-textarea";
 import { formatDistance } from "date-fns";
 import { hr } from "date-fns/locale/hr";
-
 import { User, Comment } from "@prisma/client";
 import { Badge } from "./ui/badge";
 import { cn } from "@/lib/utils";
@@ -37,46 +35,71 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "./ui/separator";
 import { useDebounce } from "use-debounce";
+import { pageSizeConstants } from "@/app/constants/page-size-constants";
+import {
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  DoubleArrowLeftIcon,
+  DoubleArrowRightIcon,
+} from "@radix-ui/react-icons";
 
 interface CommentSectionProps {
   videoId: string;
-  comments: Array<
-    Pick<
-      Comment,
-      | "id"
-      | "content"
-      | "createdAt"
-      | "updatedAt"
-      | "approved"
-      | "deletedAt"
-      | "videoId"
-      | "createdById"
-    > & {
-      createdBy: Pick<User, "name" | "email" | "image">;
-    }
-  >;
   isAdmin: boolean;
   user?: Pick<User, "name" | "email" | "image" | "role">;
-  totalApprovedComments: number;
-  totalUnapprovedComments: number;
-  totalDeletedComments: number;
 }
 
 export const CommentSection = ({
   videoId,
-  comments,
   isAdmin,
   user,
-  totalApprovedComments,
-  totalUnapprovedComments,
-  totalDeletedComments,
 }: CommentSectionProps) => {
+  const [data, setData] = useState<{
+    comments: Array<
+      Comment & {
+        createdBy: Pick<User, "name" | "email" | "image" | "role">;
+      }
+    >;
+    totalPages: number;
+    totalApprovedComments: number;
+    totalUnapprovedComments: number;
+    totalDeletedComments: number;
+    totalUnapprovedCommentsForUser: number;
+  }>({
+    comments: [],
+    totalPages: 1,
+    totalApprovedComments: 0,
+    totalUnapprovedComments: 0,
+    totalDeletedComments: 0,
+    totalUnapprovedCommentsForUser: 0,
+  });
   const [newComment, setNewComment] = useState("");
   const [debouncedComment] = useDebounce(newComment, 300);
   const [loading, setLoading] = useState(false);
-  const [serverError, setServerError] = useState<string | null>(null); // State for backend error
+  const [serverError, setServerError] = useState<string | null>(null);
+  const [page, setPage] = useState(1);
+  const [sort, setSort] = useState<"asc" | "desc">("desc");
+  const [pageSize, setPageSize] = useState(pageSizeConstants[0]);
 
-  const router = useRouter();
+  const fetchComments = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch(
+        `/api/comments?videoId=${videoId}&page=${page}&limit=${pageSize}&sort=${sort}`
+      );
+      const data = await response.json();
+
+      setData(data);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchComments();
+  }, [page, sort, pageSize]);
 
   // Initialize React Hook Form
   const form = useForm<Comment>({
@@ -107,19 +130,16 @@ export const CommentSection = ({
 
       if (response.ok) {
         setNewComment("");
-        router.refresh(); // Refresh page to show new comment
-
-        // router.push("/categories");
+        setPage(1); // Go back to the first page to show the new comment
+        fetchComments();
       } else {
         const errorData = await response.json();
         setServerError(errorData.message || "Failed to add comment.");
-        console.error(errorData.message || "Failed to add comment.");
       }
     } catch (err: any) {
       setServerError(
         err.message || "An error occurred while submitting the comment."
       );
-      console.error("An error occurred while submitting the comment.", err);
     } finally {
       setLoading(false);
     }
@@ -130,7 +150,7 @@ export const CommentSection = ({
       await fetch(`/api/comments/${commentId}/approve`, {
         method: "PATCH",
       });
-      router.refresh();
+      fetchComments();
     } catch (error) {
       console.error("Error approving comment:", error);
     }
@@ -141,7 +161,7 @@ export const CommentSection = ({
       await fetch(`/api/comments/${commentId}`, {
         method: "DELETE",
       });
-      router.refresh();
+      fetchComments();
     } catch (error) {
       console.error("Error deleting comment:", error);
     }
@@ -152,14 +172,27 @@ export const CommentSection = ({
       await fetch(`/api/comments/${commentId}/restore`, {
         method: "PATCH",
       });
-      router.refresh();
+      fetchComments();
     } catch (error) {
       console.error("Error restoring comment:", error);
     }
   };
 
+  const handlePageChange = (newPage: number) => {
+    if (newPage > 0 && newPage <= data.totalPages) {
+      setPage(newPage);
+    }
+  };
+
+  const handlePageSizeChange = (newPageSize: number) => {
+    if (newPageSize > 0) {
+      setPageSize(newPageSize);
+    }
+  };
+
   return (
-    <div className="mx-4 mb-0 mt-8 md:mb-8 md:mt-10">
+    <div className="mx-4 mb-0 mt-8 md:mb-2 md:mt-10">
+      {/* Comment Form */}
       {user ? (
         <FormProvider {...form}>
           <form
@@ -175,15 +208,12 @@ export const CommentSection = ({
               className="w-full border-none bg-transparent px-4 py-3 focus-visible:ring-0 focus-visible:ring-offset-0"
               maxLength={500}
             />
-
             <div className="flex w-full flex-col items-center justify-end gap-x-4 gap-y-2 p-4 md:flex-row">
-              {/* Display Server-Side Errors */}
               {serverError && (
                 <p className="col-span-full text-balance text-center text-sm text-red-500">
                   {serverError}
                 </p>
               )}
-
               <div className="flex items-center gap-4">
                 <p className="text-sm text-gray-500">
                   {debouncedComment.length}/500 znakova
@@ -206,163 +236,250 @@ export const CommentSection = ({
         </div>
       )}
 
-      {(totalApprovedComments > 0 ||
-        (isAdmin && totalUnapprovedComments > 0) ||
-        (isAdmin && totalDeletedComments > 0)) && (
+      {/* Comments and Pagination */}
+      {(data.totalApprovedComments > 0 ||
+        (isAdmin && data.totalUnapprovedComments > 0) ||
+        (isAdmin && data.totalDeletedComments > 0)) && (
         <>
           <Separator className="my-8" />
-
           <div className="flex flex-col items-center justify-between gap-y-3 md:flex-row md:gap-y-0">
             <div className="flex flex-col items-start gap-4 self-start md:flex-row md:items-center">
               <h2 className="text-xl font-bold">Komentari</h2>
               <div className="flex items-center gap-2">
                 <Badge variant="secondary" className="rounded-full">
-                  {totalApprovedComments}
+                  {data.totalApprovedComments}
                 </Badge>
-                {isAdmin && totalUnapprovedComments > 0 && (
+                {((isAdmin && data.totalUnapprovedComments > 0) ||
+                  (user && data.totalUnapprovedCommentsForUser > 0)) && (
                   <Badge variant="outline" className="rounded-full">
-                    Neodobreni: {totalUnapprovedComments}
+                    Neodobreni:{" "}
+                    {isAdmin
+                      ? data.totalUnapprovedComments
+                      : data.totalUnapprovedCommentsForUser}
                   </Badge>
                 )}
-                {isAdmin && totalDeletedComments > 0 && (
+                {isAdmin && data.totalDeletedComments > 0 && (
                   <Badge
                     variant="destructive"
                     className="rounded-full bg-red-100 text-red-800 shadow-none"
                   >
-                    Obrisani: {totalDeletedComments}
+                    Obrisani: {data.totalDeletedComments}
                   </Badge>
                 )}
               </div>
             </div>
-            <Select disabled>
+            <Select
+              onValueChange={(value) => setSort(value as "asc" | "desc")}
+              defaultValue={sort}
+            >
               <SelectTrigger className="h-7 md:w-auto">
                 <SelectValue placeholder="Sortiraj" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="light">Najnoviji</SelectItem>
-                <SelectItem value="dark">Najstariji</SelectItem>
-                <SelectItem value="system">Najpopularniji</SelectItem>
+                <SelectItem value="desc">Najnoviji</SelectItem>
+                <SelectItem value="asc">Najstariji</SelectItem>
               </SelectContent>
             </Select>
           </div>
         </>
       )}
-
       <div className="my-6 mb-0 divide-y md:divide-y-0">
-        {comments.map((comment) => {
-          const isPending =
-            !comment.approved && comment.createdBy.email === user?.email;
+        {data.comments &&
+          data.comments.map((comment) => {
+            const isPending =
+              !comment.approved && comment.createdBy.email === user?.email;
 
-          return (
-            <div key={comment.id} className="py-4">
-              <div className="mb-2 flex items-center justify-between gap-4">
-                <Avatar
-                  className={cn(
-                    "size-7 text-xs",
-                    (comment.deletedAt || !comment.approved) && "opacity-50"
-                  )}
-                >
-                  <AvatarImage
-                    src={comment.createdBy.image || "/default-avatar.png"}
-                    alt={`${comment.createdBy.name} avatar`}
-                  />
-                  <AvatarFallback>
-                    {comment.createdBy.name
-                      ?.split(" ")
-                      .map((name: string) => name[0].toUpperCase())
-                      .join("")}
-                  </AvatarFallback>
-                </Avatar>
-                <div
-                  className={cn(
-                    "flex flex-col md:flex-row md:items-center flex-1 ",
-                    (comment.deletedAt || !comment.approved) && "opacity-50"
-                  )}
-                >
-                  <span className="line-clamp-1 break-all font-semibold">
-                    {comment.createdBy.name}
-                  </span>
-                  <Dot className="mt-px hidden min-h-5 min-w-5 text-gray-500 md:flex" />
-                  <time
-                    className="mt-px whitespace-nowrap text-xs  text-gray-500"
-                    dateTime={comment.createdAt.toISOString()}
+            return (
+              <div key={comment.id} className="py-4">
+                <div className="mb-2 flex items-center justify-between gap-4">
+                  <Avatar
+                    className={cn(
+                      "size-7 text-xs",
+                      (comment.deletedAt || !comment.approved) && "opacity-50"
+                    )}
                   >
-                    {formatDistance(comment.createdAt, new Date(), {
-                      addSuffix: true,
-                      locale: hr,
-                    })}
-                  </time>
-                </div>
-
-                <div className="flex items-center gap-1">
-                  {!comment.approved && !comment.deletedAt && (
-                    <Badge variant="secondary" className="ml-2 p-1 md:px-2.5">
-                      <Clock className="size-4 md:mr-1 md:size-3" />
-                      <p className="hidden md:flex">Čeka odobrenje</p>
-                    </Badge>
-                  )}
-                  {comment.deletedAt && (
-                    <Badge
-                      variant="destructive"
-                      className="ml-2 bg-red-100 p-1 text-red-800 shadow-none md:px-2.5"
+                    <AvatarImage
+                      src={comment.createdBy.image || "/default-avatar.png"}
+                      alt={`${comment.createdBy.name} avatar`}
+                    />
+                    <AvatarFallback>
+                      {comment.createdBy.name
+                        ?.split(" ")
+                        .map((name: string) => name[0].toUpperCase())
+                        .join("")}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div
+                    className={cn(
+                      "flex flex-col md:flex-row md:items-center flex-1 ",
+                      (comment.deletedAt || !comment.approved) && "opacity-50"
+                    )}
+                  >
+                    <span className="line-clamp-1 break-all font-semibold">
+                      {comment.createdBy.name}
+                    </span>
+                    <Dot className="mt-px hidden min-h-5 min-w-5 text-gray-500 md:flex" />
+                    <time
+                      className="mt-px whitespace-nowrap text-xs  text-gray-500"
+                      dateTime={new Date(comment.createdAt).toISOString()}
                     >
-                      <Trash2 className="size-4 md:mr-1 md:size-3" />
-                      <p className="hidden md:flex">Obrisan</p>
-                    </Badge>
-                  )}
-                  {(isAdmin || isPending) && (
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" className="min-h-6 p-1">
-                          <MoreVertical className="size-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent>
-                        <DropdownMenuLabel>Opcije komentara</DropdownMenuLabel>
-                        <DropdownMenuSeparator />
-                        {!comment.deletedAt && isAdmin && (
-                          <DropdownMenuItem
-                            onClick={() => handleApproveComment(comment.id)}
-                            disabled={comment.approved}
-                          >
-                            <Check className="size-4" />
-                            Odobri
-                          </DropdownMenuItem>
-                        )}
-                        {(!comment.deletedAt || (!isAdmin && isPending)) && (
-                          <DropdownMenuItem
-                            onClick={() => handleDeleteComment(comment.id)}
-                            className="!text-red-600 focus:!bg-red-100/50 dark:focus:!bg-red-950/50"
-                          >
-                            <Trash2 className="size-4" />
-                            Izbriši
-                          </DropdownMenuItem>
-                        )}
-                        {comment.deletedAt && isAdmin && (
-                          <DropdownMenuItem
-                            onClick={() => handleRestoreComment(comment.id)}
-                          >
-                            <RotateCcw className="size-4" />
-                            Vrati
-                          </DropdownMenuItem>
-                        )}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  )}
+                      {formatDistance(comment.createdAt, new Date(), {
+                        addSuffix: true,
+                        locale: hr,
+                      })}
+                    </time>
+                  </div>
+
+                  <div className="flex items-center gap-1">
+                    {!comment.approved && !comment.deletedAt && (
+                      <Badge variant="secondary" className="ml-2 p-1 md:px-2.5">
+                        <Clock className="size-4 md:mr-1 md:size-3" />
+                        <p className="hidden md:flex">Čeka odobrenje</p>
+                      </Badge>
+                    )}
+                    {comment.deletedAt && (
+                      <Badge
+                        variant="destructive"
+                        className="ml-2 bg-red-100 p-1 text-red-800 shadow-none hover:bg-red-100 hover:text-red-800 md:px-2.5"
+                      >
+                        <Trash2 className="size-4 md:mr-1 md:size-3" />
+                        <p className="hidden md:flex">Obrisan</p>
+                      </Badge>
+                    )}
+                    {(isAdmin || isPending) && (
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" className="min-h-6 p-1">
+                            <MoreVertical className="size-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                          <DropdownMenuLabel>
+                            Opcije komentara
+                          </DropdownMenuLabel>
+                          <DropdownMenuSeparator />
+                          {!comment.deletedAt && isAdmin && (
+                            <DropdownMenuItem
+                              onClick={() => handleApproveComment(comment.id)}
+                              disabled={comment.approved}
+                            >
+                              <Check className="size-4" />
+                              Odobri
+                            </DropdownMenuItem>
+                          )}
+                          {(!comment.deletedAt || (!isAdmin && isPending)) && (
+                            <DropdownMenuItem
+                              onClick={() => handleDeleteComment(comment.id)}
+                              className="!text-red-600 focus:!bg-red-100/50 dark:focus:!bg-red-950/50"
+                            >
+                              <Trash2 className="size-4" />
+                              Izbriši
+                            </DropdownMenuItem>
+                          )}
+                          {comment.deletedAt && isAdmin && (
+                            <DropdownMenuItem
+                              onClick={() => handleRestoreComment(comment.id)}
+                            >
+                              <RotateCcw className="size-4" />
+                              Vrati
+                            </DropdownMenuItem>
+                          )}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    )}
+                  </div>
                 </div>
+                <p
+                  className={cn(
+                    "md:ml-11",
+                    (comment.deletedAt || !comment.approved) && "opacity-50"
+                  )}
+                >
+                  {comment.content}
+                </p>
               </div>
-              <p
-                className={cn(
-                  "md:ml-11",
-                  (comment.deletedAt || !comment.approved) && "opacity-50"
-                )}
-              >
-                {comment.content}
-              </p>
-            </div>
-          );
-        })}
+            );
+          })}
       </div>
+
+      {/* Pagination Controls */}
+      {data.comments.length > 1 && (
+        <div className="flex w-full flex-col items-center justify-between gap-3 px-2 sm:flex-row mt-4">
+          <div className="text-sm font-medium">
+            {data.totalPages}{" "}
+            {data.totalPages % 10 === 1 && data.totalPages % 100 !== 11
+              ? "stranica"
+              : "stranice"}
+          </div>
+          <div className="flex flex-col items-center gap-3 space-x-6 sm:flex-row lg:space-x-8">
+            <div className="flex items-center space-x-2">
+              <p className="text-sm font-medium">Komentara po stranici</p>
+              <Select
+                value={`${pageSize}`}
+                onValueChange={(value) => handlePageSizeChange(Number(value))}
+              >
+                <SelectTrigger className="h-8 w-[70px]">
+                  <SelectValue placeholder={pageSize} />
+                </SelectTrigger>
+                <SelectContent side="top">
+                  {pageSizeConstants.map((pageSize) => (
+                    <SelectItem key={pageSize} value={`${pageSize}`}>
+                      {pageSize}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex flex-row sm:flex-row gap-x-2">
+              <div className="flex items-center justify-center text-sm font-medium">
+                Stranica {page} od {data.totalPages}
+              </div>
+              <div className="flex items-center space-x-2">
+                <Button
+                  variant="outline"
+                  className="hidden size-8 p-0 lg:flex"
+                  onClick={() => handlePageChange(1)}
+                  disabled={page <= 1}
+                  size="sm"
+                >
+                  <span className="sr-only">Go to first page</span>
+                  <DoubleArrowLeftIcon className="size-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  className="size-8 p-0"
+                  onClick={() => handlePageChange(page - 1)}
+                  disabled={page <= 1}
+                  size="sm"
+                >
+                  <span className="sr-only">Go to previous page</span>
+                  <ChevronLeftIcon className="size-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  className="size-8 p-0"
+                  onClick={() => handlePageChange(page + 1)}
+                  disabled={page >= data.totalPages}
+                  size="sm"
+                >
+                  <span className="sr-only">Go to next page</span>
+                  <ChevronRightIcon className="size-4" />
+                </Button>
+                <Button
+                  variant="outline"
+                  className="hidden size-8 p-0 lg:flex"
+                  onClick={() => handlePageChange(data.totalPages)}
+                  disabled={page >= data.totalPages}
+                  size="sm"
+                >
+                  <span className="sr-only">Go to last page</span>
+                  <DoubleArrowRightIcon className="size-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
