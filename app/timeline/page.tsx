@@ -6,7 +6,15 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { TitleTemplate } from "@/components/title-template";
 import { ParticipantGender } from "@prisma/client";
-import { Baby, Calendar, Play, Skull, Youtube } from "lucide-react";
+import {
+  Baby,
+  Calendar,
+  ExternalLink,
+  Newspaper,
+  Play,
+  Skull,
+  Youtube,
+} from "lucide-react";
 
 type TimelineEvent = {
   type: "birth" | "death" | "video" | "custom";
@@ -83,7 +91,7 @@ export default async function TimelinePage() {
     {
       type: "custom",
       date: new Date("11 19 2020"),
-      id: "today",
+      id: "seva-mural-knezija",
       title:
         "Zagreb: Navijači Dinama na Knežiji izradili mural u čast Ševi iz Noćne More",
       icon: <Calendar className="size-4" />,
@@ -96,6 +104,26 @@ export default async function TimelinePage() {
             fill
           />
         </div>
+      ),
+    },
+    {
+      type: "custom",
+      date: new Date("01 10 2017"),
+      id: "24-sata-da-nije-bilo-spasitelja-malnara",
+      icon: <Newspaper className="size-4" strokeWidth={2.5} />,
+      title:
+        "'Da nije bilo spasitelja Malnara, mi bismo danas čistili ulice...'",
+      description: (
+        <Link
+          href="https://www.24sata.hr/show/da-nije-bilo-spasitelja-malnara-mi-bismo-danas-cistili-ulice-542196"
+          target="_blank"
+          className="w-auto"
+        >
+          <Button className="mt-2 flex gap-2">
+            <ExternalLink className="inline-block size-4" />
+            Pročitaj članak
+          </Button>
+        </Link>
       ),
     },
     // Video example
@@ -173,7 +201,7 @@ export default async function TimelinePage() {
                     <div className="font-bold">{event.title}</div>
                   )}
                   {event.date && (
-                    <time className="whitespace-nowrap opacity-50">
+                    <time className="mt-1.5 whitespace-nowrap text-xs opacity-50">
                       {new Date(event.date).toLocaleString("hr-HR", {
                         year: "numeric",
                         month: "long",

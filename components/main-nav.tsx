@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { CustomLink } from "@/components/custom-link";
@@ -24,18 +24,8 @@ import {
 } from "@/components/ui/popover";
 import { MenuIcon, XIcon } from "lucide-react";
 
-export function MainNav() {
-  const [categories, setCategories] = useState([]);
+export function MainNav({ categories }: { categories: Category[] }) {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    (async () => {
-      const res = await fetch("/api/categories");
-      const json = await res.json();
-
-      setCategories(json);
-    })();
-  }, []);
 
   return (
     <>

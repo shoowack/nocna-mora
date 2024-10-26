@@ -430,6 +430,11 @@ async function main() {
     { title: "Misli 21. stoljeća" },
     { title: "Dabog da imao, pa nemao" },
     { title: "Ševa vicevi" },
+    {
+      title: "Jel to normalno?",
+      description:
+        "Rasprava o raznim događajima iz novina, što je normalno, a što nije.",
+    },
   ];
 
   for (const categoryData of categoriesData) {
@@ -559,7 +564,7 @@ async function main() {
           [
             "vlado-matijevic",
             "remzo-krak",
-            "stanko-hranovic",
+            "stanislav-hranovic",
             "sead-hasanovic",
           ].includes(participant.slug)
         )
@@ -598,7 +603,7 @@ async function main() {
       participants: participants
         .filter((participant) =>
           [
-            "stanko-hranovic",
+            "stanislav-hranovic",
             "ivica-lako",
             "sead-hasanovic",
             "hasan-hrustic",
@@ -673,11 +678,45 @@ async function main() {
       airedDate: new Date("2006-02-18"),
       participants: participants
         .filter((participant) =>
-          ["stanko-hranovic", "davor-stern"].includes(participant.slug)
+          ["stanislav-hranovic", "davor-stern"].includes(participant.slug)
         )
         .map((participant) => participant.id),
       categories: categories
         .filter((category) => ["podcasts"].includes(category.slug))
+        .map((category) => category.id),
+    },
+    {
+      title: "Ševa - totalka!!! 2 od 2",
+      videoId: "Gu_lg3iZhmE",
+      duration: 440,
+      provider: VideoProvider.YOUTUBE,
+      airedDate: new Date("2008-02-23"),
+      participants: participants
+        .filter((participant) =>
+          ["zeljko-malnar", "stanislav-hranovic", "zvonimir-levacic"].includes(
+            participant.slug
+          )
+        )
+        .map((participant) => participant.id),
+      categories: categories
+        .filter((category) => ["jel-to-normalno"].includes(category.slug))
+        .map((category) => category.id),
+    },
+    {
+      title: "Ševa - totalka!!! 1 od 2",
+      videoId: "8CnBBraJ2-E",
+      duration: 1228,
+      provider: VideoProvider.YOUTUBE,
+      airedDate: new Date("2008-02-23"),
+      participants: participants
+        .filter((participant) =>
+          ["zeljko-malnar", "stanislav-hranovic", "zvonimir-levacic"].includes(
+            participant.slug
+          )
+        )
+        .map((participant) => participant.id),
+      categories: categories
+        .filter((category) => ["jel-to-normalno"].includes(category.slug))
         .map((category) => category.id),
     },
   ];
