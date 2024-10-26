@@ -42,7 +42,7 @@
     "cmdk": "1.0.0",
     "date-fns": "^4.1.0",
     "lucide-react": "^0.274.0",
-    "next": "latest",
+    "next": "14.2.16",
     "next-auth": "beta",
     "react": "^18.2.0",
     "react-day-picker": "8.10.1",
