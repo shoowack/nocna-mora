@@ -65,6 +65,7 @@ model User {
   participants  Participant[] @relation("UserParticipants")
   categories    Category[]    @relation("UserCategories")
   comments      Comment[]     @relation("UserComments")
+  reactions     Reaction[]
 
   @@map("users")
 }
@@ -149,6 +150,7 @@ model Video {
   participants Participant[] @relation("ParticipantVideos")
   categories   Category[]    @relation("VideoCategories")
   comments     Comment[]     @relation("VideoComments")
+  reactions    Reaction[]
 
   @@map("videos")
 }
@@ -187,17 +189,40 @@ model Category {
 }
 
 model Comment {
-  id          String   @id @default(cuid())
-  content     String   @db.VarChar(500) // Limit comment length to 500 characters
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  approved    Boolean  @default(false)
-  deletedAt   DateTime? // soft delete
+  id        String    @id @default(cuid())
+  content   String    @db.VarChar(500) // Limit comment length to 500 characters
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  approved  Boolean   @default(false)
+  deletedAt DateTime? // soft delete
 
-  video       Video    @relation(fields: [videoId], references: [id], name: "VideoComments")
+  video       Video  @relation(fields: [videoId], references: [id], name: "VideoComments")
   videoId     String
-  createdBy   User     @relation(fields: [createdById], references: [id], name: "UserComments")
+  createdBy   User   @relation(fields: [createdById], references: [id], name: "UserComments")
   createdById String
 
   @@map("comments")
+}
+
+enum ReactionType {
+  LIKE
+  LOVE
+  LAUGH
+  WOW
+  SAD
+  ANGRY
+}
+
+model Reaction {
+  id        String       @id @default(cuid())
+  type      ReactionType
+  video     Video        @relation(fields: [videoId], references: [id])
+  videoId   String
+  user      User         @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+
+  @@unique([videoId, userId]) // Ensure each user can react only once per video
+  @@map("reactions")
 }

@@ -8,13 +8,15 @@ import { Button } from "@/components/ui/button";
 import { auth } from "auth";
 import { Separator } from "@/components/ui/separator";
 import { CommentSection } from "@/components/comment-section";
+import { reactionIcons } from "@/constants/reaction-icons";
+import { Reactions } from "@/components/reactions";
 
 export default async function VideoPage({
   params,
 }: {
   params: { id: string };
 }) {
-  const { id } = params;
+  const { id } = await params;
   const session = await auth();
 
   if (session?.user) {
@@ -93,8 +95,18 @@ export default async function VideoPage({
           createdAt: "desc",
         },
       },
+      reactions: {
+        where: {
+          userId: session?.user?.id,
+        },
+        select: {
+          type: true,
+          id: true,
+        },
+      },
     },
   });
+  const userReaction = video?.reactions?.length ? video.reactions[0] : null;
 
   const totalApprovedComments = await prisma.comment.count({
     where: {
@@ -118,6 +130,12 @@ export default async function VideoPage({
         not: null,
       },
     },
+  });
+
+  const reactions = await prisma.reaction.groupBy({
+    by: ["type"],
+    where: { videoId: id },
+    _count: true,
   });
 
   // Unpublished videos should be accessible for authenticated admin users only
@@ -155,6 +173,25 @@ export default async function VideoPage({
     >
       <VideoDetail video={video} singleVideo showCategories showActors />
       <Container className="md:py-0">
+        <div className="mx-4 mb-0 mt-8 md:mb-8 md:mt-10">
+          {reactions && <h2 className="text-xl font-bold">Reakcije</h2>}
+          {reactions && (
+            <div className="my-5 flex items-center gap-3">
+              {reactions.map((reaction) => (
+                <div
+                  className="rounded-full bg-neutral-100 py-1 pl-2 pr-3"
+                  key={reaction.type}
+                >
+                  {reactionIcons[reaction.type]} {reaction._count}
+                </div>
+              ))}
+            </div>
+          )}
+          <Reactions
+            videoId={video.id}
+            userReaction={userReaction || undefined}
+          />
+        </div>
         <Separator />
         <CommentSection
           videoId={video.id}

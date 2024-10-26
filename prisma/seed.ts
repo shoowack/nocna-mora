@@ -1,10 +1,11 @@
 import prisma from "@/lib/prisma";
-import { generateSlug } from "../lib/slugify";
+import { generateSlug } from "@/lib/slugify";
 import {
   ParticipantType,
   VideoProvider,
   ParticipantGender,
 } from "@prisma/client";
+import { faker } from "@faker-js/faker";
 
 async function main() {
   // Create a default user to associate with participants
@@ -764,6 +765,40 @@ async function main() {
   }
 
   console.log("🎥 Videos seeded successfully.");
+
+  // Find a specific video to add comments to
+  const video = await prisma.video.findFirst({
+    where: { title: videosData[0].title }, // Video title of the video you want to seed comments for
+  });
+
+  if (!user || !video) {
+    console.error("User or video not found");
+    return;
+  }
+
+  // Generate 30 comments
+  const numberOfCommentsToGenearate = 30;
+
+  const commentsData = Array.from(
+    { length: numberOfCommentsToGenearate },
+    (_, index) => ({
+      content: faker.lorem.sentence(faker.number.int({ min: 10, max: 30 })), // Generate comment content of random length,
+      videoId: video.id,
+      createdById: user.id,
+      approved: index % 2 === 0, // Approve every second comment
+    })
+  );
+
+  // Seed the comments
+  await Promise.all(
+    commentsData.map(async (commentData) => {
+      await prisma.comment.create({
+        data: commentData,
+      });
+    })
+  );
+
+  console.log("💬 Comments seeded successfully.");
 }
 
 main()
