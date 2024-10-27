@@ -5,13 +5,34 @@ import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 import { ReactionType } from "@prisma/client";
 import { reactionIcons } from "@/constants/reaction-icons";
+import { Info, Loader2, SmilePlus } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { cn } from "@/lib/utils";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface ReactionProps {
   videoId: string;
   userReaction?: { id: string; type: ReactionType };
+  videoReactions: { type: ReactionType; _count: number }[];
+  isUserLoggedIn: boolean;
 }
 
-export const Reactions = ({ videoId, userReaction }: ReactionProps) => {
+export const Reactions = ({
+  videoId,
+  userReaction,
+  videoReactions,
+  isUserLoggedIn,
+}: ReactionProps) => {
   const [reaction, setReaction] = useState<ReactionType | undefined>(
     userReaction?.type
   );
@@ -62,27 +83,96 @@ export const Reactions = ({ videoId, userReaction }: ReactionProps) => {
   };
 
   return (
-    <div className="mb-4 flex flex-col items-center gap-2 md:mb-0 md:flex-row">
-      {Object.values(ReactionType).map((type) => (
-        <Button
-          key={type}
-          onClick={() => handleReaction(ReactionType[type])}
-          disabled={loading || reaction === ReactionType[type]}
-          className="w-full md:w-auto"
-        >
-          {reactionIcons[type]}{" "}
-          {type.charAt(0).toUpperCase() + type.slice(1).toLowerCase()}
-        </Button>
-      ))}
-      {reaction && (
-        <Button
-          onClick={handleRemoveReaction}
-          variant="destructive"
-          disabled={loading}
-        >
-          Remove Reaction
-        </Button>
+    <div className="mx-4 mb-0 mt-8 md:mb-8 md:mt-0">
+      {videoReactions && (
+        <div className="flex items-center gap-3">
+          <h2 className="text-xl font-bold">Reakcije</h2>
+          {!isUserLoggedIn && (
+            <TooltipProvider delayDuration={0}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Info
+                    size={18}
+                    className="text-neutral-400 hover:text-neutral-900 duration-300"
+                  />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Morate biti prijavljeni za dodavanje reakcije</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+          )}
+        </div>
       )}
+      <div className="mb-4 flex flex-col items-center gap-x-3 md:mb-0 md:flex-row my-5">
+        {isUserLoggedIn ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="ghost"
+                className="min-h-8 px-2 text-neutral-500 hover:text-neutral-900 duration-300 rounded-full"
+              >
+                {loading ? (
+                  <Loader2 className="animate-spin" size={22} />
+                ) : (
+                  <SmilePlus size={22} />
+                )}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              {Object.values(ReactionType).map((type) => (
+                <DropdownMenuItem
+                  key={type}
+                  onClick={() => handleReaction(ReactionType[type])}
+                  disabled={loading || reaction === ReactionType[type]}
+                >
+                  {reactionIcons[type]}
+                  <p className="ml-px">
+                    {type.charAt(0).toUpperCase() + type.slice(1).toLowerCase()}
+                  </p>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : videoReactions.length === 0 ? (
+          <div className="flex items-center gap-2">
+            {Object.values(ReactionType).map((type) => (
+              <div className="rounded-full bg-neutral-100 py-1 px-2" key={type}>
+                <p className="grayscale opacity-50">{reactionIcons[type]}</p>
+              </div>
+            ))}
+          </div>
+        ) : null}
+
+        <div className="flex items-center gap-2">
+          {videoReactions.map((reaction) =>
+            userReaction?.type === reaction.type ? (
+              <Button
+                className={cn("rounded-full py-1 pl-2 pr-3 min-h-8")}
+                variant="default"
+                key={reaction.type}
+                disabled={loading}
+                onClick={handleRemoveReaction}
+              >
+                {reactionIcons[reaction.type]} {reaction._count}
+              </Button>
+            ) : (
+              <div
+                className={cn("rounded-full bg-neutral-100 py-1 pl-2 pr-3", {
+                  "bg-neutral-900 text-white":
+                    userReaction?.type === reaction.type,
+                })}
+                key={reaction.type}
+                {...(userReaction?.type === reaction.type
+                  ? { onClick: handleRemoveReaction }
+                  : {})}
+              >
+                {reactionIcons[reaction.type]} {reaction._count}
+              </div>
+            )
+          )}
+        </div>
+      </div>
     </div>
   );
 };

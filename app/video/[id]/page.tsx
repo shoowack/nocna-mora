@@ -70,9 +70,10 @@ export default async function VideoPage({
       },
     },
   });
-  const userReaction = video?.reactions?.length ? video.reactions[0] : null;
+  const userReaction =
+    video?.reactions?.length && session?.user ? video.reactions[0] : null;
 
-  const reactions = await prisma.reaction.groupBy({
+  const videoReactions = await prisma.reaction.groupBy({
     by: ["type"],
     where: { videoId: id },
     _count: true,
@@ -113,25 +114,13 @@ export default async function VideoPage({
     >
       <VideoDetail video={video} singleVideo showCategories showActors />
       <Container className="md:py-0">
-        <div className="mx-4 mb-0 mt-8 md:mb-8 md:mt-10">
-          {reactions && <h2 className="text-xl font-bold">Reakcije</h2>}
-          {reactions && (
-            <div className="my-5 flex items-center gap-3">
-              {reactions.map((reaction) => (
-                <div
-                  className="rounded-full bg-neutral-100 py-1 pl-2 pr-3"
-                  key={reaction.type}
-                >
-                  {reactionIcons[reaction.type]} {reaction._count}
-                </div>
-              ))}
-            </div>
-          )}
-          <Reactions
-            videoId={video.id}
-            userReaction={userReaction || undefined}
-          />
-        </div>
+        <Reactions
+          videoId={video.id}
+          userReaction={userReaction || undefined}
+          videoReactions={videoReactions}
+          isUserLoggedIn={!!session?.user}
+        />
+
         <Separator />
         <CommentSection
           videoId={video.id}
