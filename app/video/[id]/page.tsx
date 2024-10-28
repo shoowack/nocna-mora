@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button";
 import { auth } from "auth";
 import { Separator } from "@/components/ui/separator";
 import { CommentSection } from "@/components/comment-section";
-import { reactionIcons } from "@/constants/reaction-icons";
 import { Reactions } from "@/components/reactions";
 
 export default async function VideoPage({
