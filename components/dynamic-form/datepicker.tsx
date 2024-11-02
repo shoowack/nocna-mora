@@ -9,7 +9,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { format, parseISO } from "date-fns";
-import { CaptionLayout } from "react-day-picker";
+import { hr } from "date-fns/locale";
+import { PropsBase, TZDate } from "react-day-picker";
 
 type DatePickerProps = {
   className: string;
@@ -17,7 +18,7 @@ type DatePickerProps = {
   // eslint-disable-next-line no-unused-vars
   onChange: (value: string | null) => void;
   placeholder?: string;
-  captionLayout?: CaptionLayout;
+  captionLayout?: PropsBase["captionLayout"];
   fromYear?: number;
   toYear?: number;
   classNames?: {
@@ -29,6 +30,7 @@ export const DatePicker: FC<DatePickerProps> = forwardRef<
   HTMLButtonElement,
   DatePickerProps
 >(({ className, value, ...props }, ref) => {
+  const timeZone = "UTC";
   const [date, setDate] = useState<Date | null>(null);
 
   useEffect(() => {
@@ -55,7 +57,7 @@ export const DatePicker: FC<DatePickerProps> = forwardRef<
         >
           <CalendarIcon className="mr-2 size-4" />
           {date ? (
-            format(date, "PPP")
+            format(new TZDate(date, timeZone), "PPP", { locale: hr })
           ) : (
             <span>{props.placeholder || "Odaberi datum"}</span>
           )}
@@ -64,18 +66,22 @@ export const DatePicker: FC<DatePickerProps> = forwardRef<
       <PopoverContent className="w-auto p-0">
         <Calendar
           mode="single"
-          selected={date ? new Date(date) : undefined}
+          timeZone={timeZone}
+          locale={hr}
+          selected={date ? new TZDate(date, timeZone) : undefined}
           onSelect={(selectedDate) => {
             if (selectedDate) {
-              setDate(selectedDate);
-              props.onChange(format(selectedDate, "yyyy-MM-dd"));
+              setDate(new TZDate(selectedDate, timeZone));
+              props.onChange(
+                format(new TZDate(selectedDate, timeZone), "yyyy-MM-dd")
+              );
             } else {
               setDate(null);
               props.onChange(null);
             }
           }}
-          initialFocus
-          defaultMonth={date ? new Date(date) : undefined}
+          // initialFocus
+          defaultMonth={date ? new TZDate(date, timeZone) : undefined}
           {...(props.captionLayout && { captionLayout: props.captionLayout })}
           {...(props.fromYear && { fromYear: props.fromYear })}
           {...(props.toYear && { toYear: props.toYear })}
