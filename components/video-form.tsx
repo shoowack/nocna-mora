@@ -195,7 +195,7 @@ export function VideoForm({
             title: data.title,
             videoId: data.videoId,
             duration: Number(data.duration),
-            airedDate: data.airedDate ? data.airedDate.toISOString() : null,
+            airedDate: data.airedDate ? new Date(data.airedDate) : null,
             provider: data.provider,
             published: data.published,
             participants: data.participants,
