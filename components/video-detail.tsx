@@ -20,7 +20,7 @@ const VideoContent: FC<{
   showCategories?: boolean;
 }> = ({ singleVideo, video, showActors, showCategories }) => {
   return (
-    <div className="space-y-4 p-4">
+    <div className="space-y-4 md:p-4">
       {!video.published && (
         <Badge variant="destructive">Video nije javan</Badge>
       )}
@@ -29,12 +29,14 @@ const VideoContent: FC<{
           {video.title}
         </p>
       )}
-      {video.airedDate && singleVideo && <h2>Aired Date:</h2>}
+      {video.airedDate && singleVideo && (
+        <h3 className="text-xl font-bold text-stone-900">Datum emitiranja</h3>
+      )}
       {video.airedDate ? (
         <Badge variant="secondary" className="whitespace-nowrap">
           {new Date(video.airedDate).toLocaleString("hr-HR", {
             timeZone: "UTC",
-            //   weekday: "long",
+            // weekday: "long",
             year: "numeric",
             month: "long",
             day: "numeric",
@@ -45,7 +47,11 @@ const VideoContent: FC<{
       )}
       {video.participants && video.participants?.length > 0 && showActors && (
         <>
-          {singleVideo && <h2>Sudionici:</h2>}
+          {singleVideo && (
+            <h3 className="text-xl font-bold text-stone-900 md:pt-6">
+              Sudionici
+            </h3>
+          )}
           <div className="flex flex-wrap gap-x-1">
             {video.participants.map(
               ({ id, type, slug, firstName, lastName }) => (
@@ -67,10 +73,14 @@ const VideoContent: FC<{
         showCategories &&
         video.participants &&
         video.participants.length > 0 &&
-        showActors && <Separator className="w-full bg-stone-300" />}
+        showActors && <Separator className="w-full bg-stone-300 md:hidden" />}
       {video.categories && video.categories.length > 0 && showCategories && (
         <>
-          {singleVideo && <h2>Categories:</h2>}
+          {singleVideo && (
+            <h3 className="text-xl font-bold text-stone-900 md:pt-6">
+              Kategorije
+            </h3>
+          )}
           <div className="flex flex-wrap gap-x-1">
             {video.categories?.map((category) => (
               <Link key={category.id} href={`/category/${category.slug}`}>
@@ -137,7 +147,7 @@ export const VideoDetail: FC<VideoDetailProps> = ({
     <div>
       {singleVideo && videoUrl ? (
         <div className="w-full bg-black">
-          <Container className="py-0 md:py-0">
+          <Container className="p-0 md:py-0">
             <iframe
               className="aspect-video w-full"
               src={videoUrl}
@@ -233,11 +243,12 @@ export const VideoDetail: FC<VideoDetailProps> = ({
       )}
 
       {singleVideo ? (
-        <Container>
+        <Container className="pb-0 md:pb-6">
           <VideoContent
             showCategories={showCategories}
             showActors={showActors}
             video={video}
+            singleVideo
           />
         </Container>
       ) : (

@@ -33,7 +33,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Separator } from "./ui/separator";
 import { useDebounce } from "use-debounce";
 import { pageSizeConstants } from "@/app/constants/page-size-constants";
 import {
@@ -191,57 +190,12 @@ export const CommentSection = ({
   };
 
   return (
-    <div className="mx-4 mb-0 mt-8 md:mb-2 md:mt-10">
-      {/* Comment Form */}
-      {user ? (
-        <FormProvider {...form}>
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            className="flex flex-col items-end rounded-lg bg-neutral-100"
-          >
-            <AutosizeTextarea
-              placeholder="Dodaj komentar..."
-              value={newComment}
-              onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
-                setNewComment(e.target.value)
-              }
-              className="w-full border-none bg-transparent px-4 py-3 focus-visible:ring-0 focus-visible:ring-offset-0"
-              maxLength={500}
-            />
-            <div className="flex w-full flex-col items-center justify-end gap-x-4 gap-y-2 p-4 md:flex-row">
-              {serverError && (
-                <p className="col-span-full text-balance text-center text-sm text-red-500">
-                  {serverError}
-                </p>
-              )}
-              <div className="flex items-center gap-4">
-                <p className="text-sm text-gray-500">
-                  {debouncedComment.length}/500 znakova
-                </p>
-                <Button type="submit" disabled={isSubmitting || loading}>
-                  Dodaj komentar
-                </Button>
-              </div>
-            </div>
-          </form>
-        </FormProvider>
-      ) : (
-        <div className="flex flex-col items-end rounded-lg bg-neutral-100">
-          <p className="mx-4 my-3 self-start text-sm text-neutral-400">
-            Prijavite se da biste dodali komentar.
-          </p>
-          <Button disabled className="m-4">
-            Dodaj komentar
-          </Button>
-        </div>
-      )}
-
-      {/* Comments and Pagination */}
+    <div className="mb-0 mt-4 md:mx-4 md:mb-2 md:mt-10">
+      {/* Title and counters */}
       {(data.totalApprovedComments > 0 ||
         (isAdmin && data.totalUnapprovedComments > 0) ||
         (isAdmin && data.totalDeletedComments > 0)) && (
         <>
-          <Separator className="my-8" />
           <div className="flex flex-col items-center justify-between gap-y-3 md:flex-row md:gap-y-0">
             <div className="flex flex-col items-start gap-4 self-start md:flex-row md:items-center">
               <h2 className="text-xl font-bold">Komentari</h2>
@@ -283,6 +237,8 @@ export const CommentSection = ({
           </div>
         </>
       )}
+
+      {/* Comments */}
       <div className="my-6 mb-0 divide-y md:divide-y-0">
         {data.comments &&
           data.comments.map((comment) => {
@@ -402,9 +358,69 @@ export const CommentSection = ({
           })}
       </div>
 
+      {/* Comment Form */}
+      <div className="mb-6 mt-4 md:my-10">
+        {user ? (
+          <FormProvider {...form}>
+            <form
+              onSubmit={handleSubmit(onSubmit)}
+              className="flex gap-x-4 md:gap-x-2"
+            >
+              <Avatar className={cn("size-7 text-xs")}>
+                <AvatarImage
+                  src={user.image || "/default-avatar.png"}
+                  alt={`${user.name} avatar`}
+                />
+                <AvatarFallback>
+                  {user.name
+                    ?.split(" ")
+                    .map((name: string) => name[0].toUpperCase())
+                    .join("")}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex flex-1 flex-col items-end rounded-lg bg-neutral-100">
+                <AutosizeTextarea
+                  placeholder="Dodaj komentar..."
+                  value={newComment}
+                  onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
+                    setNewComment(e.target.value)
+                  }
+                  className="w-full border-none bg-transparent px-4 py-3 focus-visible:ring-0 focus-visible:ring-offset-0"
+                  maxLength={500}
+                />
+                <div className="m-2 flex w-full flex-col items-center justify-end gap-x-4 gap-y-2 md:m-4 md:flex-row">
+                  {serverError && (
+                    <p className="col-span-full text-balance text-center text-sm text-red-500">
+                      {serverError}
+                    </p>
+                  )}
+                  <div className="flex items-center gap-4 self-end">
+                    <p className="text-sm text-gray-500">
+                      {debouncedComment.length}/500 znakova
+                    </p>
+                    <Button type="submit" disabled={isSubmitting || loading}>
+                      Dodaj komentar
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </form>
+          </FormProvider>
+        ) : (
+          <div className="flex flex-col items-end rounded-lg bg-neutral-100">
+            <p className="mx-4 my-3 self-start text-sm text-neutral-400">
+              Prijavite se da biste dodali komentar.
+            </p>
+            <Button disabled className="m-2 md:m-4">
+              Dodaj komentar
+            </Button>
+          </div>
+        )}
+      </div>
+
       {/* Pagination Controls */}
       {data.comments.length > 1 && (
-        <div className="flex w-full flex-col items-center justify-between gap-3 px-2 sm:flex-row mt-4">
+        <div className="flex w-full flex-col items-center justify-between gap-3 px-2 sm:flex-row">
           <div className="text-sm font-medium">
             {data.totalPages}{" "}
             {data.totalPages % 10 === 1 && data.totalPages % 100 !== 11
@@ -430,7 +446,7 @@ export const CommentSection = ({
                 </SelectContent>
               </Select>
             </div>
-            <div className="flex flex-row sm:flex-row gap-x-2">
+            <div className="flex flex-row gap-x-2 sm:flex-row">
               <div className="flex items-center justify-center text-sm font-medium">
                 Stranica {page} od {data.totalPages}
               </div>

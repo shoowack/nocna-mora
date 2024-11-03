@@ -120,7 +120,7 @@ export default async function VideoPage({
           isUserLoggedIn={!!session?.user}
         />
 
-        <Separator />
+        <Separator className="md:my-8" />
         <CommentSection
           videoId={video.id}
           isAdmin={isAdmin}

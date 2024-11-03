@@ -263,6 +263,7 @@ async function main() {
       firstName: "Dubravka",
       lastName: "Carić",
       nickname: null,
+      // TODO: Birth year 1955
       birthDate: null,
       deathDate: new Date(Date.parse("02 19 2024 00:00:00 GMT")),
       bio: "Bivša Jaranova ljubav",

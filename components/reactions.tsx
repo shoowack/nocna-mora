@@ -83,17 +83,17 @@ export const Reactions = ({
   };
 
   return (
-    <div className="mx-4 mb-0 mt-8 md:mb-8 md:mt-0">
+    <div className="mb-0 mt-2 md:mx-4 md:mb-8 md:mt-0">
       {videoReactions && (
         <div className="flex items-center gap-3">
-          <h2 className="text-xl font-bold">Reakcije</h2>
+          <h3 className="text-xl font-bold text-stone-900">Reakcije</h3>
           {!isUserLoggedIn && (
             <TooltipProvider delayDuration={0}>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <Info
                     size={18}
-                    className="text-neutral-400 hover:text-neutral-900 duration-300"
+                    className="text-neutral-400 duration-300 hover:text-neutral-900"
                   />
                 </TooltipTrigger>
                 <TooltipContent>
@@ -104,13 +104,13 @@ export const Reactions = ({
           )}
         </div>
       )}
-      <div className="mb-4 flex flex-col items-center gap-x-3 md:mb-0 md:flex-row my-5">
+      <div className="my-5 mb-4 flex gap-x-3 md:mb-0">
         {isUserLoggedIn ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant="ghost"
-                className="min-h-8 px-2 text-neutral-500 hover:text-neutral-900 duration-300 rounded-full"
+                className="min-h-8 rounded-full px-2 text-neutral-500 duration-300 hover:text-neutral-900"
               >
                 {loading ? (
                   <Loader2 className="animate-spin" size={22} />
@@ -137,8 +137,8 @@ export const Reactions = ({
         ) : videoReactions.length === 0 ? (
           <div className="flex items-center gap-2">
             {Object.values(ReactionType).map((type) => (
-              <div className="rounded-full bg-neutral-100 py-1 px-2" key={type}>
-                <p className="grayscale opacity-50">{reactionIcons[type]}</p>
+              <div className="rounded-full bg-neutral-100 px-2 py-1" key={type}>
+                <p className="opacity-50 grayscale">{reactionIcons[type]}</p>
               </div>
             ))}
           </div>
