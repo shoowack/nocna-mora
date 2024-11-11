@@ -117,6 +117,19 @@ interface MultiSelectProps
   searchInputPlaceholder?: string;
 }
 
+function getMoreLabel(count: number): string {
+  if (count % 10 === 1 && count % 100 !== 11) {
+    return "drugi"; // 1, 21, 31, 41, ...
+  } else if (
+    [2, 3, 4].includes(count % 10) &&
+    ![12, 13, 14].includes(count % 100)
+  ) {
+    return "druga"; // 2, 3, 4, 22, 23, 24, ...
+  } else {
+    return "drugih"; // 5, 6, 7, ..., 11, 12, 13, 14, 15, ..., 25, 26, ...
+  }
+}
+
 export const MultiSelect = forwardRef<HTMLButtonElement, MultiSelectProps>(
   (
     {
@@ -231,7 +244,9 @@ export const MultiSelect = forwardRef<HTMLButtonElement, MultiSelectProps>(
                         multiSelectVariants({ variant })
                       )}
                     >
-                      {`+ ${selectedValues.length - maxCount} drugih`}
+                      {`+ još ${
+                        selectedValues.length - maxCount
+                      } ${getMoreLabel(selectedValues.length - maxCount)}`}
                       <XCircle
                         className="ml-2 size-4 cursor-pointer"
                         onClick={(event) => {
