@@ -144,7 +144,7 @@ export const VideoDetail: FC<VideoDetailProps> = ({
   const thumbnailUrl = getThumbnailUrl();
 
   return (
-    <div>
+    <>
       {singleVideo && videoUrl ? (
         <div className="w-full bg-black">
           <Container className="p-0 md:py-0">
@@ -258,6 +258,6 @@ export const VideoDetail: FC<VideoDetailProps> = ({
           video={video}
         />
       )}
-    </div>
+    </>
   );
 };

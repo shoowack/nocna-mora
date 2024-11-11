@@ -1,22 +1,19 @@
+import { Suspense } from "react";
 import { VideoGallery } from "@/components/video-gallery";
 import { Container } from "@/components/container";
-import { Suspense } from "react";
-import { Separator } from "@/components/ui/separator";
-import { Videotape } from "lucide-react";
+import { VideosWithParticipant } from "@/components/videos-with-participant";
+import { ServerCategoriesChart } from "@/components/videos-chart";
 
 const VideoGallerySkeleton = () => {
   return (
     <div className="bg-stone-100">
       <Container>
-        <div className="flex items-center justify-between">
+        <div className="mb-12 flex items-center justify-between">
           <div className="flex flex-row items-center gap-2.5">
-            <Videotape className="size-6 stroke-red-600" strokeWidth={2} />
-            <p className="text-lg font-bold sm:text-xl">Najnovije epizode</p>
+            <div className=" h-9 w-48 animate-pulse rounded-md bg-stone-200" />
           </div>
           <div className="h-9 w-24 animate-pulse rounded-md bg-stone-200" />
         </div>
-        <Separator className="mb-10 mt-2" />
-
         <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
           {Array.from(Array(4)).map((id) => (
             <div
@@ -28,11 +25,25 @@ const VideoGallerySkeleton = () => {
                 <div className="h-7 w-full rounded-md bg-stone-100" />
                 <div className="h-5 w-3/4 rounded-md bg-stone-100" />
                 <div className="h-5 w-1/2 rounded-md bg-stone-100" />
-                <Separator className="w-full bg-stone-100" />
+                <div className="flex" />
                 <div className="h-5 w-1/2 rounded-md bg-stone-100" />
               </div>
             </div>
           ))}
+        </div>
+      </Container>
+    </div>
+  );
+};
+
+const CategoryChartSkeleton = () => {
+  return (
+    <div className="bg-stone-100">
+      <Container>
+        <div className="flex flex-col items-center gap-y-2">
+          <div className="h-7 w-64 animate-pulse rounded-md bg-stone-200" />
+          <div className="mb-6 h-6 w-44 animate-pulse rounded-md bg-stone-200" />
+          <div className="size-48 animate-pulse rounded-full border-[35px] border-stone-200" />
         </div>
       </Container>
     </div>
@@ -61,6 +72,12 @@ export default async function Index() {
       </Container>
       <Suspense fallback={<VideoGallerySkeleton />}>
         <VideoGallery />
+      </Suspense>
+      <Suspense fallback={<VideoGallerySkeleton />}>
+        <VideosWithParticipant />
+      </Suspense>
+      <Suspense fallback={<CategoryChartSkeleton />}>
+        <ServerCategoriesChart />
       </Suspense>
     </>
   );

@@ -30,6 +30,14 @@
     --ring: 222.2 84% 4.9%;
 
     --radius: 0.5rem;
+
+
+    --chart-podcasts: 356, 73%, 37%;
+    --chart-gosti: 356, 66%, 47%;
+    --chart-dokumentarci: 356, 77%, 75%;
+    --chart-dnevnik: 356, 76%, 30%;
+    --chart-picolovka: 356, 76%, 24%;
+    --chart-jel-to-normalno: 356, 62%, 56%;
   }
 }
 

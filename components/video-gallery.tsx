@@ -6,6 +6,7 @@ import { Container } from "@/components/container";
 import { VideoDetail } from "@/components/video-detail";
 import { Video } from "@prisma/client";
 import { auth } from "auth";
+import { Card } from "@/components/ui/card";
 
 export const VideoGallery = async () => {
   const session = await auth();
@@ -55,12 +56,9 @@ export const VideoGallery = async () => {
 
         <div className="grid gap-5 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
           {videos.map((video: Video) => (
-            <div
-              key={video.id}
-              className="overflow-hidden rounded-lg bg-stone-200"
-            >
+            <Card key={video.id} className="overflow-hidden">
               <VideoDetail video={video} showActors showCategories />
-            </div>
+            </Card>
           ))}
         </div>
       </Container>
