@@ -1,6 +1,3 @@
-// src/components/multi-select.tsx
-
-import * as React from "react";
 import { cva, type VariantProps } from "class-variance-authority";
 import { CheckIcon, XCircle, ChevronDown, XIcon } from "lucide-react";
 
@@ -22,6 +19,13 @@ import {
   CommandList,
   CommandSeparator,
 } from "@/components/ui/command";
+import {
+  ButtonHTMLAttributes,
+  ComponentType,
+  forwardRef,
+  useState,
+  KeyboardEvent,
+} from "react";
 
 /**
  * Variants for the multi-select component to handle different styles.
@@ -38,7 +42,7 @@ const multiSelectVariants = cva(
           "border-foreground/10 bg-secondary text-secondary-foreground hover:bg-secondary/80",
         destructive:
           "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
-        inverted: "bg-neutral-900",
+        inverted: "bg-neutral-900 text-stone-50 hover:bg-neutral-800",
       },
     },
     defaultVariants: {
@@ -51,7 +55,7 @@ const multiSelectVariants = cva(
  * Props for MultiSelect component
  */
 interface MultiSelectProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof multiSelectVariants> {
   /**
    * An array of option objects to be displayed in the multi-select component.
@@ -63,7 +67,7 @@ interface MultiSelectProps
     /** The unique value associated with the option. */
     value: string;
     /** Optional icon component to display alongside the option. */
-    icon?: React.ComponentType<{ className?: string }>;
+    icon?: ComponentType<{ className?: string }>;
   }[];
 
   /**
@@ -113,10 +117,7 @@ interface MultiSelectProps
   searchInputPlaceholder?: string;
 }
 
-export const MultiSelect = React.forwardRef<
-  HTMLButtonElement,
-  MultiSelectProps
->(
+export const MultiSelect = forwardRef<HTMLButtonElement, MultiSelectProps>(
   (
     {
       options,
@@ -134,12 +135,10 @@ export const MultiSelect = React.forwardRef<
     ref
   ) => {
     const [selectedValues, setSelectedValues] =
-      React.useState<string[]>(defaultValue);
-    const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
+      useState<string[]>(defaultValue);
+    const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
-    const handleInputKeyDown = (
-      event: React.KeyboardEvent<HTMLInputElement>
-    ) => {
+    const handleInputKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
       if (event.key === "Enter") {
         setIsPopoverOpen(true);
       } else if (event.key === "Backspace" && !event.currentTarget.value) {
@@ -232,7 +231,7 @@ export const MultiSelect = React.forwardRef<
                         multiSelectVariants({ variant })
                       )}
                     >
-                      {`+ ${selectedValues.length - maxCount} more`}
+                      {`+ ${selectedValues.length - maxCount} drugih`}
                       <XCircle
                         className="ml-2 size-4 cursor-pointer"
                         onClick={(event) => {
