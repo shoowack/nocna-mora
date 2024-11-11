@@ -24,15 +24,11 @@ export const ClientCategoriesChart = ({
 }: {
   data: CategoryChartData[];
 }) => {
-  const chartData = data.map((category, index) => {
-    console.log("index:", index);
-
-    return {
-      category: category.categoryName,
-      videoCount: category.videoCount,
-      fill: `hsl(var(--chart-${index}))`,
-    };
-  });
+  const chartData = data.map((category, index) => ({
+    category: category.categoryName,
+    videoCount: category.videoCount,
+    fill: `hsl(var(--chart-${index}))`,
+  }));
 
   const totalVideos = useMemo(
     () => chartData.reduce((acc, curr) => acc + curr.videoCount, 0),
