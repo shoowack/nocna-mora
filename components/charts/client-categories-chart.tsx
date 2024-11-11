@@ -24,18 +24,15 @@ export const ClientCategoriesChart = ({
 }: {
   data: CategoryChartData[];
 }) => {
-  const chartData = data.map((category) => ({
-    category: category.categoryName,
-    videoCount: category.videoCount,
-    fill: `hsl(var(--chart-${
-      category.categoryName
-        .toLowerCase()
-        .normalize("NFD") // Normalize to decompose diacritics
-        .replace(/[\u0300-\u036f]/g, "") // Remove diacritics
-        .replace(/[^a-z0-9]+/g, "-") // Replace non-alphanumeric chars with hyphens
-        .replace(/^-+|-+$/g, "") // Remove leading and trailing hyphens
-    }))`,
-  }));
+  const chartData = data.map((category, index) => {
+    console.log("index:", index);
+
+    return {
+      category: category.categoryName,
+      videoCount: category.videoCount,
+      fill: `hsl(var(--chart-${index}))`,
+    };
+  });
 
   const totalVideos = useMemo(
     () => chartData.reduce((acc, curr) => acc + curr.videoCount, 0),
