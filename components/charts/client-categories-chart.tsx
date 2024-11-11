@@ -9,7 +9,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { useMemo } from "react";
 import { Container } from "@/components/container";
 
 export const description = "A donut chart with text";
@@ -24,16 +23,15 @@ export const ClientCategoriesChart = ({
 }: {
   data: CategoryChartData[];
 }) => {
+  if (!data.length) {
+    return null;
+  }
+
   const chartData = data.map((category, index) => ({
     category: category.categoryName,
     videoCount: category.videoCount,
     fill: `hsl(var(--chart-${index}))`,
   }));
-
-  const totalVideos = useMemo(
-    () => chartData.reduce((acc, curr) => acc + curr.videoCount, 0),
-    [chartData]
-  );
 
   return (
     <div className="bg-stone-100">
@@ -76,22 +74,6 @@ export const ClientCategoriesChart = ({
                   <Label
                     content={({ viewBox }) => {
                       if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                        const getCategoryText = (count: number) => {
-                          const lastDigit = count % 10;
-                          const lastTwoDigits = count % 100;
-
-                          if (lastDigit === 1 && lastTwoDigits !== 11) {
-                            return "Kategorija";
-                          } else if (
-                            [2, 3, 4].includes(lastDigit) &&
-                            ![12, 13, 14].includes(lastTwoDigits)
-                          ) {
-                            return "Kategorije";
-                          } else {
-                            return "Kategorija";
-                          }
-                        };
-
                         return (
                           <text
                             x={viewBox.cx}
@@ -104,14 +86,14 @@ export const ClientCategoriesChart = ({
                               y={viewBox.cy}
                               className="fill-foreground text-3xl font-bold"
                             >
-                              {totalVideos.toLocaleString()}
+                              {data.length}
                             </tspan>
                             <tspan
                               x={viewBox.cx}
                               y={(viewBox.cy || 0) + 24}
-                              className="fill-red-500"
+                              className="fill-stone-500"
                             >
-                              {getCategoryText(totalVideos)}
+                              Kategorija
                             </tspan>
                           </text>
                         );
