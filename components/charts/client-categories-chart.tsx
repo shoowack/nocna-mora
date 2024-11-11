@@ -27,11 +27,18 @@ export const ClientCategoriesChart = ({
     return null;
   }
 
-  const chartData = data.map((category, index) => ({
-    category: category.categoryName,
-    videoCount: category.videoCount,
-    fill: `hsl(var(--chart-${index}))`,
-  }));
+  const chartData = data.map((category, index) => {
+    // Use index to generate somewhat unique hue for each category
+    const hue = (Math.floor(Math.random() * 350) + index * 30) % 360;
+    const saturation = 70 + Math.random() * 20;
+    const lightness = 50 + Math.random() * 30;
+
+    return {
+      category: category.categoryName,
+      videoCount: category.videoCount,
+      fill: `hsl(${hue}, ${saturation}%, ${lightness}%)`,
+    };
+  });
 
   return (
     <div className="bg-stone-100">
