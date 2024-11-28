@@ -15,7 +15,6 @@ export async function generateMetadata({
   params,
 }: {
   params: { slug: string };
-  searchParams: { [key: string]: string | string[] | undefined };
 }): Promise<Metadata> {
   const { slug } = params;
 
