@@ -9,6 +9,39 @@ import { FilterControls } from "@/components/filter-controls";
 import { auth } from "auth";
 import { VideoProvider } from "@prisma/client";
 import { pageSizeConstants } from "@/app/constants/page-size-constants";
+import { Metadata } from "next";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string };
+}): Promise<Metadata> {
+  const { slug } = params;
+
+  const category = await prisma.category.findUnique({
+    where: { slug, deletedAt: null },
+  });
+
+  if (!category) {
+    return {
+      title: "Kategorija nije pronađena",
+      description: "Tražena kategorija ne postoji.",
+    };
+  }
+
+  return {
+    title: `${category.title} | Noćna Mora`,
+    description:
+      category.description ||
+      `Pregledajte videozapise iz kategorije "${category.title}" i istražite jedinstvenu kolekciju emisija Noćne More.`,
+    openGraph: {
+      title: `${category.title} | Noćna Mora`,
+      description:
+        category.description ||
+        `Pregledajte videozapise iz kategorije ${category.title} i istražite jedinstvenu kolekciju emisija Noćne More.`,
+    },
+  };
+}
 
 export default async function CategoryPage({
   params,

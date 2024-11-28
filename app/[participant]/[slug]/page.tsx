@@ -7,6 +7,56 @@ import { Container } from "@/components/container";
 import { auth } from "auth";
 import { NameAndAge } from "@/components/name-and-age";
 import { Button } from "@/components/ui/button";
+import { Metadata } from "next";
+
+type Props = {
+  params: { slug: string; participant: string };
+  searchParams: { [key: string]: string | string[] | undefined };
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug, participant: participantTypeProp } = params;
+
+  const participant = await prisma.participant.findUnique({
+    where: {
+      slug,
+      type:
+        participantTypeProp === "actor"
+          ? ParticipantType.MAIN
+          : ParticipantType.GUEST,
+    },
+  });
+
+  if (!participant) {
+    return {
+      title: "Lik nije pronađen",
+      description: "Traženi lik nije pronađen.",
+    };
+  }
+
+  return {
+    title: `${participant.firstName} ${participant.lastName} ${
+      participant.nickname ? `(${participant.nickname})` : ""
+    } | Noćna Mora`,
+    description: participant.bio
+      ? participant.bio
+      : `Pogledajte više informacija o liku ${participant.firstName} ${participant.lastName} iz emisije Noćna Mora.`,
+    openGraph: {
+      title: `${participant.firstName} ${participant.lastName} ${
+        participant.nickname ? `(${participant.nickname})` : ""
+      }`,
+
+      description: participant.bio
+        ? participant.bio
+        : `Pogledajte više informacija o liku ${participant.firstName} ${participant.lastName} iz emisije Noćna Mora.`,
+      // images: [
+      //   {
+      //     url: "https://yourdomain.com/images/perfect-coffee.jpg",
+      //   },
+      // ],
+    },
+  };
+}
 
 export default async function ParticipantPage({
   params: { slug, participant: participantTypeProp },
