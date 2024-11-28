@@ -15,6 +15,20 @@ import {
   Skull,
   Youtube,
 } from "lucide-react";
+import { Metadata } from "next";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: "Vremenska linija | Noćna Mora",
+    description:
+      "Pogledajte vremensku liniju događaja emisije Noćna Mora, uključujući rođenja i smrti sudionika te emitiranja epizoda.",
+    openGraph: {
+      title: "Vremenska linija | Noćna Mora",
+      description:
+        "Pogledajte vremensku liniju događaja emisije Noćna Mora, uključujući rođenja i smrti sudionika te emitiranja epizoda.",
+    },
+  };
+}
 
 type TimelineEvent = {
   type: "birth" | "death" | "video" | "custom";
