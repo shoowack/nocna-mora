@@ -4,8 +4,23 @@ import { generateSlug } from "@/lib/slugify";
 import { auth } from "auth";
 
 export const POST = auth(async (request: Request & { auth: any }) => {
-  if (!request.auth) {
+  // if (!request.auth) {
+  //   return NextResponse.json({ message: "Not authenticated" }, { status: 401 });
+  // }
+
+  const session = (request as any).auth;
+
+  if (!session) {
     return NextResponse.json({ message: "Not authenticated" }, { status: 401 });
+  }
+
+  if (session?.user?.role !== "admin") {
+    return NextResponse.json(
+      {
+        message: "You do not have permission to perform this action.",
+      },
+      { status: 403 }
+    );
   }
 
   try {
@@ -22,7 +37,11 @@ export const POST = auth(async (request: Request & { auth: any }) => {
         gender: data.gender,
         birthDate: data.birthDate,
         deathDate: data.deathDate,
-        userId: data.userId,
+        // userId: data.userId,
+        userId: session.user.id,
+        // createdBy: {
+        //   connect: { id: session.user.id },
+        // },
         slug: slug,
         type: data.type,
       },
