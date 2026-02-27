@@ -10,6 +10,28 @@ import { Separator } from "@/components/ui/separator";
 import { DynamicField } from "./dynamic-form/dynamic-field";
 import { useForm, FormProvider } from "react-hook-form";
 
+type VideoFormValues = Video & {
+  participants?: string[];
+  categories?: string[];
+};
+
+type ParticipantOption = Pick<
+  Participant,
+  "id" | "firstName" | "lastName" | "nickname"
+>;
+
+type CategoryOption = Pick<Category, "id" | "title">;
+
+type VideoApiResponse = {
+  video: {
+    id: string;
+  };
+};
+
+type ErrorResponse = {
+  message?: string;
+};
+
 const ItemGroup: FC<PropsWithChildren & { className?: string }> = ({
   className,
   children,
@@ -31,12 +53,7 @@ export function VideoForm({
 }) {
   const router = useRouter();
 
-  const form = useForm<
-    Video & {
-      participants?: string[];
-      categories?: string[];
-    }
-  >({
+  const form = useForm<VideoFormValues>({
     defaultValues: {
       title: video?.title || "",
       videoId: video?.videoId || "",
@@ -44,8 +61,10 @@ export function VideoForm({
       airedDate: video?.airedDate ? new Date(video.airedDate) : null,
       provider: video?.provider,
       participants:
-        video?.participants?.map((participant) => participant.id) || [],
-      categories: video?.categories?.map((category) => category.id) || [],
+        video?.participants?.map((participant: Participant) => participant.id) ||
+        [],
+      categories:
+        video?.categories?.map((category: Category) => category.id) || [],
       published: video?.published || false,
     },
   });
@@ -57,8 +76,8 @@ export function VideoForm({
     formState: { isSubmitting },
   } = form;
 
-  const [participants, setParticipants] = useState<any[]>([]);
-  const [categories, setCategories] = useState<any[]>([]);
+  const [participants, setParticipants] = useState<ParticipantOption[]>([]);
+  const [categories, setCategories] = useState<CategoryOption[]>([]);
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState(false);
 
@@ -103,12 +122,14 @@ export function VideoForm({
       name: "provider",
       label: "Video platforma",
       type: "select",
-      options: Object.values(VideoProvider).map((provider) => ({
-        value: provider,
-        label:
-          provider.charAt(0).toUpperCase() + provider.slice(1).toLowerCase(),
-        icon: <X className="size-4" />,
-      })),
+      options: (Object.values(VideoProvider) as VideoProvider[]).map(
+        (provider: VideoProvider) => ({
+          value: provider,
+          label:
+            provider.charAt(0).toUpperCase() + provider.slice(1).toLowerCase(),
+          icon: <X className="size-4" />,
+        })
+      ),
       description: "Odaberi platformu na kojoj je video objavljen.",
       required: true,
     },
@@ -117,11 +138,11 @@ export function VideoForm({
       label: "Likovi",
       placeholder: "Odaberi likove",
       type: "multiselect",
-      options: participants.map((participants: any) => ({
-        label: `${participants.firstName} ${participants.lastName}${
-          participants.nickname ? ` (${participants.nickname})` : ""
+      options: participants.map((participant: ParticipantOption) => ({
+        label: `${participant.firstName} ${participant.lastName}${
+          participant.nickname ? ` (${participant.nickname})` : ""
         }`,
-        value: participants.id.toString(),
+        value: participant.id.toString(),
         // icon: ({ className }) => (
         //   <Folder className={cn("size-4", className)} />
         // ),
@@ -133,7 +154,7 @@ export function VideoForm({
       label: "Kategorije",
       placeholder: "Odaberi kategoriju/e",
       type: "multiselect",
-      options: categories.map((category) => ({
+      options: categories.map((category: CategoryOption) => ({
         label: category.title,
         value: category.id.toString(),
         // icon: ({ className }) => (
@@ -168,8 +189,8 @@ export function VideoForm({
           categoriesRes.json(),
         ]);
 
-        setParticipants(participantsData);
-        setCategories(categoriesData);
+        setParticipants(participantsData as ParticipantOption[]);
+        setCategories(categoriesData as CategoryOption[]);
       } catch (err) {
         console.error(err);
         setError("Failed to load participants or categories.");
@@ -179,9 +200,7 @@ export function VideoForm({
     fetchData();
   }, []);
 
-  const onSubmit = async (
-    data: Video & { participants?: string[]; categories?: string[] }
-  ) => {
+  const onSubmit = async (data: VideoFormValues) => {
     setError("");
     setLoading(true);
 
@@ -205,10 +224,10 @@ export function VideoForm({
       );
 
       if (response.ok) {
-        const responseData = await response.json();
+        const responseData = (await response.json()) as VideoApiResponse;
         router.push(isEditing ? `/video/${responseData.video.id}` : "/"); // TODO use /videos instead of / once it becomes available
       } else {
-        const errorData = await response.json();
+        const errorData = (await response.json()) as ErrorResponse;
         setError(errorData.message || "An error occurred.");
       }
     } catch (err) {
@@ -229,7 +248,7 @@ export function VideoForm({
         if (response.ok) {
           router.push("/"); // TODO: Redirect to the /videos page once it becomes available
         } else {
-          const errorData = await response.json();
+          const errorData = (await response.json()) as ErrorResponse;
           setError(errorData.message || "Failed to delete the video.");
         }
       } catch (err) {

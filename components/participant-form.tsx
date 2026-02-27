@@ -12,7 +12,28 @@ import { Button } from "@/components/ui/button";
 import { Loader2, Plus, Save } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Separator } from "./ui/separator";
-import { ParticipantGender } from "@prisma/client";
+import {
+  Participant,
+  ParticipantGender,
+  ParticipantType,
+} from "@prisma/client";
+
+type ParticipantFormValues = {
+  firstName: string;
+  lastName: string;
+  nickname: string;
+  bio: string;
+  gender: ParticipantGender | "";
+  birthDate: Date | null;
+  deathDate: Date | null;
+  type: ParticipantType;
+};
+
+type ParticipantApiResponse = {
+  participant: {
+    slug: string;
+  };
+};
 
 const formFields = [
   {
@@ -76,8 +97,8 @@ const formFields = [
     label: "Tip",
     type: "select",
     options: [
-      { value: "MAIN", label: "Glavni lik" },
-      { value: "GUEST", label: "Gost" },
+      { value: ParticipantType.MAIN, label: "Glavni lik" },
+      { value: ParticipantType.GUEST, label: "Gost" },
     ],
     required: true,
   },
@@ -87,7 +108,7 @@ export const ParticipantForm = ({
   participantData,
   guest,
 }: {
-  participantData?: any;
+  participantData?: Participant | null;
   guest?: boolean;
 }) => {
   const [loading, setLoading] = useState(false);
@@ -99,8 +120,9 @@ export const ParticipantForm = ({
   const { data: session } = useSession();
 
   const isEditing = Boolean(participantData);
+  const participantSlug = participantData?.slug ?? "";
 
-  const form = useForm({
+  const form = useForm<ParticipantFormValues>({
     defaultValues: {
       firstName: participantData?.firstName || "",
       lastName: participantData?.lastName || "",
@@ -113,7 +135,10 @@ export const ParticipantForm = ({
       deathDate: participantData?.deathDate
         ? new Date(participantData.deathDate)
         : null,
-      type: isEditing && guest ? "GUEST" : participantData?.type || "MAIN",
+      type:
+        isEditing && guest
+          ? ParticipantType.GUEST
+          : participantData?.type || ParticipantType.MAIN,
     },
   });
 
@@ -133,14 +158,14 @@ export const ParticipantForm = ({
   //   }
   // }, [participantData, setValue]);
 
-  const onSubmit = async (data: any) => {
+  const onSubmit = async (data: ParticipantFormValues) => {
     setLoading(true);
     setServerError(null);
 
     try {
       const method = isEditing ? "PUT" : "POST";
       const url = isEditing
-        ? `/api/participants/${participantData.slug}/edit`
+        ? `/api/participants/${participantSlug}/edit`
         : "/api/participants";
 
       const response = await fetch(url, {
@@ -159,7 +184,7 @@ export const ParticipantForm = ({
       });
 
       if (response.ok) {
-        const result = await response.json();
+        const result = (await response.json()) as ParticipantApiResponse;
 
         router.push(
           guest
@@ -171,11 +196,13 @@ export const ParticipantForm = ({
         setServerError(errorData.message || "An error occurred.");
         console.error(errorData.message || "An error occurred.");
       }
-    } catch (err: any) {
+    } catch (err) {
+      const error = err instanceof Error ? err : new Error("Unknown error");
+
       setServerError(
-        err.message || "An error occurred while submitting the form."
+        error.message || "An error occurred while submitting the form."
       );
-      console.error("An error occurred while submitting the form.", err);
+      console.error("An error occurred while submitting the form.", error);
     } finally {
       setLoading(false);
     }
@@ -239,11 +266,9 @@ export const ParticipantForm = ({
               )}
               {isSubmitting || loading
                 ? "Spremam..."
-                : isEditing &&
-                  pathname === `/guest/${participantData.slug}/edit`
+                : isEditing && pathname === `/guest/${participantSlug}/edit`
                 ? "Ažuriraj gosta"
-                : isEditing &&
-                  pathname === `/actor/${participantData.slug}/edit`
+                : isEditing && pathname === `/actor/${participantSlug}/edit`
                 ? "Ažuriraj lika"
                 : pathname === "/guest/new"
                 ? "Dodaj gosta"
