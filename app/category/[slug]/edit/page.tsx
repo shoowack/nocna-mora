@@ -4,6 +4,8 @@ import { redirect } from "next/navigation";
 import { CategoryForm } from "@/components/category-form";
 import { TitleTemplate } from "@/components/title-template";
 
+export const dynamic = "force-dynamic";
+
 export default async function EditCategoryPage({
   params,
 }: {

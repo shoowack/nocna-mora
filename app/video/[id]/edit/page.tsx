@@ -4,6 +4,8 @@ import { VideoForm } from "@/components/video-form";
 import { TitleTemplate } from "@/components/title-template";
 import { redirect } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 export default async function EditVideoPage({
   params,
 }: {

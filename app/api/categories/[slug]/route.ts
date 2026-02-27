@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import { auth } from "auth";
 import { generateSlug } from "@/lib/slugify";
 
+export const dynamic = "force-dynamic";
+
 export const GET = async (
   request: Request,
   { params }: { params: { slug: string } }
