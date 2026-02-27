@@ -35,6 +35,20 @@ export const DynamicField = ({
   className,
   datepickerProps,
 }: DynamicFieldProps) => {
+  const normalizeDateValue = (value: unknown): string | null => {
+    if (!value) {
+      return null;
+    }
+
+    const parsedDate = value instanceof Date ? value : new Date(String(value));
+
+    if (Number.isNaN(parsedDate.getTime())) {
+      return null;
+    }
+
+    return parsedDate.toISOString();
+  };
+
   const Component = FieldComponents[field.type]; // Lookup the component based on field type
 
   if (!Component) {
@@ -91,7 +105,7 @@ export const DynamicField = ({
                     defaultValue: controllerField.value,
                   })}
                   {...(field.type === "date" && {
-                    value: new Date(controllerField.value).toISOString(),
+                    value: normalizeDateValue(controllerField.value),
                   })}
                   {...(field.type === "date" &&
                     datepickerProps && { ...datepickerProps })}
