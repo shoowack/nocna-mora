@@ -193,9 +193,11 @@ export default async function CategoryPage({
       contained
       containedClassNames="px-4 py-4 sm:px-6 md:py-2 flex"
       button={
-        <Link href={`/category/${category?.slug}/edit`}>
-          <Button className="w-full">Ažuriraj kategoriju</Button>
-        </Link>
+        isAdmin ? (
+          <Link href={`/category/${category.slug}/edit`}>
+            <Button className="w-full">Ažuriraj kategoriju</Button>
+          </Link>
+        ) : undefined
       }
     >
       {totalVideosWithoutFilters === 0 ? (

@@ -106,9 +106,11 @@ export default async function VideoPage({
     <TitleTemplate
       title={video.title}
       button={
-        <Link href={`/video/${video?.id}/edit`}>
-          <Button className="w-full">Ažuriraj video</Button>
-        </Link>
+        isAdmin ? (
+          <Link href={`/video/${video.id}/edit`}>
+            <Button className="w-full">Ažuriraj video</Button>
+          </Link>
+        ) : undefined
       }
     >
       <VideoDetail video={video} singleVideo showCategories showActors />

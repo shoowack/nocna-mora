@@ -109,11 +109,13 @@ export default async function ParticipantPage({
       description={participant.bio ? participant.bio : ""}
       contained
       button={
-        <Link href={`/${participantTypeProp}/${participant.slug}/edit`}>
-          <Button className="w-full">
-            Ažuriraj {`${participantTypeProp === "actor" ? "lika" : "gosta"}`}
-          </Button>
-        </Link>
+        isAdmin ? (
+          <Link href={`/${participantTypeProp}/${participant.slug}/edit`}>
+            <Button className="w-full">
+              Ažuriraj {`${participantTypeProp === "actor" ? "lika" : "gosta"}`}
+            </Button>
+          </Link>
+        ) : undefined
       }
     >
       {participant.videos.length > 0 ? (
