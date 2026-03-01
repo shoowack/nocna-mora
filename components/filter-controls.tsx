@@ -66,7 +66,7 @@ export const FilterControls = ({
         params.delete(filterName);
       }
     } else {
-      if (value) {
+      if (value && value !== "all") {
         params.set(filterName, value);
       } else {
         params.delete(filterName);
@@ -107,15 +107,14 @@ export const FilterControls = ({
       />
       {/* Provider Filter */}
       <Select
-        defaultValue={searchParams.get("provider") ?? ""}
+        defaultValue={searchParams.get("provider") ?? "all"}
         onValueChange={(e) => handleFilterChange("provider", e)}
       >
         <SelectTrigger className="md:w-[180px]">
           <SelectValue placeholder={"Video servis"} />
         </SelectTrigger>
         <SelectContent>
-          {/* @ts-ignore next-line */}
-          <SelectItem value={undefined}>Svi servisi</SelectItem>
+          <SelectItem value="all">Svi servisi</SelectItem>
           <SelectItem value="YOUTUBE">YouTube</SelectItem>
           <SelectItem value="VIMEO">Vimeo</SelectItem>
           <SelectItem value="DAILYMOTION">Dailymotion</SelectItem>
@@ -125,15 +124,14 @@ export const FilterControls = ({
 
       {/* Duration Filter */}
       <Select
-        defaultValue={searchParams.get("duration") ?? ""}
+        defaultValue={searchParams.get("duration") ?? "all"}
         onValueChange={(e) => handleFilterChange("duration", e)}
       >
         <SelectTrigger className="md:w-[180px]">
           <SelectValue placeholder={"Dužina videa"} />
         </SelectTrigger>
         <SelectContent>
-          {/* @ts-ignore next-line */}
-          <SelectItem value={undefined}>Sve dužine</SelectItem>
+          <SelectItem value="all">Sve dužine</SelectItem>
           <SelectItem value="short">Kratki (&lt; 20 min)</SelectItem>
           <SelectItem value="long">Dugački (&gt; 20 min)</SelectItem>
         </SelectContent>
@@ -151,7 +149,7 @@ export const FilterControls = ({
         }))}
         onValueChange={(e) => {
           handleFilterChange("participants", e);
-          setSelectedParticipants;
+          setSelectedParticipants(e);
         }}
         defaultValue={selectedParticipants}
         placeholder="Filtriraj likove"
