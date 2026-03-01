@@ -7,17 +7,23 @@ import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { User } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { auth } from "auth";
 
 export const VideosWithParticipant = async () => {
+  const session = await auth();
+  const isAdmin = session?.user?.role === "admin";
+
   // Step 1: Filter participants who have at least 4 videos
   const eligibleParticipants = await prisma.participant.findMany({
     where: {
       videos: {
-        some: {}, // Participant must have some videos
+        some: isAdmin ? {} : { published: true },
       },
     },
     include: {
-      videos: true,
+      videos: {
+        where: isAdmin ? {} : { published: true },
+      },
     },
   });
 
@@ -38,6 +44,7 @@ export const VideosWithParticipant = async () => {
   // Get the latest 4 videos for the selected participant
   const videos = await prisma.video.findMany({
     where: {
+      published: isAdmin ? undefined : true,
       participants: {
         some: {
           id: firstParticipant.id,
