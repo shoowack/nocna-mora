@@ -149,7 +149,7 @@ export const FilterControls = ({
         }))}
         onValueChange={(e) => {
           handleFilterChange("participants", e);
-          setSelectedParticipants;
+          setSelectedParticipants(e);
         }}
         defaultValue={selectedParticipants}
         placeholder="Filtriraj likove"
