@@ -18,6 +18,11 @@ module.exports = {
         hostname: "www.dailymotion.com",
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "graph.facebook.com",
+        port: "",
+      },
     ],
   },
   experimental: {

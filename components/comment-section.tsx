@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, ChangeEvent, useEffect } from "react";
+import { useState, ChangeEvent, useEffect, useCallback } from "react";
 import { Button } from "./ui/button";
 import { useForm, FormProvider } from "react-hook-form";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -80,7 +80,7 @@ export const CommentSection = ({
   const [sort, setSort] = useState<"asc" | "desc">("desc");
   const [pageSize, setPageSize] = useState(pageSizeConstants[0]);
 
-  const fetchComments = async () => {
+  const fetchComments = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(
@@ -94,11 +94,11 @@ export const CommentSection = ({
     } finally {
       setLoading(false);
     }
-  };
+  }, [videoId, page, pageSize, sort]);
 
   useEffect(() => {
     fetchComments();
-  }, [page, sort, pageSize]);
+  }, [fetchComments]);
 
   // Initialize React Hook Form
   const form = useForm<Comment>({
