@@ -1,15 +1,13 @@
 import NextAuth, { type DefaultSession } from "next-auth";
 import "next-auth/jwt";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
-import { PrismaClient } from "@prisma/client";
+import prisma from "@/lib/prisma";
 // import FacebookProvider, {
 //   FacebookProfile,
 // } from "next-auth/providers/facebook";
 import GoogleProvider, { GoogleProfile } from "next-auth/providers/google";
 // import GitHub, { GitHubProfile } from "next-auth/providers/github";
 import type { NextAuthConfig } from "next-auth";
-
-const prisma = new PrismaClient();
 
 const config = {
   theme: { logo: "/nocna-mora-logo-alt.svg" },
