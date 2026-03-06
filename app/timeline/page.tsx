@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 import { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata(): Promise<Metadata> {
   return {
     title: "Vremenska linija | Noćna Mora",

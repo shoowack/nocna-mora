@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import { auth } from "auth";
 import { ReactionType } from "@prisma/client";
 
+export const dynamic = "force-dynamic";
+
 export const POST = auth(async (request: Request) => {
   const session = (request as any).auth;
 

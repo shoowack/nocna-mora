@@ -7,6 +7,8 @@ import { NameAndAge } from "@/components/name-and-age";
 import { ParticipantForm } from "@/components/participant-form";
 import { redirect } from "next/navigation";
 
+export const dynamic = "force-dynamic";
+
 export default async function EditParticipantPage({
   params: { participant: participantTypeProp, slug },
 }: {

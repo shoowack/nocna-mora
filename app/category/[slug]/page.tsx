@@ -11,6 +11,8 @@ import { VideoProvider } from "@prisma/client";
 import { pageSizeConstants } from "@/app/constants/page-size-constants";
 import { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({
   params,
 }: {

@@ -3,6 +3,8 @@ import { auth } from "auth";
 import prisma from "@/lib/prisma";
 import { VideoProvider } from "@prisma/client";
 
+export const dynamic = "force-dynamic";
+
 export const GET = async (
   request: Request,
   { params }: { params: { id: string } }

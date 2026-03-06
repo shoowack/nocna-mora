@@ -7,6 +7,8 @@ import { BreakpointIndicator } from "@/components/breakpoint-indicator";
 import { PropsWithChildren } from "react";
 import { Analytics } from "@vercel/analytics/react";
 
+export const dynamic = "force-dynamic";
+
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {

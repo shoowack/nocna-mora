@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import { generateSlug } from "@/lib/slugify";
 import { auth } from "auth";
 
+export const dynamic = "force-dynamic";
+
 export const POST = auth(async (request: Request & { auth: any }) => {
   // if (!request.auth) {
   //   return NextResponse.json({ message: "Not authenticated" }, { status: 401 });

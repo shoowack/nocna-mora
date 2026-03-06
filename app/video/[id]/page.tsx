@@ -10,6 +10,8 @@ import { Separator } from "@/components/ui/separator";
 import { CommentSection } from "@/components/comment-section";
 import { Reactions } from "@/components/reactions";
 
+export const dynamic = "force-dynamic";
+
 export default async function VideoPage({
   params,
 }: {

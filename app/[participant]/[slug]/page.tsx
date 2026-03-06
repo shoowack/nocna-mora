@@ -9,6 +9,8 @@ import { NameAndAge } from "@/components/name-and-age";
 import { Button } from "@/components/ui/button";
 import { Metadata } from "next";
 
+export const dynamic = "force-dynamic";
+
 type Props = {
   params: { slug: string; participant: string };
   searchParams: { [key: string]: string | string[] | undefined };

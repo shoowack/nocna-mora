@@ -10,6 +10,8 @@ import { TitleTemplate } from "@/components/title-template";
 import { User2 } from "lucide-react";
 import { NameAndAge } from "@/components/name-and-age";
 
+export const dynamic = "force-dynamic";
+
 export default async function Actors() {
   const participants = await prisma.participant.findMany({
     where: { type: ParticipantType.MAIN },
