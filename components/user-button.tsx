@@ -2,8 +2,8 @@ import {
   Avatar,
   // AvatarFallback,
   AvatarImage,
-} from "./ui/avatar";
-import { Button } from "./ui/button";
+} from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
 import { auth } from "auth";
 import {
   DropdownMenu,
@@ -14,7 +14,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SignIn, SignOut } from "@/components/auth-components";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, LogOut, User2 } from "lucide-react";
+import Link from "next/link";
 
 export const UserButton = async () => {
   const session = await auth();
@@ -54,8 +55,23 @@ export const UserButton = async () => {
             </div>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="p-0">
-            <SignOut />
+          <DropdownMenuItem>
+            <Link href={`/users/${session.user.id}`}>
+              <div className="flex items-center gap-x-2">
+                <User2 className="size-4" />
+                Profil
+              </div>
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            <div className="flex items-center gap-x-2">
+              <LogOut className="size-4" />
+              <SignOut
+                variant="ghost"
+                className="p-[unset] min-h-[unset] border-none"
+              />
+            </div>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

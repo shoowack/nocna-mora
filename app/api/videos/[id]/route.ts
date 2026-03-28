@@ -1,38 +1,47 @@
-import { NextRequest, NextResponse } from "next/server";
-import { auth } from "auth";
+import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { VideoProvider } from "@prisma/client";
+import { logAudit, AuditAction, AuditEntityType } from "@/lib/audit";
 
-export const GET = async (
+export async function GET(
   request: Request,
-  { params }: { params: { id: string } }
-) => {
+  { params }: { params: Promise<{ id: string }> }
+) {
   try {
+    const { id } = await params;
+
     const video = await prisma.video.findUnique({
-      where: { id: params.id },
+      where: { id },
       include: {
+        createdBy: true,
         participants: true,
         categories: true,
-        createdBy: true,
       },
     });
 
     if (!video) {
-      return NextResponse.json({ message: "Video not found" }, { status: 404 });
+      return NextResponse.json(
+        { message: "Video not found" },
+        { status: 404 }
+      );
     }
 
-    return NextResponse.json(video, { status: 200 });
-  } catch (error) {
-    console.error("Error fetching video:", error);
+    return NextResponse.json({ video }, { status: 200 });
+  } catch (err) {
+    console.error(err);
     return NextResponse.json(
       { message: "Internal server error" },
       { status: 500 }
     );
   }
-};
+}
 
-export const PUT = auth(async (request: Request, { params }: any) => {
+export async function PUT(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   const session = (request as any).auth;
+  const { id } = await params;
 
   if (!session) {
     return NextResponse.json({ message: "Not authenticated" }, { status: 401 });
@@ -48,22 +57,31 @@ export const PUT = auth(async (request: Request, { params }: any) => {
   }
 
   try {
+    const video = await prisma.video.findUnique({
+      where: { id },
+    });
+
+    if (!video) {
+      return NextResponse.json(
+        { message: "Video not found" },
+        { status: 404 }
+      );
+    }
+
     const data = await request.json();
 
-    // Validate provider if it's being updated
-    if (data.provider) {
-      const validProviders = Object.values(VideoProvider);
+    // Validate provider
+    const validProviders = Object.values(VideoProvider);
 
-      if (!validProviders.includes(data.provider)) {
-        return NextResponse.json(
-          { message: "Invalid video provider" },
-          { status: 400 }
-        );
-      }
+    if (!validProviders.includes(data.provider)) {
+      return NextResponse.json(
+        { message: "Invalid video provider" },
+        { status: 400 }
+      );
     }
 
     const updatedVideo = await prisma.video.update({
-      where: { id: params.id },
+      where: { id },
       data: {
         title: data.title,
         videoId: data.videoId,
@@ -72,13 +90,22 @@ export const PUT = auth(async (request: Request, { params }: any) => {
         provider: data.provider,
         published: data.published,
         participants: {
-          set: [], // Clear existing connections
-          connect: data.participants.map((id: number) => ({ id })),
+          set: data.participants.map((id: number) => ({ id })),
         },
         categories: {
-          set: [], // Clear existing connections
-          connect: data.categories.map((id: number) => ({ id })),
+          set: data.categories.map((id: number) => ({ id })),
         },
+      },
+    });
+
+    await logAudit({
+      action: AuditAction.UPDATE,
+      entityType: AuditEntityType.VIDEO,
+      entityId: id,
+      details: {
+        title: data.title,
+        provider: data.provider,
+        published: data.published,
       },
     });
 
@@ -90,12 +117,14 @@ export const PUT = auth(async (request: Request, { params }: any) => {
       { status: 500 }
     );
   }
-});
+}
 
-export const DELETE = auth(async (request: NextRequest, { params }: any) => {
-  const { id } = params;
-
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ id: string }> }
+) {
   const session = (request as any).auth;
+  const { id } = await params;
 
   if (!session) {
     return NextResponse.json({ message: "Not authenticated" }, { status: 401 });
@@ -116,22 +145,34 @@ export const DELETE = auth(async (request: NextRequest, { params }: any) => {
     });
 
     if (!video) {
-      return NextResponse.json({ error: "Video not found." }, { status: 404 });
+      return NextResponse.json(
+        { message: "Video not found" },
+        { status: 404 }
+      );
     }
 
     await prisma.video.delete({
       where: { id },
     });
 
+    await logAudit({
+      action: AuditAction.DELETE,
+      entityType: AuditEntityType.VIDEO,
+      entityId: id,
+      details: {
+        title: video.title,
+      },
+    });
+
     return NextResponse.json(
-      { message: "Video deleted successfully." },
+      { message: "Video deleted successfully" },
       { status: 200 }
     );
   } catch (error) {
     console.error("Error deleting video:", error);
     return NextResponse.json(
-      { error: "An error occurred while deleting the video." },
+      { message: "Internal server error" },
       { status: 500 }
     );
   }
-});
+}

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import prisma from "@/lib/prisma";
 import { auth } from "auth";
 import { VideoProvider } from "@prisma/client";
+import { logAudit, AuditAction, AuditEntityType } from "@/lib/audit";
 
 export async function GET() {
   try {
@@ -64,6 +65,17 @@ export const POST = auth(async (request: Request) => {
         categories: {
           connect: data.categories.map((id: number) => ({ id })),
         },
+      },
+    });
+
+    await logAudit({
+      action: AuditAction.CREATE,
+      entityType: AuditEntityType.VIDEO,
+      entityId: newVideo.id,
+      details: {
+        title: data.title,
+        provider: data.provider,
+        published: data.published,
       },
     });
 

@@ -1,7 +1,8 @@
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { auth } from "auth";
-import { ReactionType } from "@prisma/client";
+import { ReactionType, AuditAction, AuditEntityType } from "@prisma/client";
+import { logAudit } from "@/lib/audit";
 
 export const POST = auth(async (request: Request) => {
   const session = (request as any).auth;
@@ -21,7 +22,7 @@ export const POST = auth(async (request: Request) => {
       );
     }
 
-    // Check if `type` is a valid ReactionType
+    // Check if \`type\` is a valid ReactionType
     if (!Object.values(ReactionType).includes(type)) {
       return NextResponse.json(
         { message: "Invalid reaction type." },
@@ -43,6 +44,15 @@ export const POST = auth(async (request: Request) => {
         videoId,
         userId: session.user.id,
         type,
+      },
+    });
+
+    await logAudit({
+      action: AuditAction.LIKE,
+      entityType: AuditEntityType.VIDEO,
+      entityId: videoId,
+      details: {
+        reactionType: type,
       },
     });
 

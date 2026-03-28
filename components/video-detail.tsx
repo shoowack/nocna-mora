@@ -1,7 +1,7 @@
 import { FC } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Badge } from "@/components/ui/badge";
+import { Badge, BadgeVariants } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { PlayCircle } from "lucide-react";
 import {
@@ -22,7 +22,7 @@ const VideoContent: FC<{
   return (
     <div className="space-y-4 md:p-4">
       {!video.published && (
-        <Badge variant="destructive">Video nije javan</Badge>
+        <Badge variant={BadgeVariants.DESTRUCTIVE}>Video nije javan</Badge>
       )}
       {!singleVideo && (
         <p className="line-clamp-1 text-stone-600" title={video.title}>
@@ -33,7 +33,7 @@ const VideoContent: FC<{
         <h3 className="text-xl font-bold text-stone-900">Datum emitiranja</h3>
       )}
       {video.airedDate ? (
-        <Badge variant="secondary" className="whitespace-nowrap">
+        <Badge variant={BadgeVariants.SECONDARY} className="whitespace-nowrap">
           {new Date(video.airedDate).toLocaleString("hr-HR", {
             timeZone: "UTC",
             // weekday: "long",
@@ -61,9 +61,12 @@ const VideoContent: FC<{
                     type === ParticipantType.GUEST ? "guest" : "actor"
                   }/${slug}`}
                 >
-                  <Badge className="m-0 px-1.5">{`${firstName} ${lastName}`}</Badge>
+                  <Badge
+                    variant={BadgeVariants.OUTLINE}
+                    className="m-0 px-1.5"
+                  >{`${firstName} ${lastName}`}</Badge>
                 </Link>
-              )
+              ),
             )}
           </div>
         </>
@@ -84,7 +87,9 @@ const VideoContent: FC<{
           <div className="flex flex-wrap gap-x-1">
             {video.categories?.map((category) => (
               <Link key={category.id} href={`/category/${category.slug}`}>
-                <Badge className="m-0 px-1.5">{category.title}</Badge>
+                <Badge variant={BadgeVariants.OUTLINE} className="m-0 px-1.5">
+                  {category.title}
+                </Badge>
               </Link>
             ))}
           </div>

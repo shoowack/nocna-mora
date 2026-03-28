@@ -1,28 +1,14 @@
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
-import { auth } from "auth";
 import { generateSlug } from "@/lib/slugify";
+import { logAudit, AuditAction, AuditEntityType } from "@/lib/audit";
 
-export const GET = async (
+export async function PUT(
   request: Request,
-  { params }: { params: { slug: string } }
-) => {
-  const category = await prisma.category.findUnique({
-    where: { slug: params.slug, deletedAt: null },
-  });
-
-  if (!category) {
-    return NextResponse.json(
-      { message: "Category not found" },
-      { status: 404 }
-    );
-  }
-
-  return NextResponse.json(category);
-};
-
-export const PUT = auth(async (request: Request, { params }: any) => {
+  { params }: { params: Promise<{ slug: string }> }
+) {
   const session = (request as any).auth;
+  const { slug } = await params;
 
   if (!session) {
     return NextResponse.json({ message: "Not authenticated" }, { status: 401 });
@@ -38,16 +24,41 @@ export const PUT = auth(async (request: Request, { params }: any) => {
   }
 
   try {
+    const category = await prisma.category.findUnique({
+      where: { slug },
+    });
+
+    if (!category) {
+      return NextResponse.json(
+        { message: "Category not found" },
+        { status: 404 }
+      );
+    }
+
     const data = await request.json();
+
+    const newSlug = generateSlug(data.title);
+
     const updatedCategory = await prisma.category.update({
-      where: { slug: params.slug },
+      where: { slug },
       data: {
         title: data.title,
-        slug: generateSlug(data.title),
+        slug: newSlug,
+        description: data.description,
       },
     });
 
-    return NextResponse.json({ category: updatedCategory });
+    await logAudit({
+      action: AuditAction.UPDATE,
+      entityType: AuditEntityType.CATEGORY,
+      entityId: updatedCategory.id,
+      details: {
+        title: data.title,
+        slug: newSlug,
+      },
+    });
+
+    return NextResponse.json({ category: updatedCategory }, { status: 200 });
   } catch (error) {
     console.error("Error updating category:", error);
     return NextResponse.json(
@@ -55,10 +66,14 @@ export const PUT = auth(async (request: Request, { params }: any) => {
       { status: 500 }
     );
   }
-});
+}
 
-export const DELETE = auth(async (request: Request, { params }: any) => {
+export async function DELETE(
+  request: Request,
+  { params }: { params: Promise<{ slug: string }> }
+) {
   const session = (request as any).auth;
+  const { slug } = await params;
 
   if (!session) {
     return NextResponse.json({ message: "Not authenticated" }, { status: 401 });
@@ -74,41 +89,43 @@ export const DELETE = auth(async (request: Request, { params }: any) => {
   }
 
   try {
-    // Find the category by slug
     const category = await prisma.category.findUnique({
-      where: { slug: params.slug },
+      where: { slug },
     });
 
     if (!category) {
       return NextResponse.json(
-        { error: "Category not found." },
+        { message: "Category not found" },
         { status: 404 }
       );
     }
 
-    // TODO: Authorization Check (e.g., only admins or creators can delete)
-    // if (category.userId !== user.id && !user.isAdmin) {
-    //   return NextResponse.json(
-    //     { error: "Forbidden. You don't have permission to delete this category." },
-    //     { status: 403 }
-    //   );
-    // }
-
-    // Soft delete: set deletedAt to current timestamp
     await prisma.category.update({
-      where: { slug: params.slug },
-      data: { deletedAt: new Date() },
+      where: { slug },
+      data: {
+        deletedAt: new Date(),
+      },
+    });
+
+    await logAudit({
+      action: AuditAction.DELETE,
+      entityType: AuditEntityType.CATEGORY,
+      entityId: category.id,
+      details: {
+        title: category.title,
+        slug: category.slug,
+      },
     });
 
     return NextResponse.json(
-      { message: "Category deleted successfully." },
+      { message: "Category deleted successfully" },
       { status: 200 }
     );
   } catch (error) {
     console.error("Error deleting category:", error);
     return NextResponse.json(
-      { message: "An error occurred while deleting the category." },
+      { message: "Internal server error" },
       { status: 500 }
     );
   }
-});
+}
