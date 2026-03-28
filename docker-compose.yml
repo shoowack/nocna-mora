@@ -1,13 +1,39 @@
 services:
-  authjs-docker-test:
+  app:
     build: .
-    environment:
-      - TEST_KEYCLOAK_USERNAME
-      - TEST_KEYCLOAK_PASSWORD
-      - AUTH_KEYCLOAK_ID
-      - AUTH_KEYCLOAK_SECRET
-      - AUTH_KEYCLOAK_ISSUER
-      - AUTH_SECRET
-      - AUTH_URL=http://localhost:3000/auth
+    restart: unless-stopped
     ports:
-      - "3000:3000"
+      - '3000:3000'
+    environment:
+      - DATABASE_URI=postgresql://tvarhiv:${DB_PASSWORD:-tvarhiv}@db:5432/tvarhiv
+      - PAYLOAD_SECRET=${PAYLOAD_SECRET:-change-me-in-production}
+      - RESEND_API_KEY=${RESEND_API_KEY:-}
+      - NEXT_PUBLIC_SITE_URL=${SITE_URL:-http://localhost:3000}
+      - NODE_OPTIONS=--max-old-space-size=2048
+    volumes:
+      - media_data:/app/media
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: tvarhiv
+      POSTGRES_USER: tvarhiv
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-tvarhiv}
+    ports:
+      - '5432:5432'
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./docker/init-db.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U tvarhiv']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pg_data:
+  media_data:

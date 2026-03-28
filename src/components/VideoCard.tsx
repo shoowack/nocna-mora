@@ -1,0 +1,63 @@
+import Image from 'next/image'
+import Link from 'next/link'
+import { Play, Clock } from 'lucide-react'
+import { getThumbnailUrl } from '@/lib/video-providers'
+import { formatDuration, formatDate } from '@/lib/utils'
+
+type Props = {
+  video: {
+    slug: string
+    title: string
+    provider: 'youtube' | 'vimeo' | 'dailymotion' | 'facebook'
+    videoId: string
+    videoType: 'full' | 'clip'
+    duration?: number | null
+    airedDate?: string | null
+    thumbnail?: { url: string } | null
+  }
+}
+
+export function VideoCard({ video }: Props) {
+  const thumbnailUrl = video.thumbnail?.url || getThumbnailUrl(video.provider, video.videoId)
+
+  return (
+    <Link
+      href={`/video/${video.slug}`}
+      className="group overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-primary/50"
+    >
+      <div className="relative aspect-video overflow-hidden bg-muted">
+        {thumbnailUrl && (
+          <Image
+            src={thumbnailUrl}
+            alt={video.title}
+            fill
+            className="object-cover transition-transform group-hover:scale-105"
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+          />
+        )}
+        <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 transition-opacity group-hover:opacity-100">
+          <Play className="h-12 w-12 text-white" />
+        </div>
+        {video.duration && (
+          <span className="absolute bottom-2 right-2 flex items-center gap-1 rounded bg-black/80 px-1.5 py-0.5 text-xs text-white">
+            <Clock className="h-3 w-3" />
+            {formatDuration(video.duration)}
+          </span>
+        )}
+        {video.videoType === 'clip' && (
+          <span className="absolute left-2 top-2 rounded bg-primary px-1.5 py-0.5 text-xs font-medium text-white">
+            Isječak
+          </span>
+        )}
+      </div>
+      <div className="p-3">
+        <h3 className="line-clamp-2 text-sm font-medium text-foreground group-hover:text-primary transition-colors">
+          {video.title}
+        </h3>
+        {video.airedDate && (
+          <p className="mt-1 text-xs text-muted-foreground">{formatDate(video.airedDate)}</p>
+        )}
+      </div>
+    </Link>
+  )
+}
