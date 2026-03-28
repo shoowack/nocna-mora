@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { generateSlug } from "@/lib/slugify";
 import { auth } from "auth";
+import { logAudit, AuditAction, AuditEntityType } from "@/lib/audit";
 
 export const GET = auth(async () => {
   try {
@@ -54,6 +55,16 @@ export const POST = auth(async (request: Request) => {
         title: data.title,
         slug: slug,
         createdBy: { connect: { email: session.user.email } },
+      },
+    });
+
+    await logAudit({
+      action: AuditAction.CREATE,
+      entityType: AuditEntityType.CATEGORY,
+      entityId: category.id,
+      details: {
+        title: data.title,
+        slug: slug,
       },
     });
 

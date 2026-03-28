@@ -23,6 +23,11 @@ module.exports = {
         hostname: "graph.facebook.com",
         port: "",
       },
+      {
+        protocol: "https",
+        hostname: "lh3.googleusercontent.com",
+        port: "",
+      },
     ],
   },
   experimental: {

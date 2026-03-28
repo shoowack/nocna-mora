@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { auth } from "auth";
+import { logAudit, AuditAction, AuditEntityType } from "@/lib/audit";
 
 export const PATCH = auth(async (request: Request, { params }: any) => {
   const session = (request as any).auth;
@@ -28,10 +29,35 @@ export const PATCH = auth(async (request: Request, { params }: any) => {
       );
     }
 
+    const comment = await prisma.comment.findUnique({
+      where: { id },
+      select: {
+        videoId: true,
+        content: true,
+      },
+    });
+
+    if (!comment) {
+      return NextResponse.json(
+        { message: "Comment not found." },
+        { status: 404 }
+      );
+    }
+
     const updatedComment = await prisma.comment.update({
       where: { id },
       data: {
-        approved: true, // Approving the comment
+        approved: true,
+      },
+    });
+
+    await logAudit({
+      action: AuditAction.APPROVE,
+      entityType: AuditEntityType.COMMENT,
+      entityId: id,
+      details: {
+        videoId: comment.videoId,
+        content: comment.content,
       },
     });
 

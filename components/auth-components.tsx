@@ -12,6 +12,7 @@ export function SignIn({
         "use server";
         await signIn(provider);
       }}
+      className="!p-0"
     >
       <Button {...props}>Prijava</Button>
     </form>
@@ -25,11 +26,9 @@ export function SignOut(props: ComponentPropsWithRef<typeof Button>) {
         "use server";
         await signOut();
       }}
-      className="w-full"
+      className="!p-0"
     >
-      <Button variant="ghost" className="h-8 w-full p-0" {...props}>
-        Odjava
-      </Button>
+      <Button {...props}>Odjava</Button>
     </form>
   );
 }

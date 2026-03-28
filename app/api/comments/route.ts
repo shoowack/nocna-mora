@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { auth } from "auth";
+import { logAudit, AuditAction, AuditEntityType } from "@/lib/audit";
 
 export const POST = auth(async (request: Request) => {
   const session = (request as any).auth;
@@ -35,16 +36,26 @@ export const POST = auth(async (request: Request) => {
       );
     }
 
-    const category = await prisma.comment.create({
+    const comment = await prisma.comment.create({
       data: {
         content: data.content,
-        video: { connect: { id: data.videoId } }, // Connect the comment to the video by id
-        createdBy: { connect: { email: session.user.email } }, // Associate the comment with the logged-in user
-        approved: false, // Default to not approved
+        video: { connect: { id: data.videoId } },
+        createdBy: { connect: { email: session.user.email } },
+        approved: false,
       },
     });
 
-    return NextResponse.json({ category }, { status: 201 });
+    await logAudit({
+      action: AuditAction.COMMENT,
+      entityType: AuditEntityType.COMMENT,
+      entityId: comment.id,
+      details: {
+        videoId: data.videoId,
+        content: data.content,
+      },
+    });
+
+    return NextResponse.json({ comment }, { status: 201 });
   } catch (error) {
     console.error("Failed to add comment:", error);
     return NextResponse.json(
@@ -77,20 +88,20 @@ export const GET = auth(async (request: Request) => {
     // Fetch paginated comments with sorting
     const comments = await prisma.comment.findMany({
       where: isAdmin
-        ? { videoId } // Admins see all comments, including deleted ones
+        ? { videoId }
         : session?.user
         ? {
             videoId,
-            deletedAt: null, // Exclude deleted comments for non-admins
+            deletedAt: null,
             OR: [
-              { approved: true }, // Approved comments from others
-              { approved: false, createdById: session?.user?.id }, // Their own unapproved comments
+              { approved: true },
+              { approved: false, createdById: session?.user?.id },
             ],
           }
         : {
             videoId,
-            deletedAt: null, // Exclude deleted comments
-            approved: true, // Only approved comments from others
+            deletedAt: null,
+            approved: true,
           },
       skip: offset,
       take: limit,
@@ -118,7 +129,6 @@ export const GET = auth(async (request: Request) => {
       },
     });
 
-    // Count total approved comments
     const totalApprovedComments = await prisma.comment.count({
       where: {
         videoId,
@@ -127,7 +137,6 @@ export const GET = auth(async (request: Request) => {
       },
     });
 
-    // Count total unapproved comments (only visible to admin)
     const totalUnapprovedComments = isAdmin
       ? await prisma.comment.count({
           where: {
@@ -138,7 +147,6 @@ export const GET = auth(async (request: Request) => {
         })
       : 0;
 
-    // Count total deleted comments (only visible to admin)
     const totalDeletedComments = isAdmin
       ? await prisma.comment.count({
           where: {
@@ -169,12 +177,12 @@ export const GET = auth(async (request: Request) => {
       totalPages: Math.ceil(
         (isAdmin
           ? totalApprovedComments +
-            totalUnapprovedComments +
-            totalDeletedComments
+              totalUnapprovedComments +
+              totalDeletedComments
           : session?.user
           ? totalApprovedComments + totalUnapprovedCommentsForUser
           : totalApprovedComments) / limit
-      ), // Assuming pagination is based on approved comments
+      ),
     });
   } catch (error) {
     console.error("Failed to get comments:", error);

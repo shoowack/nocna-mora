@@ -57,8 +57,6 @@ model User {
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   role          String?
-  accounts      Account[]
-  sessions      Session[]
   images        Image[]       @relation("UserImages")
   memes         Meme[]        @relation("UserMemes")
   videos        Video[]       @relation("UserVideos")
@@ -66,6 +64,9 @@ model User {
   categories    Category[]    @relation("UserCategories")
   comments      Comment[]     @relation("UserComments")
   reactions     Reaction[]
+  accounts      Account[]
+  sessions      Session[]
+  auditLogs     AuditLog[]
 
   @@map("users")
 }
@@ -204,6 +205,24 @@ model Comment {
   @@map("comments")
 }
 
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  APPROVE
+  REJECT
+  COMMENT
+  LIKE
+}
+
+enum AuditEntityType {
+  VIDEO
+  COMMENT
+  CATEGORY
+  PARTICIPANT
+  IMAGE
+}
+
 enum ReactionType {
   LIKE
   LOVE
@@ -225,4 +244,17 @@ model Reaction {
 
   @@unique([videoId, userId]) // Ensure each user can react only once per video
   @@map("reactions")
+}
+
+model AuditLog {
+  id         String          @id @default(cuid())
+  action     AuditAction
+  entityType AuditEntityType
+  entityId   String
+  userId     String
+  details    Json?
+  createdAt  DateTime        @default(now())
+  user       User            @relation(fields: [userId], references: [id])
+
+  @@map("audit_logs")
 }

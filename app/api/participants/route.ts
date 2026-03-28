@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import { NextResponse } from "next/server";
 import { generateSlug } from "@/lib/slugify";
 import { auth } from "auth";
+import { logAudit, AuditAction, AuditEntityType } from "@/lib/audit";
 
 export const POST = auth(async (request: Request & { auth: any }) => {
   // if (!request.auth) {
@@ -44,6 +45,17 @@ export const POST = auth(async (request: Request & { auth: any }) => {
         // },
         slug: slug,
         type: data.type,
+      },
+    });
+
+    await logAudit({
+      action: AuditAction.CREATE,
+      entityType: AuditEntityType.PARTICIPANT,
+      entityId: newParticipant.id,
+      details: {
+        name: `${data.firstName} ${data.lastName}`,
+        slug: slug,
+        nickname: data.nickname,
       },
     });
 
