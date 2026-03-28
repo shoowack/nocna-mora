@@ -66,9 +66,11 @@ export const Participants: CollectionConfig = {
       name: 'gender',
       type: 'select',
       label: 'Spol',
+      admin: { position: 'sidebar' },
       options: [
         { label: 'Muški', value: 'male' },
         { label: 'Ženski', value: 'female' },
+        { label: 'Transrodni', value: 'transgender' },
         { label: 'Ostalo', value: 'other' },
       ],
     },

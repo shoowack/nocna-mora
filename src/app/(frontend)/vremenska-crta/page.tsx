@@ -71,12 +71,24 @@ export default async function TimelinePage() {
     }),
   );
 
+  const bornLabel = (gender: string | null | undefined) => {
+    if (gender === "female") return "Rođena";
+    if (gender === "male") return "Rođen";
+    return "Rođen/a";
+  };
+
+  const diedLabel = (gender: string | null | undefined) => {
+    if (gender === "female") return "Preminula";
+    if (gender === "male") return "Preminuo";
+    return "Preminuo/la";
+  };
+
   // Transform birth events
   const birthEvents: TimelineEvent[] = mainParticipants.docs
     .filter((p) => p.birthDate)
     .map((p) => ({
       id: `birth-${p.id}`,
-      title: `Rođen/a: ${p.fullName || `${p.firstName} ${p.lastName}`}`,
+      title: `${bornLabel(p.gender)}: ${p.fullName || `${p.firstName} ${p.lastName}`}`,
       description: null,
       eventDate: p.birthDate!,
       image:
@@ -96,7 +108,7 @@ export default async function TimelinePage() {
     .filter((p) => p.deathDate)
     .map((p) => ({
       id: `death-${p.id}`,
-      title: `Preminuo/la: ${p.fullName || `${p.firstName} ${p.lastName}`}`,
+      title: `${diedLabel(p.gender)}: ${p.fullName || `${p.firstName} ${p.lastName}`}`,
       description: null,
       eventDate: p.deathDate!,
       image:
