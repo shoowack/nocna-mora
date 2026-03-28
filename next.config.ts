@@ -8,6 +8,7 @@ const nextConfig: NextConfig = {
       { protocol: 'https', hostname: 'img.youtube.com' },
       { protocol: 'https', hostname: 'i.ytimg.com' },
       { protocol: 'https', hostname: 'i.vimeocdn.com' },
+      { protocol: 'https', hostname: 'vumbnail.com' },
       { protocol: 'https', hostname: 'www.dailymotion.com' },
       { protocol: 'https', hostname: 'graph.facebook.com' },
     ],
