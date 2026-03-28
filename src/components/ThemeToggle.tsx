@@ -1,8 +1,14 @@
 'use client'
 
 import { useTheme } from 'next-themes'
-import { Moon, Sun } from 'lucide-react'
+import { Monitor, Moon, Sun } from 'lucide-react'
 import { useEffect, useState } from 'react'
+
+const options = [
+  { value: 'light', icon: Sun, label: 'Light' },
+  { value: 'system', icon: Monitor, label: 'System' },
+  { value: 'dark', icon: Moon, label: 'Dark' },
+] as const
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme()
@@ -10,15 +16,24 @@ export function ThemeToggle() {
 
   useEffect(() => setMounted(true), [])
 
-  if (!mounted) return <div className="h-8 w-8" />
+  if (!mounted) return <div className="h-8 w-24" />
 
   return (
-    <button
-      onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-      className="flex h-8 w-8 items-center justify-center rounded-md border border-border bg-muted text-muted-foreground hover:text-foreground transition-colors"
-      aria-label="Toggle theme"
-    >
-      {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-    </button>
+    <div className="flex h-8 items-center rounded-md border border-border bg-muted p-0.5">
+      {options.map(({ value, icon: Icon, label }) => (
+        <button
+          key={value}
+          onClick={() => setTheme(value)}
+          aria-label={label}
+          className={`flex h-full w-7 items-center justify-center rounded transition-colors ${
+            theme === value
+              ? 'bg-background text-foreground shadow-sm'
+              : 'text-muted-foreground hover:text-foreground'
+          }`}
+        >
+          <Icon className="h-3.5 w-3.5" />
+        </button>
+      ))}
+    </div>
   )
 }
