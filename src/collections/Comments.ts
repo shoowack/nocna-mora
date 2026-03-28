@@ -40,6 +40,16 @@ export const Comments: CollectionConfig = {
       },
     },
   ],
+  hooks: {
+    beforeChange: [
+      ({ data, req, operation }) => {
+        if (operation === 'create' && req.user) {
+          data.author = req.user.id
+        }
+        return data
+      },
+    ],
+  },
   access: {
     read: approvedOrAdmin,
     create: isAuthenticated,

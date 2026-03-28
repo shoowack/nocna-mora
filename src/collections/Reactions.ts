@@ -1,6 +1,5 @@
 import type { CollectionConfig } from 'payload'
 import { isAuthenticated, anyone } from '@/access'
-import { enforceUniqueReaction } from '@/hooks/enforceUniqueReaction'
 
 export const Reactions: CollectionConfig = {
   slug: 'reactions',
@@ -36,9 +35,6 @@ export const Reactions: CollectionConfig = {
       required: true,
     },
   ],
-  hooks: {
-    beforeChange: [enforceUniqueReaction],
-  },
   access: {
     read: anyone,
     create: isAuthenticated,

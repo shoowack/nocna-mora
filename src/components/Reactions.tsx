@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 const REACTION_EMOJIS: Record<string, string> = {
   like: '👍',
@@ -26,26 +26,39 @@ export function Reactions({ videoId, initialReactions, userReaction }: Props) {
   const [reactions, setReactions] = useState<ReactionCount[]>(initialReactions)
   const [activeReaction, setActiveReaction] = useState<string | null>(userReaction || null)
 
+  useEffect(() => {
+    fetch(`/api/react?videoId=${videoId}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.reaction) {
+          setActiveReaction(data.reaction.type)
+        }
+      })
+      .catch(() => {})
+  }, [videoId])
+
   async function handleReaction(type: string) {
     try {
       if (activeReaction === type) {
         // Remove reaction
-        await fetch(`/api/reactions`, {
+        const res = await fetch('/api/react', {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ video: videoId }),
+          body: JSON.stringify({ videoId }),
         })
+        if (!res.ok) return
         setActiveReaction(null)
         setReactions((prev) =>
-          prev.map((r) => (r.type === type ? { ...r, count: Math.max(0, r.count - 1) } : r))
+          prev.map((r) => (r.type === type ? { ...r, count: Math.max(0, r.count - 1) } : r)),
         )
       } else {
         // Add/change reaction
-        await fetch('/api/reactions', {
+        const res = await fetch('/api/react', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ type, video: videoId }),
+          body: JSON.stringify({ type, videoId }),
         })
+        if (!res.ok) return
 
         setReactions((prev) => {
           const updated = prev.map((r) => {
@@ -53,7 +66,6 @@ export function Reactions({ videoId, initialReactions, userReaction }: Props) {
             if (r.type === activeReaction) return { ...r, count: Math.max(0, r.count - 1) }
             return r
           })
-          // Add reaction type if not in list
           if (!updated.find((r) => r.type === type)) {
             updated.push({ type, count: 1 })
           }
@@ -62,7 +74,7 @@ export function Reactions({ videoId, initialReactions, userReaction }: Props) {
         setActiveReaction(type)
       }
     } catch {
-      // Silently fail, user might not be logged in
+      // Silently fail
     }
   }
 
