@@ -5,7 +5,7 @@ export const TimelineEvents: CollectionConfig = {
   slug: 'timeline-events',
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'eventDate', 'importance'],
+    defaultColumns: ['title', 'eventDate'],
   },
   fields: [
     {
@@ -42,17 +42,6 @@ export const TimelineEvents: CollectionConfig = {
       type: 'relationship',
       relationTo: 'videos',
       label: 'Povezani video',
-    },
-    {
-      name: 'importance',
-      type: 'select',
-      defaultValue: 'medium',
-      label: 'Važnost',
-      options: [
-        { label: 'Niska', value: 'low' },
-        { label: 'Srednja', value: 'medium' },
-        { label: 'Visoka', value: 'high' },
-      ],
     },
   ],
   access: {

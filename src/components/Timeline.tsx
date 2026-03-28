@@ -1,109 +1,116 @@
 import Link from 'next/link'
 import Image from 'next/image'
-import { formatDate } from '@/lib/utils'
+import { Baby, Skull, Youtube, Play } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 export type TimelineEvent = {
   id: string
   title: string
   description?: { root: unknown } | null
   eventDate: string
-  importance: 'low' | 'medium' | 'high'
   image?: { url: string; alt: string } | null
   relatedVideo?: { slug: string; title: string } | null
   category?: 'birth' | 'death' | 'aired' | 'event'
   link?: { href: string; label: string } | null
 }
 
-function getCategoryLabel(category?: TimelineEvent['category']): string | null {
-  switch (category) {
-    case 'birth': return 'Rođenje'
-    case 'death': return 'Smrt'
-    case 'aired': return 'Emitiranje'
-    default: return null
-  }
-}
-
-function getDotColor(event: TimelineEvent): string {
-  switch (event.category) {
-    case 'birth': return 'bg-green-500'
-    case 'death': return 'bg-gray-500'
-    case 'aired': return 'bg-blue-500'
-    default:
-      return event.importance === 'high'
-        ? 'bg-primary'
-        : event.importance === 'medium'
-          ? 'bg-yellow-500'
-          : 'bg-muted-foreground'
-  }
-}
-
 export function Timeline({ events }: { events: TimelineEvent[] }) {
   return (
-    <div className="relative">
-      {/* Vertical line */}
-      <div className="absolute left-4 top-0 h-full w-0.5 bg-border md:left-1/2 md:-translate-x-0.5" />
+    <div className="relative space-y-8 py-10 before:absolute before:inset-0 before:ml-5 before:h-full before:w-1 before:-translate-x-px before:bg-[linear-gradient(to_bottom,transparent_0px,rgb(240_240_240)_30px,rgb(240_240_240)_calc(100%-30px),transparent_100%)] md:before:mx-auto md:before:translate-x-0">
+      {events.map((event, index) => (
+        <div
+          key={event.id}
+          className="group relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse"
+        >
+          {/* Icon dot */}
+          <div
+            className={cn(
+              'flex size-10 shrink-0 items-center justify-center rounded-full ring-4 ring-white bg-stone-200 text-stone-500 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2',
+              {
+                'bg-stone-800 text-stone-100': event.category === 'death',
+                'bg-blue-200 text-blue-800': event.category === 'birth',
+                'bg-red-200 text-red-800': event.category === 'aired',
+              }
+            )}
+          >
+            {event.category === 'birth' ? (
+              <Baby className="size-5" strokeWidth={2} />
+            ) : event.category === 'death' ? (
+              <Skull className="size-5" strokeWidth={2} />
+            ) : event.category === 'aired' ? (
+              <Youtube className="size-5" strokeWidth={2} />
+            ) : (
+              <span className="size-2 rounded-full bg-current" />
+            )}
+          </div>
 
-      <div className="space-y-8">
-        {events.map((event, index) => {
-          const categoryLabel = getCategoryLabel(event.category)
-
-          return (
-            <div
-              key={event.id}
-              className={`relative flex items-start gap-6 ${
-                index % 2 === 0 ? 'md:flex-row' : 'md:flex-row-reverse'
-              }`}
-            >
-              {/* Dot */}
-              <div
-                className={`absolute left-4 z-10 h-3 w-3 -translate-x-1/2 rounded-full md:left-1/2 ${getDotColor(event)}`}
-              />
-
-              {/* Content */}
-              <div className={`ml-10 w-full md:ml-0 md:w-5/12 ${index % 2 === 0 ? 'md:pr-8' : 'md:pl-8'}`}>
-                <div className="rounded-lg border border-border bg-card p-4">
-                  <div className="flex items-center gap-2">
-                    <time className="text-xs text-muted-foreground">{formatDate(event.eventDate)}</time>
-                    {categoryLabel && (
-                      <span className="rounded bg-muted px-1.5 py-0.5 text-xs text-muted-foreground">
-                        {categoryLabel}
-                      </span>
-                    )}
-                  </div>
-                  <h3 className="mt-1 font-semibold text-foreground">{event.title}</h3>
-                  {event.image && (
-                    <div className="relative mt-3 aspect-video overflow-hidden rounded-md">
-                      <Image
-                        src={event.image.url}
-                        alt={event.image.alt || event.title}
-                        fill
-                        className="object-cover"
-                        sizes="(max-width: 768px) 100vw, 50vw"
-                      />
-                    </div>
-                  )}
-                  {event.relatedVideo && (
-                    <Link
-                      href={`/video/${event.relatedVideo.slug}`}
-                      className="mt-2 inline-block text-sm text-primary hover:underline"
-                    >
-                      Pogledaj video
-                    </Link>
-                  )}
-                  {event.link && (
-                    <Link
-                      href={event.link.href}
-                      className="mt-2 inline-block text-sm text-primary hover:underline"
-                    >
-                      {event.link.label}
-                    </Link>
-                  )}
-                </div>
-              </div>
+          {/* Card */}
+          <div
+            className={cn(
+              'w-[calc(100%-4rem)] rounded-xl bg-stone-100 p-4 md:w-[calc(50%-2.5rem)] relative',
+              {
+                'bg-stone-200 text-stone-900': event.category === 'death',
+                'bg-blue-100/50 text-blue-800': event.category === 'birth',
+                'bg-red-100/50 text-red-800': event.category === 'aired',
+              }
+            )}
+          >
+            <div className="mb-1 flex flex-col items-start justify-between md:flex-row md:space-x-2">
+              {event.title && (
+                <div className="font-bold">{event.title}</div>
+              )}
+              {event.eventDate && (
+                <time className="mt-1.5 whitespace-nowrap text-xs opacity-50">
+                  {new Date(event.eventDate).toLocaleString('hr-HR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                  })}
+                </time>
+              )}
             </div>
-          )
-        })}
-      </div>
+
+            <div className="text-stone-500">
+              {event.image && (
+                <div className="relative mb-3 aspect-video overflow-hidden rounded-md">
+                  <Image
+                    src={event.image.url}
+                    alt={event.image.alt || event.title}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                  />
+                </div>
+              )}
+
+              {event.category === 'aired' && event.link ? (
+                <Link
+                  href={event.link.href}
+                  className="mt-2 inline-flex items-center rounded-md bg-stone-800 px-3 py-1.5 text-sm font-medium text-white hover:bg-stone-700"
+                >
+                  <Play className="mr-2 size-3.5" />
+                  Video
+                </Link>
+              ) : event.link ? (
+                <Link
+                  href={event.link.href}
+                  className="mt-2 inline-block text-sm hover:underline"
+                >
+                  {event.link.label}
+                </Link>
+              ) : event.relatedVideo ? (
+                <Link
+                  href={`/video/${event.relatedVideo.slug}`}
+                  className="mt-2 inline-flex items-center rounded-md bg-stone-800 px-3 py-1.5 text-sm font-medium text-white hover:bg-stone-700"
+                >
+                  <Play className="mr-2 size-3.5" />
+                  Video
+                </Link>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      ))}
     </div>
   )
 }

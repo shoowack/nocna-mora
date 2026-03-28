@@ -48,7 +48,6 @@ export default async function TimelinePage() {
     title: doc.title,
     description: doc.description ?? null,
     eventDate: doc.eventDate,
-    importance: (doc.importance as TimelineEvent['importance']) || 'medium',
     image: doc.image && typeof doc.image === 'object' && 'url' in doc.image
       ? { url: doc.image.url as string, alt: (doc.image as any).alt || doc.title }
       : null,
@@ -67,7 +66,6 @@ export default async function TimelinePage() {
       title: `Rođen/a: ${p.fullName || `${p.firstName} ${p.lastName}`}`,
       description: null,
       eventDate: p.birthDate!,
-      importance: 'medium' as const,
       image: p.photo && typeof p.photo === 'object' && 'url' in p.photo
         ? { url: p.photo.url as string, alt: p.fullName || `${p.firstName} ${p.lastName}` }
         : null,
@@ -84,7 +82,6 @@ export default async function TimelinePage() {
       title: `Preminuo/la: ${p.fullName || `${p.firstName} ${p.lastName}`}`,
       description: null,
       eventDate: p.deathDate!,
-      importance: 'medium' as const,
       image: p.photo && typeof p.photo === 'object' && 'url' in p.photo
         ? { url: p.photo.url as string, alt: p.fullName || `${p.firstName} ${p.lastName}` }
         : null,
@@ -101,7 +98,6 @@ export default async function TimelinePage() {
       title: v.title,
       description: null,
       eventDate: v.airedDate!,
-      importance: 'low' as const,
       image: v.thumbnail && typeof v.thumbnail === 'object' && 'url' in v.thumbnail
         ? { url: v.thumbnail.url as string, alt: v.title }
         : null,
