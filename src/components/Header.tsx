@@ -1,8 +1,15 @@
 import Link from 'next/link'
+import { headers } from 'next/headers'
 import { Search } from 'lucide-react'
 import { ThemeToggle } from '@/components/ThemeToggle'
+import { LogoutButton } from '@/components/LogoutButton'
+import { getPayload } from '@/lib/payload'
 
-export function Header() {
+export async function Header() {
+  const payload = await getPayload()
+  const headersList = await headers()
+  const { user } = await payload.auth({ headers: headersList })
+
   return (
     <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
@@ -37,12 +44,24 @@ export function Header() {
             <span className="hidden sm:inline">Pretraži...</span>
           </Link>
           <ThemeToggle />
-          <Link
-            href="/prijava"
-            className="rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
-          >
-            Prijava
-          </Link>
+          {user ? (
+            <>
+              <Link
+                href="/profil"
+                className="rounded-md border border-border px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                {user.name}
+              </Link>
+              <LogoutButton />
+            </>
+          ) : (
+            <Link
+              href="/prijava"
+              className="rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
+            >
+              Prijava
+            </Link>
+          )}
         </div>
       </div>
     </header>
