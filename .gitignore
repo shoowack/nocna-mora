@@ -39,6 +39,13 @@ payload-types.ts
 # local backups
 /backups
 
+# local doc files
+AGENTS.md
+AUDIT_LOG_IMPLEMENTATION.md
+QUICK_REFERENCE.md
+TESTING.md
+TESTS_SUMMARY.md
+
 # IDE
 .idea
 .vscode
