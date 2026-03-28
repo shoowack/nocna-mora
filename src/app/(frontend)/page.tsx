@@ -1,27 +1,27 @@
-import Link from 'next/link'
-import { getPayload } from '@/lib/payload'
-import { VideoCard } from '@/components/VideoCard'
-import { ParticipantCard } from '@/components/ParticipantCard'
+import Link from "next/link";
+import { getPayload } from "@/lib/payload";
+import { VideoCard } from "@/components/VideoCard";
+import { ParticipantCard } from "@/components/ParticipantCard";
 
-export const revalidate = 3600
+export const revalidate = 3600;
 
 export default async function HomePage() {
-  const payload = await getPayload()
+  const payload = await getPayload();
 
   const [homepage, latestVideos, participants] = await Promise.all([
-    payload.findGlobal({ slug: 'homepage' }),
+    payload.findGlobal({ slug: "homepage" }),
     payload.find({
-      collection: 'videos',
+      collection: "videos",
       where: { published: { equals: true } },
-      sort: '-airedDate',
+      sort: "-airedDate",
       limit: 6,
     }),
     payload.find({
-      collection: 'participants',
-      where: { type: { equals: 'main' } },
+      collection: "participants",
+      where: { type: { equals: "main" } },
       limit: 8,
     }),
-  ])
+  ]);
 
   return (
     <div>
@@ -29,10 +29,10 @@ export default async function HomePage() {
       <section className="border-b border-border bg-card py-16">
         <div className="mx-auto max-w-7xl px-4 text-center">
           <h1 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-            {homepage.heroTitle || 'TV Arhiv'}
+            {homepage.heroTitle || "Noćna mora Željka Malnara"}
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
-            Kompletni arhiv omiljene hrvatske TV emisije. Videi, gosti, glumci i više.
+            Arhiv omiljene hrvatske TV emisije. Videi, gosti, glumci i više.
           </p>
           <div className="mt-8 flex justify-center gap-4">
             <Link
@@ -55,8 +55,13 @@ export default async function HomePage() {
       <section className="py-12">
         <div className="mx-auto max-w-7xl px-4">
           <div className="mb-6 flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-foreground">Najnoviji videi</h2>
-            <Link href="/video" className="text-sm text-primary hover:underline">
+            <h2 className="text-2xl font-bold text-foreground">
+              Najnoviji videi
+            </h2>
+            <Link
+              href="/video"
+              className="text-sm text-primary hover:underline"
+            >
               Vidi sve
             </Link>
           </div>
@@ -66,7 +71,9 @@ export default async function HomePage() {
             ))}
           </div>
           {latestVideos.docs.length === 0 && (
-            <p className="text-center text-muted-foreground">Još nema videa u arhivu.</p>
+            <p className="text-center text-muted-foreground">
+              Još nema videa u arhivu.
+            </p>
           )}
         </div>
       </section>
@@ -76,19 +83,28 @@ export default async function HomePage() {
         <section className="border-t border-border py-12">
           <div className="mx-auto max-w-7xl px-4">
             <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-foreground">Stalna postava</h2>
-              <Link href="/glumci" className="text-sm text-primary hover:underline">
+              <h2 className="text-2xl font-bold text-foreground">
+                Stalna postava
+              </h2>
+              <Link
+                href="/glumci"
+                className="text-sm text-primary hover:underline"
+              >
                 Vidi sve
               </Link>
             </div>
             <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4">
               {participants.docs.map((participant: any) => (
-                <ParticipantCard key={participant.id} participant={participant} basePath="/glumci" />
+                <ParticipantCard
+                  key={participant.id}
+                  participant={participant}
+                  basePath="/glumci"
+                />
               ))}
             </div>
           </div>
         </section>
       )}
     </div>
-  )
+  );
 }

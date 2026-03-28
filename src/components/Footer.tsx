@@ -19,7 +19,9 @@ export async function Footer() {
       <div className="mx-auto max-w-7xl px-4 pt-8 pb-4">
         <div className="grid gap-8 md:grid-cols-3">
           <div>
-            <h3 className="mb-3 font-bold text-foreground">TV Arhiv</h3>
+            <h3 className="mb-3 font-bold text-foreground">
+              Noćna mora Željka Malnara
+            </h3>
             <p className="text-sm text-muted-foreground">
               Arhiv omiljene hrvatske TV emisije iz 90-ih i 00-ih.
             </p>

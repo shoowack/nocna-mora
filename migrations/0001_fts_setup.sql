@@ -1,4 +1,4 @@
--- Full-Text Search setup for TV Archive
+-- Full-Text Search setup for Noćna mora Željka Malnara
 -- Run this AFTER Payload has created its tables (after first `pnpm dev` or `pnpm build`)
 
 -- Add tsvector column to videos table for combined search

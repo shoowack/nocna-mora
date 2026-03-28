@@ -1,27 +1,27 @@
-import Link from 'next/link'
-import { getPayload } from '@/lib/payload'
-import { Folder } from 'lucide-react'
+import Link from "next/link";
+import { getPayload } from "@/lib/payload";
+import { Folder } from "lucide-react";
 
-export const revalidate = 3600
+export const revalidate = 3600;
 
 export const metadata = {
-  title: 'Kategorije | TV Arhiv',
-}
+  title: "Kategorije | Noćna mora Željka Malnara",
+};
 
 export default async function CategoriesPage() {
-  const payload = await getPayload()
+  const payload = await getPayload();
 
   const categories = await payload.find({
-    collection: 'categories',
-    sort: 'title',
+    collection: "categories",
+    sort: "title",
     limit: 100,
-  })
+  });
 
   // Count videos per category
   const categoriesWithCounts = await Promise.all(
     categories.docs.map(async (cat: any) => {
       const videos = await payload.find({
-        collection: 'videos',
+        collection: "videos",
         where: {
           and: [
             { categories: { equals: cat.id } },
@@ -29,10 +29,10 @@ export default async function CategoriesPage() {
           ],
         },
         limit: 0,
-      })
-      return { ...cat, videoCount: videos.totalDocs }
+      });
+      return { ...cat, videoCount: videos.totalDocs };
     }),
-  )
+  );
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
@@ -49,17 +49,23 @@ export default async function CategoriesPage() {
             <div>
               <h2 className="font-medium text-foreground">{cat.title}</h2>
               {cat.description && (
-                <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{cat.description}</p>
+                <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
+                  {cat.description}
+                </p>
               )}
-              <p className="mt-2 text-xs text-muted-foreground">{cat.videoCount} videa</p>
+              <p className="mt-2 text-xs text-muted-foreground">
+                {cat.videoCount} videa
+              </p>
             </div>
           </Link>
         ))}
       </div>
 
       {categories.docs.length === 0 && (
-        <p className="py-12 text-center text-muted-foreground">Još nema kategorija.</p>
+        <p className="py-12 text-center text-muted-foreground">
+          Još nema kategorija.
+        </p>
       )}
     </div>
-  )
+  );
 }

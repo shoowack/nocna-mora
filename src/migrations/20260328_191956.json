@@ -74,12 +74,8 @@
           "name": "users_sessions_parent_id_fk",
           "tableFrom": "users_sessions",
           "tableTo": "users",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -252,12 +248,8 @@
           "name": "users_avatar_id_media_id_fk",
           "tableFrom": "users",
           "tableTo": "media",
-          "columnsFrom": [
-            "avatar_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["avatar_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -677,12 +669,8 @@
           "name": "videos_thumbnail_id_media_id_fk",
           "tableFrom": "videos",
           "tableTo": "media",
-          "columnsFrom": [
-            "thumbnail_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["thumbnail_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -816,12 +804,8 @@
           "name": "videos_rels_parent_fk",
           "tableFrom": "videos_rels",
           "tableTo": "videos",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -829,12 +813,8 @@
           "name": "videos_rels_participants_fk",
           "tableFrom": "videos_rels",
           "tableTo": "participants",
-          "columnsFrom": [
-            "participants_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["participants_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -842,12 +822,8 @@
           "name": "videos_rels_categories_fk",
           "tableFrom": "videos_rels",
           "tableTo": "categories",
-          "columnsFrom": [
-            "categories_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["categories_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1030,12 +1006,8 @@
           "name": "participants_photo_id_media_id_fk",
           "tableFrom": "participants",
           "tableTo": "media",
-          "columnsFrom": [
-            "photo_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["photo_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1275,12 +1247,8 @@
           "name": "comments_video_id_videos_id_fk",
           "tableFrom": "comments",
           "tableTo": "videos",
-          "columnsFrom": [
-            "video_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["video_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -1288,12 +1256,8 @@
           "name": "comments_author_id_users_id_fk",
           "tableFrom": "comments",
           "tableTo": "users",
-          "columnsFrom": [
-            "author_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["author_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1415,12 +1379,8 @@
           "name": "reactions_video_id_videos_id_fk",
           "tableFrom": "reactions",
           "tableTo": "videos",
-          "columnsFrom": [
-            "video_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["video_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -1428,12 +1388,8 @@
           "name": "reactions_user_id_users_id_fk",
           "tableFrom": "reactions",
           "tableTo": "users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1574,12 +1530,8 @@
           "name": "timeline_events_image_id_media_id_fk",
           "tableFrom": "timeline_events",
           "tableTo": "media",
-          "columnsFrom": [
-            "image_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["image_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -1587,12 +1539,8 @@
           "name": "timeline_events_related_video_id_videos_id_fk",
           "tableFrom": "timeline_events",
           "tableTo": "videos",
-          "columnsFrom": [
-            "related_video_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["related_video_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -1740,12 +1688,8 @@
           "name": "notifications_recipient_id_users_id_fk",
           "tableFrom": "notifications",
           "tableTo": "users",
-          "columnsFrom": [
-            "recipient_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["recipient_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -1753,12 +1697,8 @@
           "name": "notifications_related_video_id_videos_id_fk",
           "tableFrom": "notifications",
           "tableTo": "videos",
-          "columnsFrom": [
-            "related_video_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["related_video_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -2171,12 +2111,8 @@
           "name": "payload_locked_documents_rels_parent_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "payload_locked_documents",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2184,12 +2120,8 @@
           "name": "payload_locked_documents_rels_users_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "users",
-          "columnsFrom": [
-            "users_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["users_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2197,12 +2129,8 @@
           "name": "payload_locked_documents_rels_media_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "media",
-          "columnsFrom": [
-            "media_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["media_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2210,12 +2138,8 @@
           "name": "payload_locked_documents_rels_videos_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "videos",
-          "columnsFrom": [
-            "videos_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["videos_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2223,12 +2147,8 @@
           "name": "payload_locked_documents_rels_participants_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "participants",
-          "columnsFrom": [
-            "participants_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["participants_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2236,12 +2156,8 @@
           "name": "payload_locked_documents_rels_categories_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "categories",
-          "columnsFrom": [
-            "categories_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["categories_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2249,12 +2165,8 @@
           "name": "payload_locked_documents_rels_comments_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "comments",
-          "columnsFrom": [
-            "comments_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["comments_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2262,12 +2174,8 @@
           "name": "payload_locked_documents_rels_reactions_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "reactions",
-          "columnsFrom": [
-            "reactions_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["reactions_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2275,12 +2183,8 @@
           "name": "payload_locked_documents_rels_timeline_events_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "timeline_events",
-          "columnsFrom": [
-            "timeline_events_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["timeline_events_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2288,12 +2192,8 @@
           "name": "payload_locked_documents_rels_notifications_fk",
           "tableFrom": "payload_locked_documents_rels",
           "tableTo": "notifications",
-          "columnsFrom": [
-            "notifications_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["notifications_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -2497,12 +2397,8 @@
           "name": "payload_preferences_rels_parent_fk",
           "tableFrom": "payload_preferences_rels",
           "tableTo": "payload_preferences",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -2510,12 +2406,8 @@
           "name": "payload_preferences_rels_users_fk",
           "tableFrom": "payload_preferences_rels",
           "tableTo": "users",
-          "columnsFrom": [
-            "users_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["users_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -2675,12 +2567,8 @@
           "name": "site_settings_social_links_parent_id_fk",
           "tableFrom": "site_settings_social_links",
           "tableTo": "site_settings",
-          "columnsFrom": [
-            "_parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["_parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -2706,7 +2594,7 @@
           "type": "varchar",
           "primaryKey": false,
           "notNull": false,
-          "default": "'TV Arhiv'"
+          "default": "'Noćna mora Željka Malnara'"
         },
         "site_description": {
           "name": "site_description",
@@ -2815,12 +2703,8 @@
           "name": "site_settings_logo_id_media_id_fk",
           "tableFrom": "site_settings",
           "tableTo": "media",
-          "columnsFrom": [
-            "logo_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["logo_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -2828,12 +2712,8 @@
           "name": "site_settings_favicon_id_media_id_fk",
           "tableFrom": "site_settings",
           "tableTo": "media",
-          "columnsFrom": [
-            "favicon_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["favicon_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         },
@@ -2841,12 +2721,8 @@
           "name": "site_settings_seo_og_image_id_media_id_fk",
           "tableFrom": "site_settings",
           "tableTo": "media",
-          "columnsFrom": [
-            "seo_og_image_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["seo_og_image_id"],
+          "columnsTo": ["id"],
           "onDelete": "set null",
           "onUpdate": "no action"
         }
@@ -3023,12 +2899,8 @@
           "name": "homepage_rels_parent_fk",
           "tableFrom": "homepage_rels",
           "tableTo": "homepage",
-          "columnsFrom": [
-            "parent_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["parent_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -3036,12 +2908,8 @@
           "name": "homepage_rels_videos_fk",
           "tableFrom": "homepage_rels",
           "tableTo": "videos",
-          "columnsFrom": [
-            "videos_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["videos_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -3049,12 +2917,8 @@
           "name": "homepage_rels_participants_fk",
           "tableFrom": "homepage_rels",
           "tableTo": "participants",
-          "columnsFrom": [
-            "participants_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["participants_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -3070,86 +2934,47 @@
     "public.enum_users_role": {
       "name": "enum_users_role",
       "schema": "public",
-      "values": [
-        "admin",
-        "editor",
-        "user"
-      ]
+      "values": ["admin", "editor", "user"]
     },
     "public.enum_videos_provider": {
       "name": "enum_videos_provider",
       "schema": "public",
-      "values": [
-        "youtube",
-        "vimeo",
-        "dailymotion",
-        "facebook"
-      ]
+      "values": ["youtube", "vimeo", "dailymotion", "facebook"]
     },
     "public.enum_videos_video_type": {
       "name": "enum_videos_video_type",
       "schema": "public",
-      "values": [
-        "full",
-        "clip"
-      ]
+      "values": ["full", "clip"]
     },
     "public.enum_participants_type": {
       "name": "enum_participants_type",
       "schema": "public",
-      "values": [
-        "main",
-        "guest"
-      ]
+      "values": ["main", "guest"]
     },
     "public.enum_participants_gender": {
       "name": "enum_participants_gender",
       "schema": "public",
-      "values": [
-        "male",
-        "female",
-        "other"
-      ]
+      "values": ["male", "female", "other"]
     },
     "public.enum_reactions_type": {
       "name": "enum_reactions_type",
       "schema": "public",
-      "values": [
-        "like",
-        "love",
-        "laugh",
-        "wow",
-        "sad",
-        "angry"
-      ]
+      "values": ["like", "love", "laugh", "wow", "sad", "angry"]
     },
     "public.enum_timeline_events_importance": {
       "name": "enum_timeline_events_importance",
       "schema": "public",
-      "values": [
-        "low",
-        "medium",
-        "high"
-      ]
+      "values": ["low", "medium", "high"]
     },
     "public.enum_notifications_type": {
       "name": "enum_notifications_type",
       "schema": "public",
-      "values": [
-        "new_video",
-        "comment_reply",
-        "system"
-      ]
+      "values": ["new_video", "comment_reply", "system"]
     },
     "public.enum_site_settings_social_links_platform": {
       "name": "enum_site_settings_social_links_platform",
       "schema": "public",
-      "values": [
-        "facebook",
-        "youtube",
-        "instagram",
-        "twitter"
-      ]
+      "values": ["facebook", "youtube", "instagram", "twitter"]
     }
   },
   "schemas": {},

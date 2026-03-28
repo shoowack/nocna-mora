@@ -36,6 +36,9 @@ payload-types.ts
 # resources
 /resources
 
+# local backups
+/backups
+
 # IDE
 .idea
 .vscode

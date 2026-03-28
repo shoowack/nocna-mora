@@ -1,37 +1,34 @@
-import { headers } from 'next/headers'
-import { redirect } from 'next/navigation'
-import { getPayload } from '@/lib/payload'
-import Link from 'next/link'
-import { formatDate } from '@/lib/utils'
-import { Bell, User } from 'lucide-react'
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import { getPayload } from "@/lib/payload";
+import Link from "next/link";
+import { formatDate } from "@/lib/utils";
+import { Bell, User } from "lucide-react";
 
 export const metadata = {
-  title: 'Profil | TV Arhiv',
-}
+  title: "Profil | Noćna mora Željka Malnara",
+};
 
 export default async function ProfilePage() {
-  const payload = await getPayload()
-  const headersList = await headers()
+  const payload = await getPayload();
+  const headersList = await headers();
 
-  const { user } = await payload.auth({ headers: headersList })
+  const { user } = await payload.auth({ headers: headersList });
 
   if (!user) {
-    redirect('/prijava')
+    redirect("/prijava");
   }
 
   // Fetch unread notifications
   const notifications = await payload.find({
-    collection: 'notifications',
+    collection: "notifications",
     where: {
-      and: [
-        { recipient: { equals: user.id } },
-        { read: { equals: false } },
-      ],
+      and: [{ recipient: { equals: user.id } }, { read: { equals: false } }],
     },
-    sort: '-createdAt',
+    sort: "-createdAt",
     limit: 20,
     depth: 1,
-  })
+  });
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
@@ -65,26 +62,31 @@ export default async function ProfilePage() {
               >
                 <div className="flex items-start justify-between">
                   <div>
-                    <h3 className="font-medium text-foreground">{notif.title}</h3>
-                    <p className="mt-1 text-sm text-muted-foreground">{notif.message}</p>
+                    <h3 className="font-medium text-foreground">
+                      {notif.title}
+                    </h3>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      {notif.message}
+                    </p>
                   </div>
                   <span className="text-xs text-muted-foreground">
                     {formatDate(notif.createdAt)}
                   </span>
                 </div>
-                {notif.relatedVideo && typeof notif.relatedVideo === 'object' && (
-                  <Link
-                    href={`/video/${notif.relatedVideo.slug}`}
-                    className="mt-2 inline-block text-sm text-primary hover:underline"
-                  >
-                    Pogledaj video
-                  </Link>
-                )}
+                {notif.relatedVideo &&
+                  typeof notif.relatedVideo === "object" && (
+                    <Link
+                      href={`/video/${notif.relatedVideo.slug}`}
+                      className="mt-2 inline-block text-sm text-primary hover:underline"
+                    >
+                      Pogledaj video
+                    </Link>
+                  )}
               </div>
             ))}
           </div>
         )}
       </div>
     </div>
-  )
+  );
 }
