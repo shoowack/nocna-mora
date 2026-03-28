@@ -2,17 +2,31 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'TV Arhiv',
-  description: 'Arhiv omiljene hrvatske TV emisije',
+  metadataBase: new URL("https://nocna-mora.com"),
+  title: "Noćna Mora",
+  description:
+    "Dobrodošli na arhivsku stranicu Noćne More! Pregledajte i istražite ovu jedinstvenu kolekciju emisija koje su ostavile traga u povijesti hrvatske televizije.",
   openGraph: {
-    title: 'TV Arhiv',
-    description: 'Arhiv omiljene hrvatske TV emisije',
-    images: [{ url: '/og-image.jpeg', width: 1200, height: 630 }],
+    title: "Noćna Mora",
+    description:
+      "Dobrodošli na arhivsku stranicu Noćne More! Pregledajte i istražite ovu jedinstvenu kolekciju emisija koje su ostavile traga u povijesti hrvatske televizije.",
+    url: "https://nocna-mora.com",
+    siteName: "Noćna Mora",
+    images: [
+      {
+        url: "/og-image.jpeg",
+        width: 1600,
+        height: 1200,
+      },
+    ],
+    locale: "hr_HR",
+    type: "website",
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'TV Arhiv',
-    description: 'Arhiv omiljene hrvatske TV emisije',
+    title: "Noćna Mora",
+    description:
+      "Dobrodošli na arhivsku stranicu Noćne More! Pregledajte i istražite ovu jedinstvenu kolekciju emisija koje su ostavile traga u povijesti hrvatske televizije.",
     images: ['/og-image.jpeg'],
   },
 }
