@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import { Search } from 'lucide-react'
+import { ThemeToggle } from '@/components/ThemeToggle'
 
 export function Header() {
   return (
@@ -27,7 +28,7 @@ export function Header() {
           </Link>
         </nav>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2">
           <Link
             href="/pretraga"
             className="flex items-center gap-2 rounded-md border border-border bg-muted px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
@@ -35,6 +36,7 @@ export function Header() {
             <Search className="h-4 w-4" />
             <span className="hidden sm:inline">Pretraži...</span>
           </Link>
+          <ThemeToggle />
           <Link
             href="/prijava"
             className="rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
