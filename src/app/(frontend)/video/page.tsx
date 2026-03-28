@@ -1,3 +1,4 @@
+import type { Where } from 'payload'
 import { getPayload } from '@/lib/payload'
 import { VideoCard } from '@/components/VideoCard'
 import Link from 'next/link'
@@ -14,7 +15,7 @@ export default async function VideosPage({ searchParams }: Props) {
   const limit = 12
   const payload = await getPayload()
 
-  const where: Record<string, unknown> = { published: { equals: true } }
+  const where: Where = { published: { equals: true } }
   if (params.type) {
     where.videoType = { equals: params.type }
   }
