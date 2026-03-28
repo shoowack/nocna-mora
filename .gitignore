@@ -31,7 +31,6 @@ yarn-error.log*
 next-env.d.ts
 
 # payload
-/media
 payload-types.ts
 
 # resources
