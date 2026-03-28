@@ -65,6 +65,7 @@ export const Participants: CollectionConfig = {
     {
       name: 'gender',
       type: 'select',
+      required: true,
       label: 'Spol',
       admin: { position: 'sidebar' },
       options: [
