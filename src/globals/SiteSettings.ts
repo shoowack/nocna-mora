@@ -79,8 +79,34 @@ export const SiteSettings: GlobalConfig = {
       ],
     },
     {
+      name: 'participantSeo',
+      type: 'group',
+      label: 'SEO — Sudionici',
+      admin: {
+        description: 'Predlošci za naslove i opise stranica sudionika. Dostupni tokeni: {firstName}, {lastName}, {nickname}, {siteName}',
+      },
+      fields: [
+        {
+          name: 'titleTemplate',
+          type: 'text',
+          label: 'Predložak naslova',
+          admin: {
+            placeholder: '{firstName} {lastName} | {siteName}',
+          },
+        },
+        {
+          name: 'descriptionTemplate',
+          type: 'textarea',
+          label: 'Predložak opisa',
+          admin: {
+            placeholder: 'Pogledajte više informacija o liku {firstName} {lastName} iz emisije {siteName}.',
+          },
+        },
+      ],
+    },
+    {
       name: 'footerText',
-      type: 'richText',
+      type: 'text',
       label: 'Tekst podnožja',
     },
   ],

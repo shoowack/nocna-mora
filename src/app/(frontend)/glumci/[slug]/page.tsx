@@ -19,8 +19,21 @@ export async function generateMetadata({ params }: Props) {
     limit: 1,
   })
   if (result.docs.length === 0) return { title: 'Glumac nije pronađen' }
-  const p = result.docs[0]
-  return { title: `${p.firstName} ${p.lastName} | TV Arhiv` }
+  const p = result.docs[0] as any
+  const siteSettings = await payload.findGlobal({ slug: 'site-settings' }) as any
+  const siteName = siteSettings?.siteName || 'Noćna Mora'
+  const fullName = `${p.firstName} ${p.lastName}${p.nickname ? ` (${p.nickname})` : ''}`
+  const tokens = { firstName: p.firstName, lastName: p.lastName, nickname: p.nickname || '', siteName }
+  const interpolate = (tpl: string) => tpl.replace(/\{(\w+)\}/g, (_, k) => tokens[k as keyof typeof tokens] ?? _)
+  const titleTpl = siteSettings?.participantSeo?.titleTemplate
+  const descTpl = siteSettings?.participantSeo?.descriptionTemplate
+  const title = titleTpl ? interpolate(titleTpl) : `${fullName} | ${siteName}`
+  const description = descTpl ? interpolate(descTpl) : `Pogledajte više informacija o liku ${p.firstName} ${p.lastName} iz emisije ${siteName}.`
+  return {
+    title,
+    description,
+    openGraph: { title: titleTpl ? interpolate(titleTpl) : fullName, description },
+  }
 }
 
 export default async function ActorDetailPage({ params }: Props) {

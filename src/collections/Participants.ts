@@ -7,6 +7,9 @@ export const Participants: CollectionConfig = {
   admin: {
     useAsTitle: 'fullName',
     defaultColumns: ['fullName', 'type', 'slug'],
+    components: {
+      beforeList: ['@/components/admin/ParticipantSeoLink#ParticipantSeoLink'],
+    },
   },
   fields: [
     {
