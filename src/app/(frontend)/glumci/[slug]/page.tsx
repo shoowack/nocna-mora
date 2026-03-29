@@ -94,8 +94,8 @@ export default async function ActorDetailPage({ params }: Props) {
             <p className="mt-1 text-lg text-muted-foreground">&quot;{person.nickname}&quot;</p>
           )}
           <div className="mt-3 flex flex-wrap gap-3 text-sm text-muted-foreground">
-            {person.birthDate && <span>Rođen/a: {formatDate(person.birthDate)}</span>}
-            {person.deathDate && <span>Umro/la: {formatDate(person.deathDate)}</span>}
+            {person.birthDate && <span>{person.gender === 'female' ? 'Rođena' : person.gender === 'male' ? 'Rođen' : 'Rođen/a'}: {formatDate(person.birthDate)}</span>}
+            {person.deathDate && <span>{person.gender === 'female' ? 'Preminula' : person.gender === 'male' ? 'Preminuo' : 'Preminuo/la'}: {formatDate(person.deathDate)}</span>}
           </div>
         </div>
       </div>
