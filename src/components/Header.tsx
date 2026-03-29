@@ -7,6 +7,17 @@ import { getPayload } from "@/lib/payload";
 import { Media } from "../../payload-types";
 import Image from "next/image";
 
+const navLinks = [
+  { href: "/video", label: "Videi" },
+  { href: "/glumci", label: "Glumci" },
+  { href: "/gosti", label: "Gosti" },
+  { href: "/kategorije", label: "Kategorije" },
+  { href: "/vremenska-crta", label: "Vremenska crta" },
+];
+
+const navLinkClass =
+  "text-sm text-muted-foreground hover:text-foreground transition-colors";
+
 export async function Header() {
   const payload = await getPayload();
   const headersList = await headers();
@@ -41,42 +52,17 @@ export async function Header() {
         </Link>
 
         <nav className="hidden items-center gap-6 md:flex">
-          <Link
-            href="/video"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Videi
-          </Link>
-          <Link
-            href="/glumci"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Glumci
-          </Link>
-          <Link
-            href="/gosti"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Gosti
-          </Link>
-          <Link
-            href="/kategorije"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Kategorije
-          </Link>
-          <Link
-            href="/vremenska-crta"
-            className="text-sm text-muted-foreground hover:text-foreground transition-colors"
-          >
-            Vremenska crta
-          </Link>
+          {navLinks.map(({ href, label }) => (
+            <Link key={href} href={href} className={navLinkClass}>
+              {label}
+            </Link>
+          ))}
         </nav>
 
         <div className="flex items-center gap-2">
           <Link
             href="/pretraga"
-            className="flex items-center gap-2 rounded-md border border-border bg-muted px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            className={`flex items-center gap-2 rounded-md border border-border bg-muted px-3 py-1.5 ${navLinkClass}`}
           >
             <Search className="h-4 w-4" />
             <span className="hidden sm:inline">Pretraži...</span>
@@ -86,7 +72,7 @@ export async function Header() {
             <>
               <Link
                 href="/profil"
-                className="rounded-md border border-border px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                className={`rounded-md border border-border px-3 py-1.5 ${navLinkClass}`}
               >
                 {user.name}
               </Link>
