@@ -8,7 +8,7 @@ export const Videos: CollectionConfig = {
   slug: 'videos',
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'provider', 'videoType', 'airedDate', 'published'],
+    defaultColumns: ['title', 'provider', 'videoType', 'duration', 'airedDate', 'published'],
   },
   fields: [
     {
@@ -70,7 +70,13 @@ export const Videos: CollectionConfig = {
       name: 'duration',
       type: 'number',
       min: 0,
-      label: 'Trajanje (sekunde)',
+      label: 'Trajanje',
+      admin: {
+        components: {
+          Field: '@/components/admin/DurationField#DurationField',
+          Cell: '@/components/admin/DurationCell#DurationCell',
+        },
+      },
     },
     {
       name: 'airedDate',
