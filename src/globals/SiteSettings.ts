@@ -111,5 +111,26 @@ export const SiteSettings: GlobalConfig = {
       type: "text",
       label: "Tekst podnožja",
     },
+    {
+      name: "maintenance",
+      type: "group",
+      label: "Održavanje",
+      fields: [
+        {
+          name: "enabled",
+          type: "checkbox",
+          label: "Uključi stranicu za održavanje",
+          defaultValue: false,
+        },
+        {
+          name: "message",
+          type: "textarea",
+          label: "Poruka",
+          admin: {
+            placeholder: "Stranica je trenutno u održavanju. Molimo pokušajte kasnije.",
+          },
+        },
+      ],
+    },
   ],
 };

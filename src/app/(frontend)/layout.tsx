@@ -1,7 +1,9 @@
 import type { Metadata } from 'next'
+import { headers } from 'next/headers'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
+import { MaintenancePage } from '@/components/MaintenancePage'
 import { getPayload } from '@/lib/payload'
 import type { Media } from '../../../payload-types'
 
@@ -47,18 +49,43 @@ export async function generateMetadata(): Promise<Metadata> {
   }
 }
 
-export default function FrontendLayout({
+export default async function FrontendLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
+  const payload = await getPayload()
+  const [siteSettings, { user }] = await Promise.all([
+    payload.findGlobal({ slug: 'site-settings' }) as any,
+    payload.auth({ headers: await headers() }),
+  ])
+
+  const isAdmin = user?.role === 'admin' || user?.role === 'editor'
+  const maintenanceEnabled = siteSettings?.maintenance?.enabled
+
+  if (maintenanceEnabled && !isAdmin) {
+    return (
+      <html lang="hr" suppressHydrationWarning>
+        <body>
+          <ThemeProvider>
+            <MaintenancePage message={siteSettings?.maintenance?.message} />
+          </ThemeProvider>
+        </body>
+      </html>
+    )
+  }
+
   return (
-    <ThemeProvider>
-      <div className="flex min-h-screen flex-col">
-        <Header />
-        <main className="flex-1">{children}</main>
-        <Footer />
-      </div>
-    </ThemeProvider>
+    <html lang="hr" suppressHydrationWarning>
+      <body>
+        <ThemeProvider>
+          <div className="flex min-h-screen flex-col">
+            <Header />
+            <main className="flex-1">{children}</main>
+            <Footer />
+          </div>
+        </ThemeProvider>
+      </body>
+    </html>
   )
 }
