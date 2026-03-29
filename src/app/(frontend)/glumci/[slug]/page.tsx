@@ -69,19 +69,26 @@ export default async function ActorDetailPage({ params }: Props) {
     <div className="mx-auto max-w-5xl px-4 py-8">
       <div className="flex flex-col items-start gap-6 md:flex-row">
         {/* Photo */}
-        <div className="relative h-48 w-48 shrink-0 overflow-hidden rounded-lg bg-muted">
-          {person.photo ? (
-            <Image
-              src={person.photo.url}
-              alt={`${person.firstName} ${person.lastName}`}
-              fill
-              className="object-cover"
-              sizes="192px"
-            />
-          ) : (
-            <div className="flex h-full w-full items-center justify-center text-4xl font-bold text-muted-foreground">
-              {person.firstName[0]}{person.lastName[0]}
-            </div>
+        <div className="shrink-0">
+          <div className="relative h-48 w-48 overflow-hidden rounded-lg bg-muted">
+            {person.photo ? (
+              <Image
+                src={person.photo.url}
+                alt={`${person.firstName} ${person.lastName}`}
+                fill
+                className="object-cover"
+                sizes="192px"
+              />
+            ) : (
+              <div className="flex h-full w-full items-center justify-center text-4xl font-bold text-muted-foreground">
+                {person.firstName[0]}{person.lastName[0]}
+              </div>
+            )}
+          </div>
+          {person.photo?.credit && (
+            <p className="mt-1 w-48 text-center text-xs text-muted-foreground">
+              © {person.photo.credit}
+            </p>
           )}
         </div>
 

@@ -31,6 +31,11 @@ export const Media: CollectionConfig = {
       required: true,
       label: 'Alt tekst',
     },
+    {
+      name: 'credit',
+      type: 'text',
+      label: 'Autor fotografije',
+    },
   ],
   access: {
     read: anyone,
