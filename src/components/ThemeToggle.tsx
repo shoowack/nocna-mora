@@ -3,6 +3,7 @@
 import { useTheme } from "next-themes";
 import { Monitor, Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
 const options = [
   { value: "light", icon: Sun, label: "Light" },
@@ -25,11 +26,7 @@ export function ThemeToggle() {
           key={value}
           onClick={() => setTheme(value)}
           aria-label={label}
-          className={`flex h-full w-7 items-center justify-center rounded-sm transition-colors ${
-            theme === value
-              ? "bg-background text-foreground shadow-sm"
-              : "text-muted-foreground hover:text-foreground"
-          }`}
+          className={cn("flex h-full w-7 items-center justify-center rounded-sm transition-colors", theme === value ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground")}
         >
           <Icon className="h-3.5 w-3.5" />
         </button>

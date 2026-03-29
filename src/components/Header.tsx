@@ -4,6 +4,7 @@ import { Search } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { LogoutButton } from "@/components/LogoutButton";
 import { getPayload } from "@/lib/payload";
+import { cn } from "@/lib/utils";
 import { Media } from "../../payload-types";
 import Image from "next/image";
 
@@ -62,7 +63,7 @@ export async function Header() {
         <div className="flex items-center gap-2">
           <Link
             href="/pretraga"
-            className={`flex items-center gap-2 rounded-md border border-border bg-muted px-3 py-1.5 ${navLinkClass}`}
+            className={cn("flex items-center gap-2 rounded-md border border-border bg-muted px-3 py-1.5", navLinkClass)}
           >
             <Search className="h-4 w-4" />
             <span className="hidden sm:inline">Pretraži...</span>
@@ -72,7 +73,7 @@ export async function Header() {
             <>
               <Link
                 href="/profil"
-                className={`rounded-md border border-border px-3 py-1.5 ${navLinkClass}`}
+                className={cn("rounded-md border border-border px-3 py-1.5", navLinkClass)}
               >
                 {user.name}
               </Link>

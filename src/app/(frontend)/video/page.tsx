@@ -1,6 +1,7 @@
 import type { Where } from 'payload'
 import { getPayload } from '@/lib/payload'
 import { VideoCard } from '@/components/VideoCard'
+import { cn } from '@/lib/utils'
 import Link from 'next/link'
 
 export const revalidate = 60
@@ -47,25 +48,19 @@ export default async function VideosPage({ searchParams }: Props) {
       <div className="mb-8 flex flex-wrap gap-3">
         <Link
           href="/video"
-          className={`rounded-full border px-4 py-1.5 text-sm transition-colors ${
-            !params.type ? 'border-primary bg-primary/10 text-primary' : 'border-border text-muted-foreground hover:border-primary/50'
-          }`}
+          className={cn('rounded-full border px-4 py-1.5 text-sm transition-colors', params.type ? 'border-border text-muted-foreground hover:border-primary/50' : 'border-primary bg-primary/10 text-primary')}
         >
           Svi
         </Link>
         <Link
           href="/video?type=full"
-          className={`rounded-full border px-4 py-1.5 text-sm transition-colors ${
-            params.type === 'full' ? 'border-primary bg-primary/10 text-primary' : 'border-border text-muted-foreground hover:border-primary/50'
-          }`}
+          className={cn('rounded-full border px-4 py-1.5 text-sm transition-colors', params.type === 'full' ? 'border-primary bg-primary/10 text-primary' : 'border-border text-muted-foreground hover:border-primary/50')}
         >
           Cijele epizode
         </Link>
         <Link
           href="/video?type=clip"
-          className={`rounded-full border px-4 py-1.5 text-sm transition-colors ${
-            params.type === 'clip' ? 'border-primary bg-primary/10 text-primary' : 'border-border text-muted-foreground hover:border-primary/50'
-          }`}
+          className={cn('rounded-full border px-4 py-1.5 text-sm transition-colors', params.type === 'clip' ? 'border-primary bg-primary/10 text-primary' : 'border-border text-muted-foreground hover:border-primary/50')}
         >
           Isječci
         </Link>
@@ -76,9 +71,7 @@ export default async function VideosPage({ searchParams }: Props) {
           <Link
             key={cat.id}
             href={`/video?category=${cat.id}`}
-            className={`rounded-full border px-4 py-1.5 text-sm transition-colors ${
-              params.category === cat.id ? 'border-primary bg-primary/10 text-primary' : 'border-border text-muted-foreground hover:border-primary/50'
-            }`}
+            className={cn('rounded-full border px-4 py-1.5 text-sm transition-colors', params.category === cat.id ? 'border-primary bg-primary/10 text-primary' : 'border-border text-muted-foreground hover:border-primary/50')}
           >
             {cat.title}
           </Link>

@@ -1,6 +1,7 @@
 import { getPayload } from "@/lib/payload";
 import { SearchBar } from "@/components/SearchBar";
 import { VideoCard } from "@/components/VideoCard";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 export const metadata = {
@@ -90,11 +91,7 @@ export default async function SearchPage({ searchParams }: Props) {
         <div className="mb-6 flex flex-wrap gap-2">
           <Link
             href={`/pretraga?q=${encodeURIComponent(query)}`}
-            className={`rounded-full border px-3 py-1 text-sm transition-colors ${
-              params.category
-                ? "border-border text-muted-foreground"
-                : "border-primary bg-primary/10 text-primary"
-            }`}
+            className={cn("rounded-full border px-3 py-1 text-sm transition-colors", params.category ? "border-border text-muted-foreground" : "border-primary bg-primary/10 text-primary")}
           >
             Sve kategorije
           </Link>
@@ -102,11 +99,7 @@ export default async function SearchPage({ searchParams }: Props) {
             <Link
               key={cat.id}
               href={`/pretraga?q=${encodeURIComponent(query)}&category=${String(cat.id)}`}
-              className={`rounded-full border px-3 py-1 text-sm transition-colors ${
-                params.category === String(cat.id)
-                  ? "border-primary bg-primary/10 text-primary"
-                  : "border-border text-muted-foreground"
-              }`}
+              className={cn("rounded-full border px-3 py-1 text-sm transition-colors", params.category === String(cat.id) ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground")}
             >
               {cat.title}
             </Link>
