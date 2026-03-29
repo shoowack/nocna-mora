@@ -8,8 +8,12 @@ export function getEmbedUrl(provider: Provider, videoId: string): string {
       return `https://player.vimeo.com/video/${videoId}`
     case 'dailymotion':
       return `https://www.dailymotion.com/embed/video/${videoId}`
-    case 'facebook':
-      return `https://www.facebook.com/plugins/video.php?href=https://www.facebook.com/watch/?v=${videoId}&show_text=false`
+    case 'facebook': {
+      const fbHref = videoId.startsWith('http')
+        ? videoId
+        : `https://www.facebook.com/video.php?v=${videoId}`
+      return `https://www.facebook.com/plugins/video.php?href=${encodeURIComponent(fbHref)}&show_text=false&width=560`
+    }
     default:
       return ''
   }
@@ -23,8 +27,15 @@ export function getThumbnailUrl(provider: Provider, videoId: string): string {
       return `https://vumbnail.com/${videoId}.jpg`
     case 'dailymotion':
       return `https://www.dailymotion.com/thumbnail/video/${videoId}`
-    case 'facebook':
-      return `https://graph.facebook.com/${videoId}/picture`
+    case 'facebook': {
+      // Extract numeric video ID from full URLs like:
+      // https://www.facebook.com/dvidra/videos/123 or
+      // https://www.facebook.com/61555.../videos/123/
+      const fbId = videoId.startsWith('http')
+        ? videoId.replace(/\/$/, '').split('/').pop() ?? videoId
+        : videoId
+      return `https://graph.facebook.com/${fbId}/picture`
+    }
     default:
       return ''
   }
