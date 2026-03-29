@@ -2,8 +2,10 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { getPayload } from "@/lib/payload";
 import Link from "next/link";
+import Image from "next/image";
 import { formatDate } from "@/lib/utils";
 import { Bell, User } from "lucide-react";
+import type { Media } from "../../../../payload-types";
 
 export const metadata = {
   title: "Profil | Noćna mora Željka Malnara",
@@ -19,6 +21,9 @@ export default async function ProfilePage() {
     redirect("/prijava");
   }
 
+  const fullUser = await payload.findByID({ collection: "users", id: user.id, depth: 1 });
+  const avatarUrl = (fullUser?.avatar as Media | null | undefined)?.url ?? undefined;
+
   // Fetch unread notifications
   const notifications = await payload.find({
     collection: "notifications",
@@ -33,8 +38,12 @@ export default async function ProfilePage() {
   return (
     <div className="mx-auto max-w-3xl px-4 py-8">
       <div className="mb-8 flex items-center gap-4">
-        <div className="flex h-16 w-16 items-center justify-center rounded-full bg-muted">
-          <User className="h-8 w-8 text-muted-foreground" />
+        <div className="relative flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full bg-muted">
+          {avatarUrl ? (
+            <Image src={avatarUrl} alt={user.name} fill className="object-cover" sizes="64px" />
+          ) : (
+            <User className="h-8 w-8 text-muted-foreground" />
+          )}
         </div>
         <div>
           <h1 className="text-2xl font-bold text-foreground">{user.name}</h1>

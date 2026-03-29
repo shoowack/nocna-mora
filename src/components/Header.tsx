@@ -23,6 +23,18 @@ export async function Header() {
   const payload = await getPayload();
   const headersList = await headers();
   const { user } = await payload.auth({ headers: headersList });
+
+  let avatarUrl: string | undefined;
+  if (user) {
+    const fullUser = await payload.findByID({
+      collection: "users",
+      id: user.id,
+      depth: 1,
+    });
+    const avatar = fullUser?.avatar as Media | null | undefined;
+    if (avatar?.url) avatarUrl = avatar.url;
+  }
+
   let logoUrl: string | undefined;
 
   try {
@@ -73,9 +85,18 @@ export async function Header() {
             <>
               <Link
                 href="/profil"
-                className={cn("rounded-md border border-border px-3 py-1.5", navLinkClass)}
+                className={cn("flex items-center gap-2 rounded-md border border-border px-3 py-1.5", navLinkClass)}
               >
-                {user.name}
+                {avatarUrl ? (
+                  <div className="relative h-5 w-5 shrink-0 overflow-hidden rounded-full">
+                    <Image src={avatarUrl} alt={user.name} fill className="object-cover" sizes="20px" />
+                  </div>
+                ) : (
+                  <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
+                    {user.name?.charAt(0).toUpperCase()}
+                  </div>
+                )}
+                <span className="hidden sm:inline">{user.name}</span>
               </Link>
               <LogoutButton />
             </>
