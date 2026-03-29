@@ -1,76 +1,80 @@
-import Link from 'next/link'
-import Image from 'next/image'
-import { Baby, Skull, Youtube, Play } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import Link from "next/link";
+import Image from "next/image";
+import { Baby, Skull, Youtube, Play, CalendarDays } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export type TimelineEvent = {
-  id: string
-  title: string
-  description?: { root: unknown } | null
-  eventDate: string
-  image?: { url: string; alt: string } | null
-  relatedVideo?: { slug: string; title: string } | null
-  category?: 'birth' | 'death' | 'aired' | 'event'
-  link?: { href: string; label: string } | null
-}
+  id: string;
+  title: string;
+  description?: { root: unknown } | null;
+  eventDate: string;
+  image?: { url: string; alt: string } | null;
+  relatedVideo?: { slug: string; title: string } | null;
+  category?: "birth" | "death" | "aired" | "event";
+  link?: { href: string; label: string } | null;
+};
 
 export function Timeline({ events }: { events: TimelineEvent[] }) {
   return (
-    <div className="relative space-y-8 py-10 before:absolute before:inset-0 before:ml-5 before:h-full before:w-1 before:-translate-x-px before:bg-[linear-gradient(to_bottom,transparent_0px,rgb(240_240_240)_30px,rgb(240_240_240)_calc(100%-30px),transparent_100%)] md:before:mx-auto md:before:translate-x-0">
+    <div className="relative space-y-8 py-10 before:absolute before:inset-0 before:ml-5 before:h-full before:w-1 before:-translate-x-px before:bg-[linear-gradient(to_bottom,transparent_0px,rgb(240_240_240)_30px,rgb(240_240_240)_calc(100%-30px),transparent_100%)] dark:before:bg-[linear-gradient(to_bottom,transparent_0px,rgb(30_30_30)_30px,rgb(30_30_30)_calc(100%-30px),transparent_100%)] md:before:mx-auto md:before:translate-x-0">
       {events.map((event, index) => (
         <div
           key={event.id}
           className="group relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse"
         >
-          {/* Icon dot */}
+          {/* Icon */}
           <div
             className={cn(
-              'flex size-10 shrink-0 items-center justify-center rounded-full ring-4 ring-white bg-stone-200 text-stone-500 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2',
+              "flex size-10 shrink-0 items-center justify-center rounded-full ring-4 ring-background bg-muted text-stone-500 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2",
               {
-                'bg-stone-800 text-stone-100': event.category === 'death',
-                'bg-blue-200 text-blue-800': event.category === 'birth',
-                'bg-red-200 text-red-800': event.category === 'aired',
-              }
+                "": event.category === "death",
+                "bg-blue-200 text-blue-800 dark:bg-blue-900 dark:text-blue-200":
+                  event.category === "birth",
+                "bg-red-200 text-red-800 dark:bg-red-900 dark:text-red-200":
+                  event.category === "aired",
+              },
             )}
           >
-            {event.category === 'birth' ? (
+            {event.category === "birth" ? (
               <Baby className="size-5" strokeWidth={2} />
-            ) : event.category === 'death' ? (
+            ) : event.category === "death" ? (
               <Skull className="size-5" strokeWidth={2} />
-            ) : event.category === 'aired' ? (
+            ) : event.category === "aired" ? (
               <Youtube className="size-5" strokeWidth={2} />
             ) : (
-              <span className="size-2 rounded-full bg-current" />
+              <CalendarDays className="size-5" strokeWidth={2} />
             )}
           </div>
 
           {/* Card */}
           <div
             className={cn(
-              'w-[calc(100%-4rem)] rounded-xl bg-stone-100 p-4 md:w-[calc(50%-2.5rem)] relative',
+              "w-[calc(100%-4rem)] rounded-xl p-4 md:w-[calc(50%-2.5rem)] relative border bg-muted dark:bg-muted dark:border-muted-foreground/20 border-muted-foreground/30",
               {
-                'bg-stone-200 text-stone-900': event.category === 'death',
-                'bg-blue-100/50 text-blue-800': event.category === 'birth',
-                'bg-red-100/50 text-red-800': event.category === 'aired',
-              }
+                "": event.category === "death",
+                "bg-blue-100/50 text-blue-800 dark:bg-blue-950/50 dark:border-blue-950 border-blue-200":
+                  event.category === "birth",
+                "bg-red-100/50 text-red-800 dark:bg-red-950/50 dark:border-red-950 border-red-200":
+                  event.category === "aired",
+              },
             )}
           >
             <div className="mb-1 flex flex-col items-start justify-between md:flex-row md:space-x-2">
               {event.title && (
-                <div className="font-bold">{event.title}</div>
+                <div className="font-bold text-foreground">{event.title}</div>
               )}
               {event.eventDate && (
-                <time className="mt-1.5 whitespace-nowrap text-xs opacity-50">
-                  {new Date(event.eventDate).toLocaleString('hr-HR', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
+                <time className="mt-1.5 whitespace-nowrap text-xs text-muted-foreground">
+                  {new Date(event.eventDate).toLocaleString("hr-HR", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
                   })}
                 </time>
               )}
             </div>
 
-            <div className="text-stone-500">
+            <div className="text-muted-foreground">
               {event.image && (
                 <div className="relative mb-3 aspect-video overflow-hidden rounded-md">
                   <Image
@@ -83,7 +87,7 @@ export function Timeline({ events }: { events: TimelineEvent[] }) {
                 </div>
               )}
 
-              {event.category === 'aired' && event.link ? (
+              {event.category === "aired" && event.link ? (
                 <Link
                   href={event.link.href}
                   className="mt-2 inline-flex items-center rounded-md bg-stone-800 px-3 py-1.5 text-sm font-medium text-white hover:bg-stone-700"
@@ -112,5 +116,5 @@ export function Timeline({ events }: { events: TimelineEvent[] }) {
         </div>
       ))}
     </div>
-  )
+  );
 }
