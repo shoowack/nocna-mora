@@ -53,16 +53,12 @@ export default function FrontendLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="hr" suppressHydrationWarning>
-      <body>
-        <ThemeProvider>
-          <div className="flex min-h-screen flex-col">
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
-        </ThemeProvider>
-      </body>
-    </html>
+    <ThemeProvider>
+      <div className="flex min-h-screen flex-col">
+        <Header />
+        <main className="flex-1">{children}</main>
+        <Footer />
+      </div>
+    </ThemeProvider>
   )
 }
