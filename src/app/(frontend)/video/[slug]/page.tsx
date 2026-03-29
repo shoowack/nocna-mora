@@ -1,11 +1,13 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { headers } from "next/headers";
 import { getPayload } from "@/lib/payload";
 import { VideoEmbed } from "@/components/VideoEmbed";
 import { CommentSection } from "@/components/CommentSection";
 import { Reactions } from "@/components/Reactions";
 import { formatDate, formatDuration } from "@/lib/utils";
 import { getProviderLabel } from "@/lib/video-providers";
+import { Pencil } from "lucide-react";
 
 export const revalidate = 300;
 
@@ -33,6 +35,8 @@ export async function generateMetadata({ params }: Props) {
 export default async function VideoDetailPage({ params }: Props) {
   const { slug } = await params;
   const payload = await getPayload();
+  const { user } = await payload.auth({ headers: await headers() });
+  const isAdmin = user?.role === "admin" || user?.role === "editor";
 
   const videos = await payload.find({
     collection: "videos",
@@ -88,9 +92,20 @@ export default async function VideoDetailPage({ params }: Props) {
 
       {/* Video info */}
       <div className="mt-6 space-y-4">
-        <h1 className="text-2xl font-bold text-foreground md:text-3xl">
-          {video.title}
-        </h1>
+        <div className="flex items-start justify-between gap-4">
+          <h1 className="text-2xl font-bold text-foreground md:text-3xl">
+            {video.title}
+          </h1>
+          {isAdmin && (
+            <Link
+              href={`/admin/collections/videos/${video.id}`}
+              className="flex shrink-0 items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <Pencil className="h-3.5 w-3.5" />
+              Uredi
+            </Link>
+          )}
+        </div>
 
         <div className="flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
           {video.airedDate && <span>{formatDate(video.airedDate)}</span>}
