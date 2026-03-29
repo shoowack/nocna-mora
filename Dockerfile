@@ -25,7 +25,7 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 
-RUN mkdir -p media && chown nextjs:nodejs media
+RUN mkdir -p media .next/cache && chown -R nextjs:nodejs media .next
 
 USER nextjs
 

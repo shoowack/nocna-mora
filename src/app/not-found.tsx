@@ -1,3 +1,5 @@
+export const dynamic = 'force-dynamic'
+
 import Link from "next/link";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Header } from "@/components/Header";

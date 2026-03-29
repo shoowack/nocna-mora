@@ -17,6 +17,7 @@ import {
   TimelineEvents,
   Notifications,
 } from "@/collections";
+import { migrations } from "@/migrations";
 import { SiteSettings } from "@/globals/SiteSettings";
 import { Homepage } from "@/globals/Homepage";
 
@@ -69,6 +70,7 @@ export default buildConfig({
     pool: {
       connectionString: process.env.DATABASE_URI || "",
     },
+    prodMigrations: migrations,
   }),
   editor: lexicalEditor(),
   email: process.env.RESEND_API_KEY
