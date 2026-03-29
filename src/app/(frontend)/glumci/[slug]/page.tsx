@@ -1,8 +1,11 @@
 import { notFound } from 'next/navigation'
+import { headers } from 'next/headers'
 import { getPayload } from '@/lib/payload'
 import { VideoCard } from '@/components/VideoCard'
 import { formatDate } from '@/lib/utils'
 import Image from 'next/image'
+import Link from 'next/link'
+import { Pencil } from 'lucide-react'
 
 export const revalidate = 3600
 
@@ -39,6 +42,8 @@ export async function generateMetadata({ params }: Props) {
 export default async function ActorDetailPage({ params }: Props) {
   const { slug } = await params
   const payload = await getPayload()
+  const { user } = await payload.auth({ headers: await headers() })
+  const isAdmin = user?.role === 'admin' || user?.role === 'editor'
 
   const result = await payload.find({
     collection: 'participants',
@@ -94,9 +99,20 @@ export default async function ActorDetailPage({ params }: Props) {
 
         {/* Info */}
         <div>
-          <h1 className="text-3xl font-bold text-foreground">
-            {person.firstName} {person.lastName}
-          </h1>
+          <div className="flex items-start justify-between gap-4">
+            <h1 className="text-3xl font-bold text-foreground">
+              {person.firstName} {person.lastName}
+            </h1>
+            {isAdmin && (
+              <Link
+                href={`/admin/collections/participants/${person.id}`}
+                className="flex shrink-0 items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <Pencil className="h-3.5 w-3.5" />
+                Uredi
+              </Link>
+            )}
+          </div>
           {person.nickname && (
             <p className="mt-1 text-lg text-muted-foreground">&quot;{person.nickname}&quot;</p>
           )}

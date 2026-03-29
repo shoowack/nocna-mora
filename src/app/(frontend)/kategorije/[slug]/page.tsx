@@ -1,6 +1,10 @@
 import { notFound } from "next/navigation";
+import { headers } from "next/headers";
 import { getPayload } from "@/lib/payload";
 import { VideoCard } from "@/components/VideoCard";
+import Link from "next/link";
+import { Pencil } from "lucide-react";
+
 
 export const revalidate = 300;
 
@@ -29,6 +33,8 @@ export default async function CategoryDetailPage({
   const sp = await searchParams;
   const page = parseInt(sp.page || "1");
   const payload = await getPayload();
+  const { user } = await payload.auth({ headers: await headers() });
+  const isAdmin = user?.role === "admin" || user?.role === "editor";
 
   const catResult = await payload.find({
     collection: "categories",
@@ -56,9 +62,20 @@ export default async function CategoryDetailPage({
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
-      <h1 className="mb-2 text-3xl font-bold text-foreground">
-        {category.title}
-      </h1>
+      <div className="mb-2 flex items-start justify-between gap-4">
+        <h1 className="text-3xl font-bold text-foreground">
+          {category.title}
+        </h1>
+        {isAdmin && (
+          <Link
+            href={`/admin/collections/categories/${category.id}`}
+            className="flex shrink-0 items-center gap-1.5 rounded-md border border-border px-3 py-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors"
+          >
+            <Pencil className="h-3.5 w-3.5" />
+            Uredi
+          </Link>
+        )}
+      </div>
       {category.description && (
         <p className="mb-6 text-muted-foreground">{category.description}</p>
       )}
