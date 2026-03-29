@@ -8,7 +8,7 @@ export type TimelineEvent = {
   title: string;
   description?: { root: unknown } | null;
   eventDate: string;
-  image?: { url: string; alt: string } | null;
+  image?: { url: string; alt: string; credit?: string | null } | null;
   relatedVideo?: { slug: string; title: string } | null;
   category?: "birth" | "death" | "aired" | "event";
   link?: { href: string; label: string } | null;
@@ -76,14 +76,21 @@ export function Timeline({ events }: { events: TimelineEvent[] }) {
 
             <div className="text-muted-foreground">
               {event.image && (
-                <div className="relative mb-3 aspect-video overflow-hidden rounded-md">
-                  <Image
-                    src={event.image.url}
-                    alt={event.image.alt || event.title}
-                    fill
-                    className="object-cover"
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                  />
+                <div className="mb-3">
+                  <div className="relative aspect-video overflow-hidden rounded-md">
+                    <Image
+                      src={event.image.url}
+                      alt={event.image.alt || event.title}
+                      fill
+                      className="object-cover"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                  </div>
+                  {event.image.credit && (
+                    <p className="mt-1 text-center text-xs text-muted-foreground">
+                      © {event.image.credit}
+                    </p>
+                  )}
                 </div>
               )}
 

@@ -96,6 +96,7 @@ export default async function TimelinePage() {
           ? {
               url: p.photo.url as string,
               alt: p.fullName || `${p.firstName} ${p.lastName}`,
+              credit: (p.photo as any).credit ?? null,
             }
           : null,
       relatedVideo: null,
@@ -116,6 +117,7 @@ export default async function TimelinePage() {
           ? {
               url: p.photo.url as string,
               alt: p.fullName || `${p.firstName} ${p.lastName}`,
+              credit: (p.photo as any).credit ?? null,
             }
           : null,
       relatedVideo: null,
