@@ -3,7 +3,10 @@ import { isAdmin, isAdminOrSelf, anyone } from '@/access'
 
 export const Users: CollectionConfig = {
   slug: 'users',
-  auth: true,
+  auth: {
+    maxLoginAttempts: 5,
+    lockTime: 10 * 60 * 1000, // 10 minutes in ms
+  },
   admin: {
     useAsTitle: 'name',
     defaultColumns: ['name', 'email', 'role'],
