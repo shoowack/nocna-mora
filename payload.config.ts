@@ -3,6 +3,7 @@ import { fileURLToPath } from "url";
 import { buildConfig } from "payload";
 import { postgresAdapter } from "@payloadcms/db-postgres";
 import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import { s3Storage } from "@payloadcms/storage-s3";
 import sharp from "sharp";
 
 import {
@@ -44,6 +45,26 @@ export default buildConfig({
     Notifications,
   ],
   globals: [SiteSettings, Homepage],
+  plugins: [
+    ...(process.env.R2_BUCKET
+      ? [
+          s3Storage({
+            collections: {
+              media: true,
+            },
+            bucket: process.env.R2_BUCKET,
+            config: {
+              credentials: {
+                accessKeyId: process.env.R2_ACCESS_KEY_ID || "",
+                secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || "",
+              },
+              region: "auto",
+              endpoint: process.env.R2_ENDPOINT,
+            },
+          }),
+        ]
+      : []),
+  ],
   db: postgresAdapter({
     pool: {
       connectionString: process.env.DATABASE_URI || "",
