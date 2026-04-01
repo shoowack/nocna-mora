@@ -1,6 +1,7 @@
 import { getPayload } from "@/lib/payload";
 import { Timeline } from "@/components/Timeline";
 import type { TimelineEvent } from "@/components/Timeline";
+import { notArchived } from "@/lib/query-helpers";
 
 export const revalidate = 3600;
 
@@ -23,10 +24,10 @@ export default async function TimelinePage() {
       payload.find({
         collection: "participants",
         where: {
-          type: { equals: "main" },
-          or: [
-            { birthDate: { exists: true } },
-            { deathDate: { exists: true } },
+          and: [
+            { type: { equals: "main" } },
+            notArchived,
+            { or: [{ birthDate: { exists: true } }, { deathDate: { exists: true } }] },
           ],
         },
         limit: 200,
@@ -35,8 +36,7 @@ export default async function TimelinePage() {
       payload.find({
         collection: "videos",
         where: {
-          published: { equals: true },
-          airedDate: { exists: true },
+          and: [{ published: { equals: true } }, { airedDate: { exists: true } }, notArchived],
         },
         limit: 500,
         depth: 1,

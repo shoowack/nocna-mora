@@ -1,5 +1,6 @@
 import { getPayload } from "@/lib/payload";
 import { ParticipantCard } from "@/components/ParticipantCard";
+import { notArchived } from "@/lib/query-helpers";
 
 export const revalidate = 3600;
 
@@ -13,7 +14,7 @@ export default async function ActorsPage() {
 
   const participants = await payload.find({
     collection: "participants",
-    where: { type: { equals: "main" } },
+    where: { and: [{ type: { equals: "main" } }, notArchived] },
     sort: "lastName",
     limit: 100,
     depth: 1,

@@ -3,6 +3,7 @@ import { getPayload } from '@/lib/payload'
 import { VideoCard } from '@/components/VideoCard'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
+import { notArchived } from '@/lib/query-helpers'
 
 export const revalidate = 60
 
@@ -16,7 +17,7 @@ export default async function VideosPage({ searchParams }: Props) {
   const limit = 12
   const payload = await getPayload()
 
-  const where: Where = { published: { equals: true } }
+  const where: Where = { published: { equals: true }, ...notArchived }
   if (params.type) {
     where.videoType = { equals: params.type }
   }
@@ -35,6 +36,7 @@ export default async function VideosPage({ searchParams }: Props) {
     }),
     payload.find({
       collection: 'categories',
+      where: notArchived,
       sort: 'title',
       limit: 100,
     }),

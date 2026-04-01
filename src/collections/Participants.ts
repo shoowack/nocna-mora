@@ -1,12 +1,12 @@
 import type { CollectionConfig } from 'payload'
-import { isAdmin, isAdminOrEditor, anyone } from '@/access'
+import { isAdmin, isAdminOrEditor, notArchived } from '@/access'
 import { populateFullName, populateParticipantSlug } from '@/hooks/populateSlug'
 
 export const Participants: CollectionConfig = {
   slug: 'participants',
   admin: {
     useAsTitle: 'fullName',
-    defaultColumns: ['fullName', 'type', 'slug'],
+    defaultColumns: ['fullName', 'type', 'slug', 'deletedAt'],
     components: {
       beforeList: ['@/components/admin/ParticipantSeoLink#ParticipantSeoLink'],
     },
@@ -108,9 +108,21 @@ export const Participants: CollectionConfig = {
         },
       },
     },
+    {
+      name: 'deletedAt',
+      type: 'date',
+      label: 'Arhivirano',
+      admin: {
+        position: 'sidebar',
+        description: 'Postavi datum za arhiviranje (sakriva od javnosti)',
+        date: {
+          pickerAppearance: 'dayAndTime',
+        },
+      },
+    },
   ],
   access: {
-    read: anyone,
+    read: notArchived,
     create: isAdminOrEditor,
     update: isAdminOrEditor,
     delete: isAdmin,

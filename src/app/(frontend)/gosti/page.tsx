@@ -1,5 +1,6 @@
 import { getPayload } from "@/lib/payload";
 import { ParticipantCard } from "@/components/ParticipantCard";
+import { notArchived } from "@/lib/query-helpers";
 
 export const revalidate = 3600;
 
@@ -19,7 +20,7 @@ export default async function GuestsPage({ searchParams }: Props) {
 
   const participants = await payload.find({
     collection: "participants",
-    where: { type: { equals: "guest" } },
+    where: { and: [{ type: { equals: "guest" } }, notArchived] },
     sort: "lastName",
     page,
     limit: 40,

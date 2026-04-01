@@ -6,6 +6,7 @@ import { formatDate } from '@/lib/utils'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Pencil } from 'lucide-react'
+import { notArchived } from '@/lib/query-helpers'
 
 export const revalidate = 3600
 
@@ -18,7 +19,7 @@ export async function generateMetadata({ params }: Props) {
   const payload = await getPayload()
   const result = await payload.find({
     collection: 'participants',
-    where: { slug: { equals: slug }, type: { equals: 'main' } },
+    where: { and: [{ slug: { equals: slug } }, { type: { equals: 'main' } }, notArchived] },
     limit: 1,
   })
   if (result.docs.length === 0) return { title: 'Glumac nije pronađen' }
@@ -47,7 +48,7 @@ export default async function ActorDetailPage({ params }: Props) {
 
   const result = await payload.find({
     collection: 'participants',
-    where: { slug: { equals: slug }, type: { equals: 'main' } },
+    where: { and: [{ slug: { equals: slug } }, { type: { equals: 'main' } }, notArchived] },
     limit: 1,
     depth: 1,
   })
@@ -63,6 +64,7 @@ export default async function ActorDetailPage({ params }: Props) {
       and: [
         { participants: { equals: person.id } },
         { published: { equals: true } },
+        notArchived,
       ],
     },
     sort: '-airedDate',
@@ -115,6 +117,15 @@ export default async function ActorDetailPage({ params }: Props) {
           </div>
           {person.nickname && (
             <p className="mt-1 text-lg text-muted-foreground">&quot;{person.nickname}&quot;</p>
+          )}
+          {person.bio?.root?.children?.map((node: any) =>
+            node.children?.map((t: any) => t.text).join('')
+          ).filter(Boolean).join('\n') && (
+            <p className="mt-3 text-sm text-muted-foreground">
+              {person.bio.root.children.map((node: any) =>
+                node.children?.map((t: any) => t.text).join('')
+              ).filter(Boolean).join(' ')}
+            </p>
           )}
           <div className="mt-3 flex flex-wrap gap-3 text-sm text-muted-foreground">
             {person.birthDate && <span>{person.gender === 'female' ? 'Rođena' : person.gender === 'male' ? 'Rođen' : 'Rođen/a'}: {formatDate(person.birthDate)}</span>}

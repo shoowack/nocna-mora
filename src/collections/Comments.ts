@@ -4,7 +4,7 @@ import { isAdmin, isAuthenticated, approvedOrAdmin } from '@/access'
 export const Comments: CollectionConfig = {
   slug: 'comments',
   admin: {
-    defaultColumns: ['content', 'video', 'author', 'approved', 'createdAt'],
+    defaultColumns: ['content', 'video', 'author', 'approved', 'createdAt', 'deletedAt'],
   },
   fields: [
     {
@@ -37,6 +37,18 @@ export const Comments: CollectionConfig = {
       admin: {
         position: 'sidebar',
         description: 'Odobri komentar za prikaz na stranici',
+      },
+    },
+    {
+      name: 'deletedAt',
+      type: 'date',
+      label: 'Arhivirano',
+      admin: {
+        position: 'sidebar',
+        description: 'Postavi datum za arhiviranje (sakriva od javnosti)',
+        date: {
+          pickerAppearance: 'dayAndTime',
+        },
       },
     },
   ],

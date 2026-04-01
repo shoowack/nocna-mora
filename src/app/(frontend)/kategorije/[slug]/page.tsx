@@ -4,6 +4,7 @@ import { getPayload } from "@/lib/payload";
 import { VideoCard } from "@/components/VideoCard";
 import Link from "next/link";
 import { Pencil } from "lucide-react";
+import { notArchived } from "@/lib/query-helpers";
 
 
 export const revalidate = 300;
@@ -18,7 +19,7 @@ export async function generateMetadata({ params }: Props) {
   const payload = await getPayload();
   const result = await payload.find({
     collection: "categories",
-    where: { slug: { equals: slug } },
+    where: { and: [{ slug: { equals: slug } }, notArchived] },
     limit: 1,
   });
   if (result.docs.length === 0) return { title: "Kategorija nije pronađena" };
@@ -38,7 +39,7 @@ export default async function CategoryDetailPage({
 
   const catResult = await payload.find({
     collection: "categories",
-    where: { slug: { equals: slug } },
+    where: { and: [{ slug: { equals: slug } }, notArchived] },
     limit: 1,
   });
 
@@ -52,6 +53,7 @@ export default async function CategoryDetailPage({
       and: [
         { categories: { equals: category.id } },
         { published: { equals: true } },
+        notArchived,
       ],
     },
     sort: "-airedDate",

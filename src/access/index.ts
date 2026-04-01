@@ -20,12 +20,27 @@ export const isAdminOrSelf: Access = ({ req: { user } }) => {
 
 export const publishedOrAdmin: Access = ({ req: { user } }) => {
   if (user?.role === 'admin' || user?.role === 'editor') return true
-  return { published: { equals: true } }
+  return {
+    and: [
+      { published: { equals: true } } as any,
+      { deletedAt: { exists: false } } as any,
+    ],
+  }
 }
 
 export const approvedOrAdmin: Access = ({ req: { user } }) => {
   if (user?.role === 'admin') return true
-  return { approved: { equals: true } }
+  return {
+    and: [
+      { approved: { equals: true } } as any,
+      { deletedAt: { exists: false } } as any,
+    ],
+  }
+}
+
+export const notArchived: Access = ({ req: { user } }) => {
+  if (user?.role === 'admin' || user?.role === 'editor') return true
+  return { deletedAt: { exists: false } }
 }
 
 export const isRecipientOrAdmin: Access = ({ req: { user } }) => {

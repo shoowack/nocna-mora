@@ -1,12 +1,12 @@
 import type { CollectionConfig } from 'payload'
-import { isAdmin, isAdminOrEditor, anyone } from '@/access'
+import { isAdmin, isAdminOrEditor, notArchived } from '@/access'
 import { populateSlug } from '@/hooks/populateSlug'
 
 export const Categories: CollectionConfig = {
   slug: 'categories',
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'slug'],
+    defaultColumns: ['title', 'slug', 'deletedAt'],
   },
   fields: [
     {
@@ -33,9 +33,21 @@ export const Categories: CollectionConfig = {
       type: 'textarea',
       label: 'Opis',
     },
+    {
+      name: 'deletedAt',
+      type: 'date',
+      label: 'Arhivirano',
+      admin: {
+        position: 'sidebar',
+        description: 'Postavi datum za arhiviranje (sakriva od javnosti)',
+        date: {
+          pickerAppearance: 'dayAndTime',
+        },
+      },
+    },
   ],
   access: {
-    read: anyone,
+    read: notArchived,
     create: isAdminOrEditor,
     update: isAdminOrEditor,
     delete: isAdmin,

@@ -8,7 +8,7 @@ export const Videos: CollectionConfig = {
   slug: 'videos',
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'provider', 'videoType', 'duration', 'airedDate', 'published'],
+    defaultColumns: ['title', 'provider', 'videoType', 'duration', 'airedDate', 'published', 'deletedAt'],
   },
   fields: [
     {
@@ -129,6 +129,18 @@ export const Videos: CollectionConfig = {
       admin: {
         readOnly: true,
         hidden: true,
+      },
+    },
+    {
+      name: 'deletedAt',
+      type: 'date',
+      label: 'Arhivirano',
+      admin: {
+        position: 'sidebar',
+        description: 'Postavi datum za arhiviranje (sakriva od javnosti)',
+        date: {
+          pickerAppearance: 'dayAndTime',
+        },
       },
     },
   ],

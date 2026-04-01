@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getPayload } from "@/lib/payload";
 import { Folder } from "lucide-react";
+import { notArchived } from "@/lib/query-helpers";
 
 export const revalidate = 3600;
 
@@ -13,6 +14,7 @@ export default async function CategoriesPage() {
 
   const categories = await payload.find({
     collection: "categories",
+    where: notArchived,
     sort: "title",
     limit: 100,
   });
@@ -26,6 +28,7 @@ export default async function CategoriesPage() {
           and: [
             { categories: { equals: cat.id } },
             { published: { equals: true } },
+            notArchived,
           ],
         },
         limit: 0,

@@ -2,6 +2,7 @@ import Link from "next/link";
 import { getPayload } from "@/lib/payload";
 import { VideoCard } from "@/components/VideoCard";
 import { ParticipantCard } from "@/components/ParticipantCard";
+import { notArchived } from "@/lib/query-helpers";
 
 export const revalidate = 3600;
 
@@ -12,13 +13,13 @@ export default async function HomePage() {
     payload.findGlobal({ slug: "homepage" }),
     payload.find({
       collection: "videos",
-      where: { published: { equals: true } },
+      where: { and: [{ published: { equals: true } }, notArchived] },
       sort: "-airedDate",
       limit: 6,
     }),
     payload.find({
       collection: "participants",
-      where: { type: { equals: "main" } },
+      where: { and: [{ type: { equals: "main" } }, notArchived] },
       limit: 8,
     }),
   ]);

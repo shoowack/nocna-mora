@@ -3,6 +3,7 @@ import { SearchBar } from "@/components/SearchBar";
 import { VideoCard } from "@/components/VideoCard";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { notArchived } from "@/lib/query-helpers";
 
 export const metadata = {
   title: "Pretraži | Noćna mora Željka Malnara",
@@ -33,6 +34,7 @@ export default async function SearchPage({ searchParams }: Props) {
       where: {
         and: [
           { published: { equals: true } },
+          notArchived,
           {
             or: [
               { title: { contains: query } },
@@ -58,10 +60,15 @@ export default async function SearchPage({ searchParams }: Props) {
     const pResult = await payload.find({
       collection: "participants",
       where: {
-        or: [
-          { firstName: { contains: query } },
-          { lastName: { contains: query } },
-          { nickname: { contains: query } },
+        and: [
+          notArchived,
+          {
+            or: [
+              { firstName: { contains: query } },
+              { lastName: { contains: query } },
+              { nickname: { contains: query } },
+            ],
+          },
         ],
       },
       limit: 5,
@@ -72,6 +79,7 @@ export default async function SearchPage({ searchParams }: Props) {
   // Fetch categories for filter
   const categories = await payload.find({
     collection: "categories",
+    where: notArchived,
     sort: "title",
     limit: 100,
   });
