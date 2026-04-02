@@ -1,0 +1,136 @@
+import type { GlobalConfig } from "payload";
+import { isAdmin, anyone } from "@/access";
+
+export const SiteSettings: GlobalConfig = {
+  slug: "site-settings",
+  label: "Postavke stranice",
+  access: {
+    read: anyone,
+    update: isAdmin,
+  },
+  fields: [
+    {
+      name: "siteName",
+      type: "text",
+      defaultValue: "Noćna mora Željka Malnara",
+      label: "Naziv stranice",
+    },
+    {
+      name: "siteDescription",
+      type: "textarea",
+      label: "Opis stranice",
+    },
+    {
+      name: "logo",
+      type: "upload",
+      relationTo: "media",
+      label: "Logo",
+    },
+    {
+      name: "favicon",
+      type: "upload",
+      relationTo: "media",
+      label: "Favicon",
+    },
+    {
+      name: "socialLinks",
+      type: "array",
+      label: "Društvene mreže",
+      fields: [
+        {
+          name: "platform",
+          type: "select",
+          required: true,
+          options: [
+            { label: "Facebook", value: "facebook" },
+            { label: "YouTube", value: "youtube" },
+            { label: "Instagram", value: "instagram" },
+            { label: "Twitter / X", value: "twitter" },
+          ],
+        },
+        {
+          name: "url",
+          type: "text",
+          required: true,
+        },
+      ],
+    },
+    {
+      name: "seo",
+      type: "group",
+      label: "SEO",
+      fields: [
+        {
+          name: "metaTitle",
+          type: "text",
+          label: "Meta naslov",
+        },
+        {
+          name: "metaDescription",
+          type: "textarea",
+          label: "Meta opis",
+        },
+        {
+          name: "ogImage",
+          type: "upload",
+          relationTo: "media",
+          label: "OG slika",
+        },
+      ],
+    },
+    {
+      name: "participantSeo",
+      type: "group",
+      label: "SEO — Sudionici",
+      admin: {
+        description:
+          "Predlošci za naslove i opise stranica sudionika. Dostupni tokeni: {firstName}, {lastName}, {nickname}, {siteName}",
+      },
+      fields: [
+        {
+          name: "titleTemplate",
+          type: "text",
+          label: "Predložak naslova",
+          admin: {
+            placeholder: "{firstName} {lastName} | {siteName}",
+          },
+        },
+        {
+          name: "descriptionTemplate",
+          type: "textarea",
+          label: "Predložak opisa",
+          admin: {
+            placeholder:
+              "Pogledajte više informacija o liku {firstName} {lastName} iz emisije {siteName}.",
+          },
+        },
+      ],
+    },
+    {
+      name: "footerText",
+      type: "text",
+      label: "Tekst podnožja",
+    },
+    {
+      name: "maintenance",
+      type: "group",
+      label: "Održavanje",
+      fields: [
+        {
+          name: "enabled",
+          type: "checkbox",
+          label: "Uključi stranicu za održavanje",
+          defaultValue: false,
+        },
+        {
+          name: "message",
+          type: "textarea",
+          label: "Poruka",
+          admin: {
+            placeholder: "Stranica je trenutno u održavanju. Molimo pokušajte kasnije.",
+          },
+        },
+      ],
+    },
+  ],
+};
