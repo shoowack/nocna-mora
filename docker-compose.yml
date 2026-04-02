@@ -29,7 +29,7 @@ services:
       POSTGRES_USER: tvarhiv
       POSTGRES_PASSWORD: ${DB_PASSWORD:-tvarhiv}
     ports:
-      - '5432:5432'
+      - '5433:5432'
     volumes:
       - pg_data:/var/lib/postgresql/data
       - ./docker/init-db.sql:/docker-entrypoint-initdb.d/init.sql

@@ -39,7 +39,7 @@ export default function PrivacyPage() {
           </p>
         </section>
 
-        <section>
+        {/* <section>
           <h2 className="mb-2 text-lg font-semibold text-foreground">
             Kontakt
           </h2>
@@ -47,7 +47,7 @@ export default function PrivacyPage() {
             Za pitanja o privatnosti, kontaktirajte nas putem email adrese
             navedene u podnožju stranice.
           </p>
-        </section>
+        </section> */}
       </div>
     </div>
   );
