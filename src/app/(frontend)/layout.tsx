@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { headers } from 'next/headers'
+import Script from 'next/script'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
@@ -62,6 +63,10 @@ export default async function FrontendLayout({
 
   const isAdmin = user?.role === 'admin' || user?.role === 'editor'
   const maintenanceEnabled = siteSettings?.maintenance?.enabled
+  const host = (await headers()).get('host') || ''
+  const umamiId = host.includes('nightmare-stage')
+    ? '7c75d581-f861-4cd2-ae79-09f381fd974f'
+    : '5a45ae66-1af8-4bff-93b8-3c2206791dd3'
 
   if (maintenanceEnabled && !isAdmin) {
     return (
@@ -77,6 +82,9 @@ export default async function FrontendLayout({
 
   return (
     <html lang="hr" suppressHydrationWarning>
+      <head>
+        <Script defer src="https://stats.nocna-mora.com/script.js" data-website-id={umamiId} />
+      </head>
       <body>
         <ThemeProvider>
           <div className="flex min-h-screen flex-col">
