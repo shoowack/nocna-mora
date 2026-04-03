@@ -18,6 +18,7 @@ export function UmamiIdentify({ websiteId, user }: Props) {
     <Script
       src="https://stats.nocna-mora.com/script.js"
       data-website-id={websiteId}
+      data-performance="true"
       strategy="afterInteractive"
       onReady={() => {
         if (user && (window as any).umami?.identify) {
