@@ -21,7 +21,8 @@ export function UmamiIdentify({ websiteId, user }: Props) {
       strategy="afterInteractive"
       onReady={() => {
         if (user && (window as any).umami?.identify) {
-          ;(window as any).umami.identify(user)
+          const { id, ...data } = user
+          ;(window as any).umami.identify(String(id), data)
         }
       }}
     />
