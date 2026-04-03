@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { headers } from 'next/headers'
-import Script from 'next/script'
+
 import { ThemeProvider } from '@/components/ThemeProvider'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
@@ -89,17 +89,13 @@ export default async function FrontendLayout({
   return (
     <html lang="hr" suppressHydrationWarning>
       <head>
-        {!isLocal && <Script defer src="https://stats.nocna-mora.com/script.js" data-website-id={umamiId} />}
       </head>
       <body>
         <ThemeProvider>
-          {user && (
+          {!isLocal && (
             <UmamiIdentify
-              id={user.id}
-              name={user.name}
-              email={user.email}
-              role={user.role}
-              createdAt={user.createdAt}
+              websiteId={umamiId}
+              user={user ? { id: user.id, name: user.name, email: user.email, role: user.role, createdAt: user.createdAt } : undefined}
             />
           )}
           <div className="flex min-h-screen flex-col">

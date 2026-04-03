@@ -1,21 +1,29 @@
 'use client'
 
-import { useEffect } from 'react'
+import Script from 'next/script'
 
 interface Props {
-  id: number
-  name: string
-  email: string
-  role: string
-  createdAt: string
+  websiteId: string
+  user?: {
+    id: number
+    name: string
+    email: string
+    role: string
+    createdAt: string
+  }
 }
 
-export function UmamiIdentify({ id, name, email, role, createdAt }: Props) {
-  useEffect(() => {
-    if (typeof window !== 'undefined' && (window as any).umami) {
-      ;(window as any).umami.identify({ id, name, email, role, createdAt })
-    }
-  }, [id])
-
-  return null
+export function UmamiIdentify({ websiteId, user }: Props) {
+  return (
+    <Script
+      defer
+      src="https://stats.nocna-mora.com/script.js"
+      data-website-id={websiteId}
+      onLoad={() => {
+        if (user) {
+          ;(window as any).umami.identify(user)
+        }
+      }}
+    />
+  )
 }
