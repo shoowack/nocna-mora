@@ -16,11 +16,11 @@ interface Props {
 export function UmamiIdentify({ websiteId, user }: Props) {
   return (
     <Script
-      defer
       src="https://stats.nocna-mora.com/script.js"
       data-website-id={websiteId}
-      onLoad={() => {
-        if (user) {
+      strategy="afterInteractive"
+      onReady={() => {
+        if (user && (window as any).umami?.identify) {
           ;(window as any).umami.identify(user)
         }
       }}
