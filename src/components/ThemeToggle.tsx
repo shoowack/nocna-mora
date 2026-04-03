@@ -24,7 +24,7 @@ export function ThemeToggle() {
       {options.map(({ value, icon: Icon, label }) => (
         <button
           key={value}
-          onClick={() => setTheme(value)}
+          onClick={() => { setTheme(value); (window as any).umami?.track('theme change', { theme: value }) }}
           aria-label={label}
           className={cn("flex h-full w-7 items-center justify-center rounded-sm transition-colors", theme === value ? "bg-background text-foreground shadow-sm" : "text-muted-foreground hover:text-foreground")}
         >

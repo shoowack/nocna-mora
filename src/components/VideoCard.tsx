@@ -29,6 +29,9 @@ export function VideoCard({ video }: Props) {
     <Link
       href={`/video/${video.slug}`}
       className="group overflow-hidden rounded-lg border border-border bg-card transition-colors hover:border-primary/50"
+      data-umami-event="video click"
+      data-umami-event-title={video.title}
+      data-umami-event-type={video.videoType}
     >
       <div className="relative aspect-video overflow-hidden bg-muted">
         {thumbnailUrl && !imgError ? (

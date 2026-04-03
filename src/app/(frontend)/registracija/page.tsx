@@ -36,6 +36,7 @@ export default function RegisterPage() {
         body: JSON.stringify({ email, password }),
       })
 
+      ;(window as any).umami?.track('register')
       router.push('/')
       router.refresh()
     } catch (err) {

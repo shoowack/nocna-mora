@@ -11,6 +11,7 @@ export function SearchBar({ defaultValue = '' }: { defaultValue?: string }) {
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (query.trim()) {
+      ;(window as any).umami?.track('search', { query: query.trim() })
       router.push(`/pretraga?q=${encodeURIComponent(query.trim())}`)
     }
   }

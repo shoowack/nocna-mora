@@ -48,6 +48,7 @@ export function Reactions({ videoId, initialReactions, userReaction }: Props) {
           body: JSON.stringify({ videoId }),
         })
         if (!res.ok) return
+        ;(window as any).umami?.track('reaction', { emoji: type, action: 'remove' })
         setActiveReaction(null)
         setReactions((prev) =>
           prev.map((r) => (r.type === type ? { ...r, count: Math.max(0, r.count - 1) } : r)),
@@ -60,6 +61,7 @@ export function Reactions({ videoId, initialReactions, userReaction }: Props) {
           body: JSON.stringify({ type, videoId }),
         })
         if (!res.ok) return
+        ;(window as any).umami?.track('reaction', { emoji: type, action: 'add' })
 
         setReactions((prev) => {
           const updated = prev.map((r) => {

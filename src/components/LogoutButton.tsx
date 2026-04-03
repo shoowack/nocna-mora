@@ -7,6 +7,7 @@ export function LogoutButton() {
 
   async function handleLogout() {
     await fetch('/api/users/logout', { method: 'POST' })
+    ;(window as any).umami?.track('logout')
     router.push('/')
     router.refresh()
   }

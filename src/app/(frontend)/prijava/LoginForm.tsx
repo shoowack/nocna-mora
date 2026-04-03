@@ -27,6 +27,7 @@ export function LoginForm() {
         throw new Error('Pogrešan email ili lozinka')
       }
 
+      ;(window as any).umami?.track('login')
       router.push('/')
       router.refresh()
     } catch (err) {

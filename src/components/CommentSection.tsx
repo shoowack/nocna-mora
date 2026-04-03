@@ -43,6 +43,7 @@ export function CommentSection({ videoId, initialComments }: Props) {
       setContent('')
       // Comment needs approval, show message
       setError(null)
+      ;(window as any).umami?.track('comment submitted')
       alert('Komentar je poslan na odobrenje.')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Nešto je pošlo po krivu')
