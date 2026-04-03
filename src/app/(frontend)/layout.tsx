@@ -7,6 +7,7 @@ import { Footer } from '@/components/Footer'
 import { MaintenancePage } from '@/components/MaintenancePage'
 import { getPayload } from '@/lib/payload'
 import type { Media } from '../../../payload-types'
+import { UmamiIdentify } from '@/components/UmamiIdentify'
 
 export const dynamic = 'force-dynamic'
 
@@ -22,8 +23,12 @@ export async function generateMetadata(): Promise<Metadata> {
     // fall through to static favicon
   }
 
+  const host = (await headers()).get('host') || 'nocna-mora.com'
+  const protocol = host.startsWith('localhost') || host.startsWith('127.') ? 'http' : 'https'
+  const siteUrl = `${protocol}://${host}`
+
   return {
-    metadataBase: new URL("https://nocna-mora.com"),
+    metadataBase: new URL(siteUrl),
     title: "Noćna Mora",
     description:
       "Dobrodošli na arhivsku stranicu Noćne More! Pregledajte i istražite ovu jedinstvenu kolekciju emisija koje su ostavile traga u povijesti hrvatske televizije.",
@@ -34,7 +39,7 @@ export async function generateMetadata(): Promise<Metadata> {
       title: "Noćna Mora",
       description:
         "Dobrodošli na arhivsku stranicu Noćne More! Pregledajte i istražite ovu jedinstvenu kolekciju emisija koje su ostavile traga u povijesti hrvatske televizije.",
-      url: "https://nocna-mora.com",
+      url: siteUrl,
       siteName: "Noćna Mora",
       images: [{ url: "/og-image.jpeg", width: 1600, height: 1200 }],
       locale: "hr_HR",
@@ -64,6 +69,7 @@ export default async function FrontendLayout({
   const isAdmin = user?.role === 'admin' || user?.role === 'editor'
   const maintenanceEnabled = siteSettings?.maintenance?.enabled
   const host = (await headers()).get('host') || ''
+  const isLocal = host.startsWith('localhost') || host.startsWith('127.')
   const umamiId = host.includes('nightmare-stage')
     ? '7c75d581-f861-4cd2-ae79-09f381fd974f'
     : '5a45ae66-1af8-4bff-93b8-3c2206791dd3'
@@ -83,10 +89,19 @@ export default async function FrontendLayout({
   return (
     <html lang="hr" suppressHydrationWarning>
       <head>
-        <Script defer src="https://stats.nocna-mora.com/script.js" data-website-id={umamiId} />
+        {!isLocal && <Script defer src="https://stats.nocna-mora.com/script.js" data-website-id={umamiId} />}
       </head>
       <body>
         <ThemeProvider>
+          {user && (
+            <UmamiIdentify
+              id={user.id}
+              name={user.name}
+              email={user.email}
+              role={user.role}
+              createdAt={user.createdAt}
+            />
+          )}
           <div className="flex min-h-screen flex-col">
             <Header />
             <main className="flex-1">{children}</main>
