@@ -70,3 +70,18 @@ body {
 }
 
 /* Ensure Payload admin styles don't leak into frontend */
+
+/* Calendar: dot indicator for days that have videos */
+.has-video-dot::after {
+  content: '';
+  display: block;
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 9999px;
+  background-color: var(--primary);
+  pointer-events: none;
+}

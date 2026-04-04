@@ -56,7 +56,14 @@ export default async function VideosPage({ searchParams }: Props) {
     ;(where as any).and.push({ published: { equals: params.published === 'true' } })
   }
 
-  const [videos, categories, participants] = await Promise.all([
+  // Build a where clause without the date filter for calendar dot indicators
+  const whereWithoutDate: typeof where = {
+    and: (where as any).and.filter(
+      (clause: any) => !clause.airedDate,
+    ),
+  } as any
+
+  const [videos, categories, participants, allDates] = await Promise.all([
     payload.find({
       collection: 'videos',
       where,
@@ -77,10 +84,22 @@ export default async function VideosPage({ searchParams }: Props) {
       sort: 'fullName',
       limit: 200,
     }),
+    payload.find({
+      collection: 'videos',
+      where: whereWithoutDate,
+      select: { airedDate: true },
+      sort: '-airedDate',
+      limit: 500,
+      depth: 0,
+    }),
   ])
 
   const prevUrl = buildVideoUrl({ ...params, page: params.page - 1 })
   const nextUrl = buildVideoUrl({ ...params, page: params.page + 1 })
+
+  const videoDates = allDates.docs
+    .map((v: any) => v.airedDate)
+    .filter(Boolean) as string[]
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
@@ -94,6 +113,7 @@ export default async function VideosPage({ searchParams }: Props) {
           type: p.type,
         }))}
         isAdmin={isAdmin}
+        videoDates={videoDates}
         current={{
           type: params.type,
           categories: params.categories,

@@ -28,6 +28,7 @@ interface VideoFiltersProps {
   categories: Category[]
   participants: Participant[]
   isAdmin: boolean
+  videoDates: string[]
   current: {
     type: string[]
     categories: string[]
@@ -47,7 +48,7 @@ const PUBLISHED_OPTIONS = [
   { value: 'false', label: 'Neobjavljeno' },
 ]
 
-export function VideoFilters({ categories, participants, isAdmin, current }: VideoFiltersProps) {
+export function VideoFilters({ categories, participants, isAdmin, videoDates, current }: VideoFiltersProps) {
   const router = useRouter()
 
   const [filters, setFilters] = React.useState<VideoFilterParams>({
@@ -99,6 +100,11 @@ export function VideoFilters({ categories, participants, isAdmin, current }: Vid
   const guests = participants.filter((p) => p.type === 'guest')
 
   const selectedDate = filters.date ? new Date(filters.date + 'T12:00:00') : undefined
+
+  const parsedVideoDates = React.useMemo(
+    () => videoDates.map((d) => new Date(d)),
+    [videoDates],
+  )
 
   return (
     <div className="mb-8 flex flex-wrap items-center gap-2">
@@ -167,6 +173,11 @@ export function VideoFilters({ categories, participants, isAdmin, current }: Vid
             mode="single"
             selected={selectedDate}
             onSelect={setDate}
+            captionLayout="dropdown"
+            startMonth={new Date(2000, 0)}
+            endMonth={new Date()}
+            modifiers={{ hasVideo: parsedVideoDates }}
+            modifiersClassNames={{ hasVideo: 'has-video-dot' }}
             initialFocus
           />
         </PopoverContent>
