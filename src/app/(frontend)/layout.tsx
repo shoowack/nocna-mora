@@ -1,7 +1,8 @@
-import type { Metadata, Viewport } from 'next'
+import type { Metadata } from 'next'
 import { headers } from 'next/headers'
 
 import { ThemeProvider } from '@/components/ThemeProvider'
+import { ThemeColor } from '@/components/ThemeColor'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
 import { MaintenancePage } from '@/components/MaintenancePage'
@@ -11,12 +12,6 @@ import { UmamiIdentify } from '@/components/UmamiIdentify'
 
 export const dynamic = 'force-dynamic'
 
-export const viewport: Viewport = {
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#ffffff' },
-    { media: '(prefers-color-scheme: dark)', color: '#0a0a0a' },
-  ],
-}
 
 export async function generateMetadata(): Promise<Metadata> {
   let faviconUrl: string | undefined
@@ -86,6 +81,7 @@ export default async function FrontendLayout({
       <html lang="hr" suppressHydrationWarning>
         <body>
           <ThemeProvider>
+            <ThemeColor />
             <MaintenancePage message={siteSettings?.maintenance?.message} />
           </ThemeProvider>
         </body>
