@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { Search } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { LogoutButton } from "@/components/LogoutButton";
+import { MobileMenu } from "@/components/MobileMenu";
 import { getPayload } from "@/lib/payload";
 import { cn } from "@/lib/utils";
 import { Media } from "../../payload-types";
@@ -55,7 +56,7 @@ export async function Header() {
                 src={logoUrl}
                 alt={`${process.env.NEXT_PUBLIC_SITE_NAME} Logo`}
                 fill
-                className="object-contain"
+                className="object-contain object-left"
                 sizes="160px"
               />
             </div>
@@ -72,31 +73,43 @@ export async function Header() {
           ))}
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="hidden items-center gap-2 md:flex">
           <Link
             href="/pretraga"
-            className={cn("flex items-center gap-2 rounded-md border border-border bg-muted px-3 py-1.5", navLinkClass)}
+            className={cn(
+              "flex items-center gap-2 rounded-md border border-border bg-muted px-3 py-1.5",
+              navLinkClass,
+            )}
           >
             <Search className="h-4 w-4" />
-            <span className="hidden sm:inline">Pretraži...</span>
+            <span>Pretraži...</span>
           </Link>
           <ThemeToggle />
           {user ? (
             <>
               <Link
                 href="/profil"
-                className={cn("flex items-center gap-2 rounded-md border border-border px-3 py-1.5", navLinkClass)}
+                className={cn(
+                  "flex items-center gap-2 rounded-md border border-border px-3 py-1.5",
+                  navLinkClass,
+                )}
               >
                 {avatarUrl ? (
                   <div className="relative h-5 w-5 shrink-0 overflow-hidden rounded-full">
-                    <Image src={avatarUrl} alt={user.name} fill className="object-cover" sizes="20px" />
+                    <Image
+                      src={avatarUrl}
+                      alt={user.name}
+                      fill
+                      className="object-cover"
+                      sizes="20px"
+                    />
                   </div>
                 ) : (
                   <div className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-primary-foreground">
                     {user.name?.charAt(0).toUpperCase()}
                   </div>
                 )}
-                <span className="hidden sm:inline">{user.name}</span>
+                <span>{user.name}</span>
               </Link>
               <LogoutButton />
             </>
@@ -109,6 +122,11 @@ export async function Header() {
             </Link>
           )}
         </div>
+
+        <MobileMenu
+          user={user ? { id: String(user.id), name: user.name ?? "", email: user.email ?? "" } : null}
+          avatarUrl={avatarUrl}
+        />
       </div>
     </header>
   );
