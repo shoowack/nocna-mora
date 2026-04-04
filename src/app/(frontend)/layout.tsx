@@ -1,4 +1,4 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import { headers } from 'next/headers'
 
 import { ThemeProvider } from '@/components/ThemeProvider'
@@ -10,6 +10,10 @@ import type { Media } from '../../../payload-types'
 import { UmamiIdentify } from '@/components/UmamiIdentify'
 
 export const dynamic = 'force-dynamic'
+
+export const viewport: Viewport = {
+  viewportFit: 'cover',
+}
 
 export async function generateMetadata(): Promise<Metadata> {
   let faviconUrl: string | undefined

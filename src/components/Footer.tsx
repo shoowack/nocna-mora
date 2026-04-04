@@ -15,7 +15,7 @@ export async function Footer() {
   const footerText = await getFooterText();
 
   return (
-    <footer className="mt-auto border-t border-border bg-card">
+    <footer className="mt-auto border-t border-border bg-card" style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}>
       <div className="mx-auto max-w-7xl px-4 pt-8 pb-4">
         <div className="grid gap-8 md:grid-cols-3">
           <div>

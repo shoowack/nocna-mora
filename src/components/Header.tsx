@@ -47,7 +47,7 @@ export async function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur" style={{ paddingTop: 'env(safe-area-inset-top)' }}>
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4">
         <Link href="/" className="text-xl font-bold text-primary">
           {logoUrl ? (
