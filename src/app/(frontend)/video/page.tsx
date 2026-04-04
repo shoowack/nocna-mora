@@ -2,36 +2,66 @@ import type { Where } from 'payload'
 import { headers } from 'next/headers'
 import { getPayload } from '@/lib/payload'
 import { VideoCard } from '@/components/VideoCard'
-import { cn } from '@/lib/utils'
+import { VideoFilters } from '@/components/VideoFilters'
 import Link from 'next/link'
 import { notArchived, publishedFilter } from '@/lib/query-helpers'
+import { buildVideoUrl, parseVideoParams } from '@/lib/video-url'
 
 type Props = {
-  searchParams: Promise<{ page?: string; type?: string; category?: string }>
+  searchParams: Promise<{
+    page?: string
+    type?: string
+    categories?: string
+    participants?: string
+    date?: string
+    published?: string
+  }>
 }
 
 export default async function VideosPage({ searchParams }: Props) {
-  const params = await searchParams
-  const page = parseInt(params.page || '1')
+  const raw = await searchParams
+  const params = parseVideoParams(raw)
   const limit = 12
   const payload = await getPayload()
   const { user } = await payload.auth({ headers: await headers() })
   const isAdmin = user?.role === 'admin'
 
+  // Build where clause
   const where: Where = { and: [...publishedFilter(isAdmin), notArchived] } as any
-  if (params.type) {
-    (where as any).and.push({ videoType: { equals: params.type } })
-  }
-  if (params.category) {
-    (where as any).and.push({ categories: { equals: params.category } })
+
+  if (params.type.length > 0) {
+    if (params.type.length === 1) {
+      ;(where as any).and.push({ videoType: { equals: params.type[0] } })
+    } else {
+      ;(where as any).and.push({ videoType: { in: params.type } })
+    }
   }
 
-  const [videos, categories] = await Promise.all([
+  if (params.categories.length > 0) {
+    ;(where as any).and.push({ categories: { in: params.categories } })
+  }
+
+  if (params.participants.length > 0) {
+    ;(where as any).and.push({ participants: { in: params.participants } })
+  }
+
+  if (params.date) {
+    const start = new Date(params.date + 'T00:00:00.000Z')
+    const end = new Date(params.date + 'T23:59:59.999Z')
+    ;(where as any).and.push({ airedDate: { greater_than_equal: start.toISOString() } })
+    ;(where as any).and.push({ airedDate: { less_than_equal: end.toISOString() } })
+  }
+
+  if (isAdmin && params.published !== '') {
+    ;(where as any).and.push({ published: { equals: params.published === 'true' } })
+  }
+
+  const [videos, categories, participants] = await Promise.all([
     payload.find({
       collection: 'videos',
       where,
       sort: '-airedDate',
-      page,
+      page: params.page,
       limit,
       depth: 1,
     }),
@@ -41,45 +71,37 @@ export default async function VideosPage({ searchParams }: Props) {
       sort: 'title',
       limit: 100,
     }),
+    payload.find({
+      collection: 'participants',
+      where: notArchived,
+      sort: 'fullName',
+      limit: 200,
+    }),
   ])
+
+  const prevUrl = buildVideoUrl({ ...params, page: params.page - 1 })
+  const nextUrl = buildVideoUrl({ ...params, page: params.page + 1 })
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
       <h1 className="mb-6 text-3xl font-bold text-foreground">Videi</h1>
 
-      {/* Filters */}
-      <div className="mb-8 flex flex-wrap gap-3">
-        <Link
-          href="/video"
-          className={cn('rounded-full border px-4 py-1.5 text-sm transition-colors', params.type ? 'border-border text-muted-foreground hover:border-primary/50' : 'border-primary bg-primary/10 text-primary')}
-        >
-          Svi
-        </Link>
-        <Link
-          href="/video?type=full"
-          className={cn('rounded-full border px-4 py-1.5 text-sm transition-colors', params.type === 'full' ? 'border-primary bg-primary/10 text-primary' : 'border-border text-muted-foreground hover:border-primary/50')}
-        >
-          Cijele epizode
-        </Link>
-        <Link
-          href="/video?type=clip"
-          className={cn('rounded-full border px-4 py-1.5 text-sm transition-colors', params.type === 'clip' ? 'border-primary bg-primary/10 text-primary' : 'border-border text-muted-foreground hover:border-primary/50')}
-        >
-          Isječci
-        </Link>
-
-        <div className="h-6 w-px bg-border" />
-
-        {categories.docs.map((cat: any) => (
-          <Link
-            key={cat.id}
-            href={`/video?category=${cat.id}`}
-            className={cn('rounded-full border px-4 py-1.5 text-sm transition-colors', params.category === cat.id ? 'border-primary bg-primary/10 text-primary' : 'border-border text-muted-foreground hover:border-primary/50')}
-          >
-            {cat.title}
-          </Link>
-        ))}
-      </div>
+      <VideoFilters
+        categories={categories.docs.map((c: any) => ({ id: c.id, title: c.title }))}
+        participants={participants.docs.map((p: any) => ({
+          id: p.id,
+          fullName: p.fullName || `${p.firstName} ${p.lastName}`,
+          type: p.type,
+        }))}
+        isAdmin={isAdmin}
+        current={{
+          type: params.type,
+          categories: params.categories,
+          participants: params.participants,
+          date: params.date,
+          published: params.published,
+        }}
+      />
 
       {/* Grid */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
@@ -95,21 +117,21 @@ export default async function VideosPage({ searchParams }: Props) {
       {/* Pagination */}
       {videos.totalPages > 1 && (
         <div className="mt-8 flex justify-center gap-2">
-          {page > 1 && (
+          {params.page > 1 && (
             <Link
-              href={`/video?page=${page - 1}${params.type ? `&type=${params.type}` : ''}${params.category ? `&category=${params.category}` : ''}`}
-              className="rounded-md border border-border px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              href={prevUrl}
+              className="rounded-md border border-border px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
               Prethodna
             </Link>
           )}
           <span className="flex items-center px-4 text-sm text-muted-foreground">
-            Stranica {page} od {videos.totalPages}
+            Stranica {params.page} od {videos.totalPages}
           </span>
-          {page < videos.totalPages && (
+          {params.page < videos.totalPages && (
             <Link
-              href={`/video?page=${page + 1}${params.type ? `&type=${params.type}` : ''}${params.category ? `&category=${params.category}` : ''}`}
-              className="rounded-md border border-border px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              href={nextUrl}
+              className="rounded-md border border-border px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
             >
               Sljedeća
             </Link>
