@@ -71,7 +71,7 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URI || "",
     },
     prodMigrations: migrations,
-    push: false,
+    push: process.env.DB_PUSH === 'true',
   }),
   editor: lexicalEditor(),
   email: process.env.RESEND_API_KEY
