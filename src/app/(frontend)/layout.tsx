@@ -95,6 +95,7 @@ export default async function FrontendLayout({
       </head>
       <body>
         <ThemeProvider>
+          <ThemeColor />
           {!isLocal && (
             <UmamiIdentify
               websiteId={umamiId}
