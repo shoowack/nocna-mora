@@ -1,36 +1,20 @@
 "use client";
 
-import { useEffect } from "react";
-
-const colors = {
-  light: "#ffffff",
-  dark: "#0a0a0a",
-};
-
-function setThemeColor() {
-  const isDark = document.documentElement.classList.contains("dark");
-  const color = isDark ? colors.dark : colors.light;
-  let meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]');
-  if (!meta) {
-    meta = document.createElement("meta");
-    meta.name = "theme-color";
-    document.head.appendChild(meta);
-  }
-  meta.content = color;
-}
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
 
 export function ThemeColor() {
-  useEffect(() => {
-    setThemeColor();
+  const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
-    const observer = new MutationObserver(setThemeColor);
-    observer.observe(document.documentElement, {
-      attributes: true,
-      attributeFilter: ["class"],
-    });
+  useEffect(() => setMounted(true), []);
 
-    return () => observer.disconnect();
-  }, []);
+  if (!mounted) return null;
 
-  return null;
+  return (
+    <meta
+      name="theme-color"
+      content={resolvedTheme === "dark" ? "#0a0a0a" : "#ffffff"}
+    />
+  );
 }
