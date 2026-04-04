@@ -1,11 +1,10 @@
 import type { Where } from 'payload'
+import { headers } from 'next/headers'
 import { getPayload } from '@/lib/payload'
 import { VideoCard } from '@/components/VideoCard'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
-import { notArchived } from '@/lib/query-helpers'
-
-export const revalidate = 60
+import { notArchived, publishedFilter } from '@/lib/query-helpers'
 
 type Props = {
   searchParams: Promise<{ page?: string; type?: string; category?: string }>
@@ -16,13 +15,15 @@ export default async function VideosPage({ searchParams }: Props) {
   const page = parseInt(params.page || '1')
   const limit = 12
   const payload = await getPayload()
+  const { user } = await payload.auth({ headers: await headers() })
+  const isAdmin = user?.role === 'admin'
 
-  const where: Where = { published: { equals: true }, ...notArchived }
+  const where: Where = { and: [...publishedFilter(isAdmin), notArchived] } as any
   if (params.type) {
-    where.videoType = { equals: params.type }
+    (where as any).and.push({ videoType: { equals: params.type } })
   }
   if (params.category) {
-    where.categories = { equals: params.category }
+    (where as any).and.push({ categories: { equals: params.category } })
   }
 
   const [videos, categories] = await Promise.all([

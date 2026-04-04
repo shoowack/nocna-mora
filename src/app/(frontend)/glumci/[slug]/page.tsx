@@ -6,7 +6,7 @@ import { formatDate } from '@/lib/utils'
 import Image from 'next/image'
 import Link from 'next/link'
 import { Pencil } from 'lucide-react'
-import { notArchived } from '@/lib/query-helpers'
+import { notArchived, publishedFilter } from '@/lib/query-helpers'
 
 export const revalidate = 3600
 
@@ -44,7 +44,7 @@ export default async function ActorDetailPage({ params }: Props) {
   const { slug } = await params
   const payload = await getPayload()
   const { user } = await payload.auth({ headers: await headers() })
-  const isAdmin = user?.role === 'admin' || user?.role === 'editor'
+  const isAdmin = user?.role === 'admin'
 
   const result = await payload.find({
     collection: 'participants',
@@ -63,7 +63,7 @@ export default async function ActorDetailPage({ params }: Props) {
     where: {
       and: [
         { participants: { equals: person.id } },
-        { published: { equals: true } },
+        ...publishedFilter(isAdmin),
         notArchived,
       ],
     },

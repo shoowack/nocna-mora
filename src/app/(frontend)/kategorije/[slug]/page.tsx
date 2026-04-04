@@ -4,7 +4,7 @@ import { getPayload } from "@/lib/payload";
 import { VideoCard } from "@/components/VideoCard";
 import Link from "next/link";
 import { Pencil } from "lucide-react";
-import { notArchived } from "@/lib/query-helpers";
+import { notArchived, publishedFilter } from "@/lib/query-helpers";
 
 
 export const revalidate = 300;
@@ -35,7 +35,7 @@ export default async function CategoryDetailPage({
   const page = parseInt(sp.page || "1");
   const payload = await getPayload();
   const { user } = await payload.auth({ headers: await headers() });
-  const isAdmin = user?.role === "admin" || user?.role === "editor";
+  const isAdmin = user?.role === "admin";
 
   const catResult = await payload.find({
     collection: "categories",
@@ -52,7 +52,7 @@ export default async function CategoryDetailPage({
     where: {
       and: [
         { categories: { equals: category.id } },
-        { published: { equals: true } },
+        ...publishedFilter(isAdmin),
         notArchived,
       ],
     },

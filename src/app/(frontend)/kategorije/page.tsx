@@ -1,9 +1,8 @@
 import Link from "next/link";
+import { headers } from "next/headers";
 import { getPayload } from "@/lib/payload";
 import { Folder } from "lucide-react";
-import { notArchived } from "@/lib/query-helpers";
-
-export const revalidate = 3600;
+import { notArchived, publishedFilter } from "@/lib/query-helpers";
 
 export const metadata = {
   title: "Kategorije | Noćna mora Željka Malnara",
@@ -11,6 +10,8 @@ export const metadata = {
 
 export default async function CategoriesPage() {
   const payload = await getPayload();
+  const { user } = await payload.auth({ headers: await headers() });
+  const isAdmin = user?.role === "admin";
 
   const categories = await payload.find({
     collection: "categories",
@@ -27,7 +28,7 @@ export default async function CategoriesPage() {
         where: {
           and: [
             { categories: { equals: cat.id } },
-            { published: { equals: true } },
+            ...publishedFilter(isAdmin),
             notArchived,
           ],
         },

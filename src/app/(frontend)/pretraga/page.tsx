@@ -1,9 +1,10 @@
+import { headers } from "next/headers";
 import { getPayload } from "@/lib/payload";
 import { SearchBar } from "@/components/SearchBar";
 import { VideoCard } from "@/components/VideoCard";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { notArchived } from "@/lib/query-helpers";
+import { notArchived, publishedFilter } from "@/lib/query-helpers";
 
 export const metadata = {
   title: "Pretraži | Noćna mora Željka Malnara",
@@ -23,6 +24,8 @@ export default async function SearchPage({ searchParams }: Props) {
   const query = params.q || "";
   const page = parseInt(params.page || "1");
   const payload = await getPayload();
+  const { user } = await payload.auth({ headers: await headers() });
+  const isAdmin = user?.role === "admin";
 
   let results: any = { docs: [], totalDocs: 0, totalPages: 0 };
   let participantResults: any[] = [];
@@ -33,7 +36,7 @@ export default async function SearchPage({ searchParams }: Props) {
       collection: "videos",
       where: {
         and: [
-          { published: { equals: true } },
+          ...publishedFilter(isAdmin),
           notArchived,
           {
             or: [

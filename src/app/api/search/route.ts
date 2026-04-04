@@ -23,6 +23,8 @@ export async function GET(request: NextRequest) {
   }
 
   const payload = await getPayload()
+  const { user } = await payload.auth({ headers: request.headers })
+  const isAdmin = user?.role === 'admin'
 
   try {
     // Try PostgreSQL FTS via Drizzle (available after running migrations/0001_fts_setup.sql)
@@ -44,7 +46,7 @@ export async function GET(request: NextRequest) {
              v."video_type" as "videoType", v."aired_date" as "airedDate", v.duration,
              ts_rank(v.search_vector, to_tsquery('croatian', ${tsQuery})) AS rank
       FROM videos v
-      WHERE v.published = true
+      WHERE ${isAdmin ? sql`true` : sql`v.published = true`}
         AND v.search_vector @@ to_tsquery('croatian', ${tsQuery})
         ${category ? sql`AND v.id IN (SELECT video_id FROM videos_rels WHERE path = 'categories' AND "categories_id" = ${category})` : sql``}
         ${participant ? sql`AND v.id IN (SELECT video_id FROM videos_rels WHERE path = 'participants' AND "participants_id" = ${participant})` : sql``}
@@ -56,7 +58,7 @@ export async function GET(request: NextRequest) {
 
     const countResult = await (db as any).execute(sql`
       SELECT COUNT(*) as total FROM videos v
-      WHERE v.published = true
+      WHERE ${isAdmin ? sql`true` : sql`v.published = true`}
         AND v.search_vector @@ to_tsquery('croatian', ${tsQuery})
         ${category ? sql`AND v.id IN (SELECT video_id FROM videos_rels WHERE path = 'categories' AND "categories_id" = ${category})` : sql``}
         ${participant ? sql`AND v.id IN (SELECT video_id FROM videos_rels WHERE path = 'participants' AND "participants_id" = ${participant})` : sql``}
@@ -78,7 +80,7 @@ export async function GET(request: NextRequest) {
       collection: 'videos',
       where: {
         and: [
-          { published: { equals: true } },
+          ...(isAdmin ? [] : [{ published: { equals: true } }]),
           {
             or: [
               { title: { contains: query } },

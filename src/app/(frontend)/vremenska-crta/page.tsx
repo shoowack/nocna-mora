@@ -1,7 +1,8 @@
+import { headers } from "next/headers";
 import { getPayload } from "@/lib/payload";
 import { Timeline } from "@/components/Timeline";
 import type { TimelineEvent } from "@/components/Timeline";
-import { notArchived } from "@/lib/query-helpers";
+import { notArchived, publishedFilter } from "@/lib/query-helpers";
 
 export const revalidate = 3600;
 
@@ -12,6 +13,8 @@ export const metadata = {
 
 export default async function TimelinePage() {
   const payload = await getPayload();
+  const { user } = await payload.auth({ headers: await headers() });
+  const isAdmin = user?.role === "admin";
 
   const [timelineEventsResult, mainParticipants, publishedVideos] =
     await Promise.all([
@@ -36,7 +39,7 @@ export default async function TimelinePage() {
       payload.find({
         collection: "videos",
         where: {
-          and: [{ published: { equals: true } }, { airedDate: { exists: true } }, notArchived],
+          and: [...publishedFilter(isAdmin), { airedDate: { exists: true } }, notArchived],
         },
         limit: 500,
         depth: 1,

@@ -1,19 +1,20 @@
 import Link from "next/link";
+import { headers } from "next/headers";
 import { getPayload } from "@/lib/payload";
 import { VideoCard } from "@/components/VideoCard";
 import { ParticipantCard } from "@/components/ParticipantCard";
-import { notArchived } from "@/lib/query-helpers";
-
-export const revalidate = 3600;
+import { notArchived, publishedFilter } from "@/lib/query-helpers";
 
 export default async function HomePage() {
   const payload = await getPayload();
+  const { user } = await payload.auth({ headers: await headers() });
+  const isAdmin = user?.role === "admin";
 
   const [homepage, latestVideos, participants] = await Promise.all([
     payload.findGlobal({ slug: "homepage" }),
     payload.find({
       collection: "videos",
-      where: { and: [{ published: { equals: true } }, notArchived] },
+      where: { and: [...publishedFilter(isAdmin), notArchived] },
       sort: "-airedDate",
       limit: 6,
     }),

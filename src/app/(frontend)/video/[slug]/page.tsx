@@ -8,7 +8,7 @@ import { Reactions } from "@/components/Reactions";
 import { formatDate, formatDuration } from "@/lib/utils";
 import { getProviderLabel } from "@/lib/video-providers";
 import { Pencil } from "lucide-react";
-import { notArchived } from "@/lib/query-helpers";
+import { notArchived, publishedFilter } from "@/lib/query-helpers";
 
 export const revalidate = 300;
 
@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props) {
   const payload = await getPayload();
   const videos = await payload.find({
     collection: "videos",
-    where: { and: [{ slug: { equals: slug } }, { published: { equals: true } }, notArchived] },
+    where: { and: [{ slug: { equals: slug } }, notArchived] },
     limit: 1,
   });
 
@@ -37,11 +37,11 @@ export default async function VideoDetailPage({ params }: Props) {
   const { slug } = await params;
   const payload = await getPayload();
   const { user } = await payload.auth({ headers: await headers() });
-  const isAdmin = user?.role === "admin" || user?.role === "editor";
+  const isAdmin = user?.role === "admin";
 
   const videos = await payload.find({
     collection: "videos",
-    where: { and: [{ slug: { equals: slug } }, { published: { equals: true } }, notArchived] },
+    where: { and: [{ slug: { equals: slug } }, ...publishedFilter(isAdmin), notArchived] },
     limit: 1,
     depth: 2,
   });
