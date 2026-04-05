@@ -14,6 +14,7 @@ type Props = {
     provider: "youtube" | "vimeo" | "dailymotion" | "facebook";
     videoId: string;
     videoType: "full" | "clip";
+    published?: boolean;
     duration?: number | null;
     airedDate?: string | null;
     thumbnail?: { url: string } | null;
@@ -60,6 +61,11 @@ export function VideoCard({ video }: Props) {
         {video.videoType === "clip" && (
           <span className="absolute left-2 top-2 rounded bg-primary px-1.5 py-0.5 text-xs font-medium text-white">
             Isječak
+          </span>
+        )}
+        {video.published === false && (
+          <span className="absolute right-2 top-2 rounded bg-amber-500 px-1.5 py-0.5 text-xs font-medium text-white">
+            Neobjavljeno
           </span>
         )}
       </div>
