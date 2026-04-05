@@ -107,7 +107,7 @@ export function VideoFilters({ categories, participants, isAdmin, videoDates, cu
   )
 
   return (
-    <div className="mb-8 flex flex-wrap items-center gap-2">
+    <div className="mb-8 grid grid-cols-1 gap-2 sm:flex sm:flex-wrap sm:items-center">
       {/* Video type */}
       <MultiCombobox
         label="Tip videa"
@@ -146,7 +146,7 @@ export function VideoFilters({ categories, participants, isAdmin, videoDates, cu
           <Button
             variant="outline"
             className={cn(
-              'min-w-[175px] justify-between font-normal',
+              'w-full justify-between font-normal sm:min-w-[175px] sm:w-auto',
               selectedDate && 'border-primary text-foreground',
             )}
           >
@@ -232,7 +232,7 @@ function MultiCombobox({ label, options, selected, onToggle, onClear, searchPlac
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={cn('min-w-[140px] justify-between font-normal', count > 0 && 'border-primary')}
+          className={cn('w-full justify-between font-normal sm:w-auto sm:min-w-[140px]', count > 0 && 'border-primary')}
         >
           <span className="flex items-center gap-1.5">
             {label}
@@ -297,7 +297,7 @@ function GroupedMultiCombobox({ label, groups, selected, onToggle, onClear, sear
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={cn('min-w-[140px] justify-between font-normal', count > 0 && 'border-primary')}
+          className={cn('w-full justify-between font-normal sm:w-auto sm:min-w-[140px]', count > 0 && 'border-primary')}
         >
           <span className="flex items-center gap-1.5">
             {label}
@@ -367,7 +367,7 @@ function SingleCombobox({ label, options, selected, onSelect, onClear, allLabel 
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={cn('min-w-[140px] justify-between font-normal', active && 'border-primary')}
+          className={cn('w-full justify-between font-normal sm:w-auto sm:min-w-[140px]', active && 'border-primary')}
         >
           <span>{active ? active.label : allLabel}</span>
           {active ? (
