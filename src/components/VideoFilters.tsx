@@ -176,6 +176,7 @@ export function VideoFilters({ categories, participants, isAdmin, videoDates, cu
             captionLayout="dropdown"
             startMonth={new Date(2000, 0)}
             endMonth={new Date()}
+            defaultMonth={selectedDate}
             modifiers={{ hasVideo: parsedVideoDates }}
             modifiersClassNames={{ hasVideo: 'has-video-dot' }}
             initialFocus
