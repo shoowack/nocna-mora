@@ -114,6 +114,7 @@ export function VideoFilters({ categories, participants, isAdmin, videoDates, cu
         options={VIDEO_TYPES}
         selected={filters.type ?? []}
         onToggle={(v) => toggleMulti('type', v)}
+        onClear={() => applyFilters({ ...filters, type: [] })}
       />
 
       {/* Categories */}
@@ -122,6 +123,7 @@ export function VideoFilters({ categories, participants, isAdmin, videoDates, cu
         options={categories.map((c) => ({ value: c.id, label: c.title }))}
         selected={filters.categories ?? []}
         onToggle={(v) => toggleMulti('categories', v)}
+        onClear={() => applyFilters({ ...filters, categories: [] })}
         searchPlaceholder="Traži kategoriju..."
       />
 
@@ -134,6 +136,7 @@ export function VideoFilters({ categories, participants, isAdmin, videoDates, cu
         ]}
         selected={filters.participants ?? []}
         onToggle={(v) => toggleMulti('participants', v)}
+        onClear={() => applyFilters({ ...filters, participants: [] })}
         searchPlaceholder="Traži sudionika..."
       />
 
@@ -191,6 +194,7 @@ export function VideoFilters({ categories, participants, isAdmin, videoDates, cu
           options={PUBLISHED_OPTIONS}
           selected={filters.published ?? ''}
           onSelect={setPublished}
+          onClear={() => applyFilters({ ...filters, published: '' })}
           allLabel="Svi statusi"
         />
       )}
@@ -213,10 +217,11 @@ interface MultiComboboxProps {
   options: { value: string; label: string }[]
   selected: string[]
   onToggle: (value: string) => void
+  onClear: () => void
   searchPlaceholder?: string
 }
 
-function MultiCombobox({ label, options, selected, onToggle, searchPlaceholder }: MultiComboboxProps) {
+function MultiCombobox({ label, options, selected, onToggle, onClear, searchPlaceholder }: MultiComboboxProps) {
   const [open, setOpen] = React.useState(false)
   const count = selected.length
 
@@ -233,7 +238,21 @@ function MultiCombobox({ label, options, selected, onToggle, searchPlaceholder }
             {label}
             {count > 0 && <Badge>{count}</Badge>}
           </span>
-          <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
+          {count > 0 ? (
+            <span
+              role="button"
+              aria-label={`Obriši ${label}`}
+              className="ml-1 rounded-full p-0.5 hover:bg-muted"
+              onClick={(e) => {
+                e.stopPropagation()
+                onClear()
+              }}
+            >
+              <X className="h-3 w-3" />
+            </span>
+          ) : (
+            <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
+          )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[220px] p-0">
@@ -263,10 +282,11 @@ interface GroupedMultiComboboxProps {
   groups: { heading: string; options: { value: string; label: string }[] }[]
   selected: string[]
   onToggle: (value: string) => void
+  onClear: () => void
   searchPlaceholder?: string
 }
 
-function GroupedMultiCombobox({ label, groups, selected, onToggle, searchPlaceholder }: GroupedMultiComboboxProps) {
+function GroupedMultiCombobox({ label, groups, selected, onToggle, onClear, searchPlaceholder }: GroupedMultiComboboxProps) {
   const [open, setOpen] = React.useState(false)
   const count = selected.length
 
@@ -283,7 +303,21 @@ function GroupedMultiCombobox({ label, groups, selected, onToggle, searchPlaceho
             {label}
             {count > 0 && <Badge>{count}</Badge>}
           </span>
-          <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
+          {count > 0 ? (
+            <span
+              role="button"
+              aria-label={`Obriši ${label}`}
+              className="ml-1 rounded-full p-0.5 hover:bg-muted"
+              onClick={(e) => {
+                e.stopPropagation()
+                onClear()
+              }}
+            >
+              <X className="h-3 w-3" />
+            </span>
+          ) : (
+            <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
+          )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[240px] p-0">
@@ -318,10 +352,11 @@ interface SingleComboboxProps {
   options: { value: string; label: string }[]
   selected: string
   onSelect: (value: string) => void
+  onClear: () => void
   allLabel: string
 }
 
-function SingleCombobox({ label, options, selected, onSelect, allLabel }: SingleComboboxProps) {
+function SingleCombobox({ label, options, selected, onSelect, onClear, allLabel }: SingleComboboxProps) {
   const [open, setOpen] = React.useState(false)
   const active = options.find((o) => o.value === selected)
 
@@ -335,7 +370,21 @@ function SingleCombobox({ label, options, selected, onSelect, allLabel }: Single
           className={cn('min-w-[140px] justify-between font-normal', active && 'border-primary')}
         >
           <span>{active ? active.label : allLabel}</span>
-          <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
+          {active ? (
+            <span
+              role="button"
+              aria-label={`Obriši ${label}`}
+              className="ml-1 rounded-full p-0.5 hover:bg-muted"
+              onClick={(e) => {
+                e.stopPropagation()
+                onClear()
+              }}
+            >
+              <X className="h-3 w-3" />
+            </span>
+          ) : (
+            <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
+          )}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
