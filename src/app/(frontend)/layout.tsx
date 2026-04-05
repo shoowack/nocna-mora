@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
+import { Geist } from "next/font/google";
+
+const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ThemeColor } from "@/components/ThemeColor";
@@ -78,7 +81,7 @@ export default async function FrontendLayout({
 
   if (maintenanceEnabled && !isAdmin) {
     return (
-      <html lang="hr" suppressHydrationWarning>
+      <html lang="hr" className={geist.variable} suppressHydrationWarning>
         <body>
           <ThemeProvider>
             <ThemeColor />
@@ -90,7 +93,7 @@ export default async function FrontendLayout({
   }
 
   return (
-    <html lang="hr" suppressHydrationWarning>
+    <html lang="hr" className={geist.variable} suppressHydrationWarning>
       <body>
         <ThemeProvider>
           <ThemeColor />
