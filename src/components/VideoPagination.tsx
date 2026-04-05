@@ -3,6 +3,13 @@
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { cn } from '@/lib/utils'
 import {
   DEFAULT_PAGE_SIZE,
@@ -45,20 +52,18 @@ export function VideoPagination({
     <div className="mt-8 flex flex-col items-center justify-between gap-3 sm:flex-row">
       {/* Left: page size + summary */}
       <div className="flex items-center gap-3">
-        <div className="relative inline-flex items-center">
-          <select
-            value={perPage}
-            onChange={(e) => changePerPage(Number(e.target.value))}
-            className="h-8 cursor-pointer appearance-none rounded-md border border-border bg-background pl-3 pr-7 text-sm text-foreground focus:outline-none focus:ring-1 focus:ring-ring"
-          >
+        <Select value={String(perPage)} onValueChange={(v) => changePerPage(Number(v))}>
+          <SelectTrigger className="h-8 w-auto text-sm">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
             {PAGE_SIZE_OPTIONS.map((n) => (
-              <option key={n} value={n}>
+              <SelectItem key={n} value={String(n)}>
                 {n}/stranici
-              </option>
+              </SelectItem>
             ))}
-          </select>
-          <ChevronLeft className="pointer-events-none absolute right-2 top-1/2 h-3 w-3 -translate-y-1/2 rotate-[-90deg] text-muted-foreground" />
-        </div>
+          </SelectContent>
+        </Select>
         <span className="text-sm text-muted-foreground">
           Prikazuje se {from}–{to} od {totalDocs}
         </span>

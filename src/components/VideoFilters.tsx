@@ -1,13 +1,14 @@
 'use client'
 
 import * as React from 'react'
+import { hr as rdpHr } from 'react-day-picker/locale'
 import { useRouter } from 'next/navigation'
 import { format } from 'date-fns'
-import { hr } from 'date-fns/locale'
-import { CalendarIcon, Check, ChevronDown, X } from 'lucide-react'
+import { hr as dateFnsHr } from 'date-fns/locale'
+import { CalendarIcon, ChevronDown, X } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { Calendar } from '@/components/ui/calendar'
+import { Calendar, CalendarDayButton } from '@/components/ui/calendar'
 import {
   Command,
   CommandEmpty,
@@ -156,7 +157,7 @@ export function VideoFilters({
             <span className="flex items-center gap-2">
               <CalendarIcon className="h-4 w-4 text-muted-foreground" />
               {selectedDate
-                ? format(selectedDate, 'dd.MM.yyyy', { locale: hr })
+                ? format(selectedDate, 'dd.MM.yyyy', { locale: dateFnsHr })
                 : 'Datum emitiranja'}
             </span>
             {selectedDate ? (
@@ -185,9 +186,18 @@ export function VideoFilters({
             startMonth={new Date(2000, 0)}
             endMonth={new Date()}
             defaultMonth={selectedDate}
+            locale={rdpHr}
             modifiers={{ hasVideo: parsedVideoDates }}
-            modifiersClassNames={{ hasVideo: 'has-video-dot' }}
-            initialFocus
+            components={{
+              DayButton: (props) => (
+                <CalendarDayButton locale={rdpHr} {...props}>
+                  {props.children}
+                  {props.modifiers?.hasVideo && (
+                    <span className="absolute bottom-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-primary" />
+                  )}
+                </CalendarDayButton>
+              ),
+            }}
           />
         </PopoverContent>
       </Popover>
@@ -282,13 +292,12 @@ function MultiCombobox({
             <CommandEmpty>Nema rezultata.</CommandEmpty>
             <CommandGroup>
               {options.map((opt) => (
-                <CommandItem key={opt.value} value={opt.value} onSelect={() => onToggle(opt.value)}>
-                  <Check
-                    className={cn(
-                      'mr-2 h-4 w-4',
-                      selected.includes(opt.value) ? 'opacity-100' : 'opacity-0',
-                    )}
-                  />
+                <CommandItem
+                  key={opt.value}
+                  value={opt.value}
+                  data-checked={selected.includes(opt.value)}
+                  onSelect={() => onToggle(opt.value)}
+                >
                   {opt.label}
                 </CommandItem>
               ))}
@@ -366,14 +375,9 @@ function GroupedMultiCombobox({
                     <CommandItem
                       key={opt.value}
                       value={opt.value}
+                      data-checked={selected.includes(opt.value)}
                       onSelect={() => onToggle(opt.value)}
                     >
-                      <Check
-                        className={cn(
-                          'mr-2 h-4 w-4',
-                          selected.includes(opt.value) ? 'opacity-100' : 'opacity-0',
-                        )}
-                      />
                       {opt.label}
                     </CommandItem>
                   ))}
@@ -445,17 +449,12 @@ function SingleCombobox({
                 <CommandItem
                   key={opt.value}
                   value={opt.value}
+                  data-checked={selected === opt.value}
                   onSelect={() => {
                     onSelect(opt.value)
                     setOpen(false)
                   }}
                 >
-                  <Check
-                    className={cn(
-                      'mr-2 h-4 w-4',
-                      selected === opt.value ? 'opacity-100' : 'opacity-0',
-                    )}
-                  />
                   {opt.label}
                 </CommandItem>
               ))}

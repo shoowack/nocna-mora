@@ -1,34 +1,33 @@
-import path from "path";
-import { fileURLToPath } from "url";
-import { buildConfig } from "payload";
-import { postgresAdapter } from "@payloadcms/db-postgres";
-import { lexicalEditor } from "@payloadcms/richtext-lexical";
-import { s3Storage } from "@payloadcms/storage-s3";
-import sharp from "sharp";
-
+import { postgresAdapter } from '@payloadcms/db-postgres'
+import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { s3Storage } from '@payloadcms/storage-s3'
+import path from 'path'
+import { buildConfig } from 'payload'
+import sharp from 'sharp'
+import { fileURLToPath } from 'url'
 import {
-  Users,
-  Media,
-  Videos,
-  Participants,
   Categories,
   Comments,
+  Media,
+  Notifications,
+  Participants,
   Reactions,
   TimelineEvents,
-  Notifications,
-} from "@/collections";
-import { migrations } from "@/migrations";
-import { SiteSettings } from "@/globals/SiteSettings";
-import { Homepage } from "@/globals/Homepage";
+  Users,
+  Videos,
+} from '@/collections'
+import { Homepage } from '@/globals/Homepage'
+import { SiteSettings } from '@/globals/SiteSettings'
+import { migrations } from '@/migrations'
 
-const filename = fileURLToPath(import.meta.url);
-const dirname = path.dirname(filename);
+const filename = fileURLToPath(import.meta.url)
+const dirname = path.dirname(filename)
 
 export default buildConfig({
   admin: {
     user: Users.slug,
     meta: {
-      titleSuffix: "Admin | Noćna mora Željka Malnara",
+      titleSuffix: 'Admin | Noćna mora Željka Malnara',
     },
     importMap: {
       baseDir: path.resolve(dirname),
@@ -56,10 +55,10 @@ export default buildConfig({
             bucket: process.env.R2_BUCKET,
             config: {
               credentials: {
-                accessKeyId: process.env.R2_ACCESS_KEY_ID || "",
-                secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || "",
+                accessKeyId: process.env.R2_ACCESS_KEY_ID || '',
+                secretAccessKey: process.env.R2_SECRET_ACCESS_KEY || '',
               },
-              region: "auto",
+              region: 'auto',
               endpoint: process.env.R2_ENDPOINT,
             },
           }),
@@ -68,7 +67,7 @@ export default buildConfig({
   ],
   db: postgresAdapter({
     pool: {
-      connectionString: process.env.DATABASE_URI || "",
+      connectionString: process.env.DATABASE_URI || '',
     },
     prodMigrations: migrations,
   }),
@@ -76,9 +75,9 @@ export default buildConfig({
   email: process.env.RESEND_API_KEY
     ? undefined // Configure @payloadcms/email-resend when API key is available
     : undefined,
-  secret: process.env.PAYLOAD_SECRET || "CHANGE-ME-IN-PRODUCTION",
+  secret: process.env.PAYLOAD_SECRET || 'CHANGE-ME-IN-PRODUCTION',
   sharp,
   typescript: {
-    outputFile: path.resolve(dirname, "payload-types.ts"),
+    outputFile: path.resolve(dirname, 'payload-types.ts'),
   },
-});
+})

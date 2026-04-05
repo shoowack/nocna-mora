@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Geist } from 'next/font/google'
 import { headers } from 'next/headers'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
@@ -8,6 +9,8 @@ import { ThemeProvider } from '@/components/ThemeProvider'
 import { UmamiIdentify } from '@/components/UmamiIdentify'
 import { getPayload } from '@/lib/payload'
 import type { Media } from '../../../payload-types'
+
+const geist = Geist({ subsets: ['latin'], variable: '--font-sans' })
 
 export const dynamic = 'force-dynamic'
 
@@ -72,7 +75,7 @@ export default async function FrontendLayout({ children }: { children: React.Rea
 
   if (maintenanceEnabled && !isAdmin) {
     return (
-      <html lang="hr" suppressHydrationWarning>
+      <html lang="hr" className={geist.variable} suppressHydrationWarning>
         <body>
           <ThemeProvider>
             <ThemeColor />
@@ -84,7 +87,7 @@ export default async function FrontendLayout({ children }: { children: React.Rea
   }
 
   return (
-    <html lang="hr" suppressHydrationWarning>
+    <html lang="hr" className={geist.variable} suppressHydrationWarning>
       <body>
         <ThemeProvider>
           <ThemeColor />

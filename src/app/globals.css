@@ -1,4 +1,8 @@
 @import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'shadcn/tailwind.css';
+
+@custom-variant dark (&:is(.dark *));
 
 @variant dark (&:where(.dark, .dark *));
 
@@ -8,6 +12,8 @@
   --foreground: #0a0a0a;
   --card: #f4f4f5;
   --card-foreground: #0a0a0a;
+  --popover: #ffffff;
+  --popover-foreground: #0a0a0a;
   --primary: #e11d48;
   --primary-foreground: #ffffff;
   --secondary: #e2e8f0;
@@ -16,10 +22,19 @@
   --muted-foreground: #71717a;
   --accent: #e2e8f0;
   --accent-foreground: #1e293b;
-  --destructive: #dc2626;
+  --destructive: oklch(0.577 0.245 27.325);
   --border: #e4e4e7;
   --input: #e4e4e7;
   --ring: #e11d48;
+  --radius: 0.5rem;
+  --sidebar: #f4f4f5;
+  --sidebar-foreground: #0a0a0a;
+  --sidebar-primary: #e11d48;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #e2e8f0;
+  --sidebar-accent-foreground: #1e293b;
+  --sidebar-border: #e4e4e7;
+  --sidebar-ring: #e11d48;
 }
 
 /* Dark */
@@ -28,6 +43,8 @@
   --foreground: #fafafa;
   --card: #141414;
   --card-foreground: #fafafa;
+  --popover: #141414;
+  --popover-foreground: #fafafa;
   --primary: #e11d48;
   --primary-foreground: #ffffff;
   --secondary: #1e293b;
@@ -36,18 +53,29 @@
   --muted-foreground: #a1a1aa;
   --accent: #1e293b;
   --accent-foreground: #e2e8f0;
-  --destructive: #dc2626;
+  --destructive: oklch(0.704 0.191 22.216);
   --border: #27272a;
   --input: #27272a;
   --ring: #e11d48;
+  --sidebar: #141414;
+  --sidebar-foreground: #fafafa;
+  --sidebar-primary: #e11d48;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #1e293b;
+  --sidebar-accent-foreground: #e2e8f0;
+  --sidebar-border: #27272a;
+  --sidebar-ring: #e11d48;
 }
 
-/* Point Tailwind's theme tokens at the CSS variables so they respond to theme switches */
-@theme {
+@theme inline {
+  --font-heading: var(--font-sans);
+  --font-sans: var(--font-sans);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
@@ -60,16 +88,33 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --radius: 0.5rem;
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family:
-    system-ui,
-    -apple-system,
-    sans-serif;
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background font-sans text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
 }
 
 /* Ensure Payload admin styles don't leak into frontend */
