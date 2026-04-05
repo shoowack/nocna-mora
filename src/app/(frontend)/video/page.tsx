@@ -1,11 +1,10 @@
-import type { Where } from 'payload'
 import { headers } from 'next/headers'
-import { getPayload } from '@/lib/payload'
+import type { Where } from 'payload'
 import { VideoCard } from '@/components/VideoCard'
 import { VideoFilters } from '@/components/VideoFilters'
 import { VideoPagination } from '@/components/VideoPagination'
+import { getPayload } from '@/lib/payload'
 import { notArchived, publishedFilter } from '@/lib/query-helpers'
-
 import { parseVideoParams } from '@/lib/video-url'
 
 type Props = {
@@ -60,9 +59,7 @@ export default async function VideosPage({ searchParams }: Props) {
 
   // Build a where clause without the date filter for calendar dot indicators
   const whereWithoutDate: typeof where = {
-    and: (where as any).and.filter(
-      (clause: any) => !clause.airedDate,
-    ),
+    and: (where as any).and.filter((clause: any) => !clause.airedDate),
   } as any
 
   const [videos, categories, participants, allDates] = await Promise.all([
@@ -96,9 +93,7 @@ export default async function VideosPage({ searchParams }: Props) {
     }),
   ])
 
-  const videoDates = allDates.docs
-    .map((v: any) => v.airedDate)
-    .filter(Boolean) as string[]
+  const videoDates = allDates.docs.map((v: any) => v.airedDate).filter(Boolean) as string[]
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">

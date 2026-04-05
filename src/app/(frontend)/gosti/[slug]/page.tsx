@@ -1,12 +1,12 @@
-import { notFound } from 'next/navigation'
 import { headers } from 'next/headers'
-import { getPayload } from '@/lib/payload'
-import { VideoCard } from '@/components/VideoCard'
-import { formatDate } from '@/lib/utils'
 import Image from 'next/image'
 import Link from 'next/link'
+import { notFound } from 'next/navigation'
 import { Pencil } from 'lucide-react'
+import { VideoCard } from '@/components/VideoCard'
+import { getPayload } from '@/lib/payload'
 import { notArchived, publishedFilter } from '@/lib/query-helpers'
+import { formatDate } from '@/lib/utils'
 
 export const revalidate = 3600
 
@@ -24,15 +24,23 @@ export async function generateMetadata({ params }: Props) {
   })
   if (result.docs.length === 0) return { title: 'Gost nije pronađen' }
   const p = result.docs[0] as any
-  const siteSettings = await payload.findGlobal({ slug: 'site-settings' }) as any
+  const siteSettings = (await payload.findGlobal({ slug: 'site-settings' })) as any
   const siteName = siteSettings?.siteName || 'Noćna Mora'
   const fullName = `${p.firstName} ${p.lastName}${p.nickname ? ` (${p.nickname})` : ''}`
-  const tokens = { firstName: p.firstName, lastName: p.lastName, nickname: p.nickname || '', siteName }
-  const interpolate = (tpl: string) => tpl.replace(/\{(\w+)\}/g, (_, k) => tokens[k as keyof typeof tokens] ?? _)
+  const tokens = {
+    firstName: p.firstName,
+    lastName: p.lastName,
+    nickname: p.nickname || '',
+    siteName,
+  }
+  const interpolate = (tpl: string) =>
+    tpl.replace(/\{(\w+)\}/g, (_, k) => tokens[k as keyof typeof tokens] ?? _)
   const titleTpl = siteSettings?.participantSeo?.titleTemplate
   const descTpl = siteSettings?.participantSeo?.descriptionTemplate
   const title = titleTpl ? interpolate(titleTpl) : `${fullName} | ${siteName}`
-  const description = descTpl ? interpolate(descTpl) : `Pogledajte više informazioni o liku ${p.firstName} ${p.lastName} iz emisije ${siteName}.`
+  const description = descTpl
+    ? interpolate(descTpl)
+    : `Pogledajte više informazioni o liku ${p.firstName} ${p.lastName} iz emisije ${siteName}.`
   return {
     title,
     description,
@@ -60,11 +68,7 @@ export default async function GuestDetailPage({ params }: Props) {
   const videos = await payload.find({
     collection: 'videos',
     where: {
-      and: [
-        { participants: { equals: person.id } },
-        ...publishedFilter(isAdmin),
-        notArchived,
-      ],
+      and: [{ participants: { equals: person.id } }, ...publishedFilter(isAdmin), notArchived],
     },
     sort: '-airedDate',
     limit: 50,
@@ -86,7 +90,8 @@ export default async function GuestDetailPage({ params }: Props) {
               />
             ) : (
               <div className="flex h-full w-full items-center justify-center text-4xl font-bold text-muted-foreground">
-                {person.firstName[0]}{person.lastName[0]}
+                {person.firstName[0]}
+                {person.lastName[0]}
               </div>
             )}
           </div>
@@ -120,18 +125,38 @@ export default async function GuestDetailPage({ params }: Props) {
           {person.nickname && (
             <p className="mt-1 text-lg text-muted-foreground">&quot;{person.nickname}&quot;</p>
           )}
-          {person.bio?.root?.children?.map((node: any) =>
-            node.children?.map((t: any) => t.text).join('')
-          ).filter(Boolean).join('\n') && (
+          {person.bio?.root?.children
+            ?.map((node: any) => node.children?.map((t: any) => t.text).join(''))
+            .filter(Boolean)
+            .join('\n') && (
             <p className="mt-3 text-sm text-muted-foreground">
-              {person.bio.root.children.map((node: any) =>
-                node.children?.map((t: any) => t.text).join('')
-              ).filter(Boolean).join(' ')}
+              {person.bio.root.children
+                .map((node: any) => node.children?.map((t: any) => t.text).join(''))
+                .filter(Boolean)
+                .join(' ')}
             </p>
           )}
           <div className="mt-3 flex flex-wrap gap-3 text-sm text-muted-foreground">
-            {person.birthDate && <span>{person.gender === 'female' ? 'Rođena' : person.gender === 'male' ? 'Rođen' : 'Rođen/a'}: {formatDate(person.birthDate)}</span>}
-            {person.deathDate && <span>{person.gender === 'female' ? 'Preminula' : person.gender === 'male' ? 'Preminuo' : 'Preminuo/la'}: {formatDate(person.deathDate)}</span>}
+            {person.birthDate && (
+              <span>
+                {person.gender === 'female'
+                  ? 'Rođena'
+                  : person.gender === 'male'
+                    ? 'Rođen'
+                    : 'Rođen/a'}
+                : {formatDate(person.birthDate)}
+              </span>
+            )}
+            {person.deathDate && (
+              <span>
+                {person.gender === 'female'
+                  ? 'Preminula'
+                  : person.gender === 'male'
+                    ? 'Preminuo'
+                    : 'Preminuo/la'}
+                : {formatDate(person.deathDate)}
+              </span>
+            )}
           </div>
         </div>
       </div>

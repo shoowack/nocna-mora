@@ -1,20 +1,20 @@
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image'
+import Link from 'next/link'
 
 type Props = {
   participant: {
-    slug: string;
-    firstName: string;
-    lastName: string;
-    nickname?: string | null;
-    type: "main" | "guest";
-    photo?: { url: string; alt: string } | null;
-  };
-  basePath: string;
-};
+    slug: string
+    firstName: string
+    lastName: string
+    nickname?: string | null
+    type: 'main' | 'guest'
+    photo?: { url: string; alt: string } | null
+  }
+  basePath: string
+}
 
 export function ParticipantCard({ participant, basePath }: Props) {
-  const name = `${participant.firstName} ${participant.lastName}`;
+  const name = `${participant.firstName} ${participant.lastName}`
 
   return (
     <Link
@@ -46,5 +46,5 @@ export function ParticipantCard({ participant, basePath }: Props) {
         </p>
       )}
     </Link>
-  );
+  )
 }

@@ -1,47 +1,46 @@
-import Link from "next/link";
-import { headers } from "next/headers";
-import { Search } from "lucide-react";
-import { ThemeToggle } from "@/components/ThemeToggle";
-import { LogoutButton } from "@/components/LogoutButton";
-import { MobileMenu } from "@/components/MobileMenu";
-import { getPayload } from "@/lib/payload";
-import { cn } from "@/lib/utils";
-import { Media } from "../../payload-types";
-import Image from "next/image";
+import { headers } from 'next/headers'
+import Image from 'next/image'
+import Link from 'next/link'
+import { Search } from 'lucide-react'
+import { LogoutButton } from '@/components/LogoutButton'
+import { MobileMenu } from '@/components/MobileMenu'
+import { ThemeToggle } from '@/components/ThemeToggle'
+import { getPayload } from '@/lib/payload'
+import { cn } from '@/lib/utils'
+import { Media } from '../../payload-types'
 
 const navLinks = [
-  { href: "/video", label: "Videi" },
-  { href: "/glumci", label: "Glumci" },
-  { href: "/gosti", label: "Gosti" },
-  { href: "/kategorije", label: "Kategorije" },
-  { href: "/vremenska-crta", label: "Vremenska crta" },
-];
+  { href: '/video', label: 'Videi' },
+  { href: '/glumci', label: 'Glumci' },
+  { href: '/gosti', label: 'Gosti' },
+  { href: '/kategorije', label: 'Kategorije' },
+  { href: '/vremenska-crta', label: 'Vremenska crta' },
+]
 
-const navLinkClass =
-  "text-sm text-muted-foreground hover:text-foreground transition-colors";
+const navLinkClass = 'text-sm text-muted-foreground hover:text-foreground transition-colors'
 
 export async function Header() {
-  const payload = await getPayload();
-  const headersList = await headers();
-  const { user } = await payload.auth({ headers: headersList });
+  const payload = await getPayload()
+  const headersList = await headers()
+  const { user } = await payload.auth({ headers: headersList })
 
-  let avatarUrl: string | undefined;
+  let avatarUrl: string | undefined
   if (user) {
     const fullUser = await payload.findByID({
-      collection: "users",
+      collection: 'users',
       id: user.id,
       depth: 1,
-    });
-    const avatar = fullUser?.avatar as Media | null | undefined;
-    if (avatar?.url) avatarUrl = avatar.url;
+    })
+    const avatar = fullUser?.avatar as Media | null | undefined
+    if (avatar?.url) avatarUrl = avatar.url
   }
 
-  let logoUrl: string | undefined;
+  let logoUrl: string | undefined
 
   try {
-    const siteSettings = await payload.findGlobal({ slug: "site-settings" });
-    const logo = siteSettings?.logo as Media | null | undefined;
-    if (logo?.url) logoUrl = logo.url;
+    const siteSettings = await payload.findGlobal({ slug: 'site-settings' })
+    const logo = siteSettings?.logo as Media | null | undefined
+    if (logo?.url) logoUrl = logo.url
   } catch {
     // fall through to static favicon
   }
@@ -77,7 +76,7 @@ export async function Header() {
           <Link
             href="/pretraga"
             className={cn(
-              "flex items-center gap-2 rounded-md border border-border bg-muted px-3 py-1.5",
+              'flex items-center gap-2 rounded-md border border-border bg-muted px-3 py-1.5',
               navLinkClass,
             )}
           >
@@ -90,7 +89,7 @@ export async function Header() {
               <Link
                 href="/profil"
                 className={cn(
-                  "flex items-center gap-2 rounded-md border border-border px-3 py-1.5",
+                  'flex items-center gap-2 rounded-md border border-border px-3 py-1.5',
                   navLinkClass,
                 )}
               >
@@ -124,10 +123,12 @@ export async function Header() {
         </div>
 
         <MobileMenu
-          user={user ? { id: String(user.id), name: user.name ?? "", email: user.email ?? "" } : null}
+          user={
+            user ? { id: String(user.id), name: user.name ?? '', email: user.email ?? '' } : null
+          }
           avatarUrl={avatarUrl}
         />
       </div>
     </header>
-  );
+  )
 }

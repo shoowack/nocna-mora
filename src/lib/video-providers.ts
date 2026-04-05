@@ -32,7 +32,7 @@ export function getThumbnailUrl(provider: Provider, videoId: string): string {
       // https://www.facebook.com/dvidra/videos/123 or
       // https://www.facebook.com/61555.../videos/123/
       const fbId = videoId.startsWith('http')
-        ? videoId.replace(/\/$/, '').split('/').pop() ?? videoId
+        ? (videoId.replace(/\/$/, '').split('/').pop() ?? videoId)
         : videoId
       return `https://graph.facebook.com/${fbId}/picture`
     }

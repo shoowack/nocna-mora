@@ -1,4 +1,4 @@
-import { MigrateUpArgs, MigrateDownArgs, sql } from "@payloadcms/db-postgres";
+import { MigrateDownArgs, MigrateUpArgs, sql } from '@payloadcms/db-postgres'
 
 export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   await db.execute(sql`
@@ -365,14 +365,10 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
   CREATE INDEX "homepage_rels_parent_idx" ON "homepage_rels" USING btree ("parent_id");
   CREATE INDEX "homepage_rels_path_idx" ON "homepage_rels" USING btree ("path");
   CREATE INDEX "homepage_rels_videos_id_idx" ON "homepage_rels" USING btree ("videos_id");
-  CREATE INDEX "homepage_rels_participants_id_idx" ON "homepage_rels" USING btree ("participants_id");`);
+  CREATE INDEX "homepage_rels_participants_id_idx" ON "homepage_rels" USING btree ("participants_id");`)
 }
 
-export async function down({
-  db,
-  payload,
-  req,
-}: MigrateDownArgs): Promise<void> {
+export async function down({ db, payload, req }: MigrateDownArgs): Promise<void> {
   await db.execute(sql`
    DROP TABLE "users_sessions" CASCADE;
   DROP TABLE "users" CASCADE;
@@ -403,5 +399,5 @@ export async function down({
   DROP TYPE "public"."enum_reactions_type";
   DROP TYPE "public"."enum_timeline_events_importance";
   DROP TYPE "public"."enum_notifications_type";
-  DROP TYPE "public"."enum_site_settings_social_links_platform";`);
+  DROP TYPE "public"."enum_site_settings_social_links_platform";`)
 }

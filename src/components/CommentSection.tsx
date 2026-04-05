@@ -86,7 +86,9 @@ export function CommentSection({ videoId, initialComments }: Props) {
             <div key={comment.id} className="rounded-lg border border-border bg-card p-4">
               <div className="mb-2 flex items-center justify-between">
                 <span className="text-sm font-medium text-foreground">{comment.author.name}</span>
-                <span className="text-xs text-muted-foreground">{formatDate(comment.createdAt)}</span>
+                <span className="text-xs text-muted-foreground">
+                  {formatDate(comment.createdAt)}
+                </span>
               </div>
               <p className="text-sm text-muted-foreground">{comment.content}</p>
             </div>

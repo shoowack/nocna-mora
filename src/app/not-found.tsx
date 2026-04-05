@@ -1,9 +1,9 @@
-export const dynamic = 'force-dynamic'
+import Link from 'next/link'
+import { Footer } from '@/components/Footer'
+import { Header } from '@/components/Header'
+import { ThemeProvider } from '@/components/ThemeProvider'
 
-import Link from "next/link";
-import { ThemeProvider } from "@/components/ThemeProvider";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
+export const dynamic = 'force-dynamic'
 
 export default function NotFound() {
   return (
@@ -15,12 +15,10 @@ export default function NotFound() {
             <main className="flex-1 flex items-center justify-center px-4 py-24 text-center">
               <div>
                 <h1 className="mb-2 text-8xl font-bold text-primary">404</h1>
-                <h2 className="mb-4 text-2xl font-bold text-foreground">
-                  Stranica nije pronađena
-                </h2>
+                <h2 className="mb-4 text-2xl font-bold text-foreground">Stranica nije pronađena</h2>
                 <p className="mx-auto mb-8 max-w-md text-muted-foreground">
-                  Stranica koju tražite ne postoji. Moguće je da je uklonjena ili
-                  da ste unijeli krivi URL.
+                  Stranica koju tražite ne postoji. Moguće je da je uklonjena ili da ste unijeli
+                  krivi URL.
                 </p>
                 <Link
                   href="/"
@@ -35,5 +33,5 @@ export default function NotFound() {
         </ThemeProvider>
       </body>
     </html>
-  );
+  )
 }

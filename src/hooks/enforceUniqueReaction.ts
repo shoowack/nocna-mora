@@ -14,10 +14,7 @@ export const enforceUniqueReaction: CollectionBeforeChangeHook = async ({
   const existing = await req.payload.find({
     collection: 'reactions',
     where: {
-      and: [
-        { video: { equals: data.video } },
-        { user: { equals: data.user } },
-      ],
+      and: [{ video: { equals: data.video } }, { user: { equals: data.user } }],
     },
     limit: 1,
   })

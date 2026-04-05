@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getPayload } from '@/lib/payload'
 import { sql } from 'drizzle-orm'
+import { getPayload } from '@/lib/payload'
 
 /**
  * Custom search endpoint that uses PostgreSQL full-text search.

@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { isAdmin, isAdminOrSelf, anyone } from '@/access'
+import { anyone, isAdmin, isAdminOrSelf } from '@/access'
 
 export const Users: CollectionConfig = {
   slug: 'users',
