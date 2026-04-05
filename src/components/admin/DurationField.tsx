@@ -1,7 +1,7 @@
 'use client'
 
-import { useField, FieldLabel } from '@payloadcms/ui'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import { FieldLabel, useField } from '@payloadcms/ui'
 
 type Props = {
   path: string

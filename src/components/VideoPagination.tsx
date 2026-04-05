@@ -3,8 +3,6 @@
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { buildVideoUrl, PAGE_SIZE_OPTIONS, DEFAULT_PAGE_SIZE, type VideoFilterParams } from '@/lib/video-url'
 import {
   Select,
   SelectContent,
@@ -12,6 +10,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { cn } from '@/lib/utils'
+import {
+  DEFAULT_PAGE_SIZE,
+  PAGE_SIZE_OPTIONS,
+  type VideoFilterParams,
+  buildVideoUrl,
+} from '@/lib/video-url'
 
 interface VideoPaginationProps {
   currentPage: number
@@ -66,27 +71,34 @@ export function VideoPagination({
 
       {/* Right: prev, page numbers, next */}
       <div className="flex items-center gap-1">
-        <PageButton onClick={() => go(currentPage - 1)} disabled={currentPage <= 1} aria-label="Prethodna stranica">
+        <PageButton
+          onClick={() => go(currentPage - 1)}
+          disabled={currentPage <= 1}
+          aria-label="Prethodna stranica"
+        >
           <ChevronLeft className="h-4 w-4" />
         </PageButton>
 
         {pages.map((p, i) =>
           p === '...' ? (
-            <span key={`ellipsis-${i}`} className="flex h-8 w-8 items-center justify-center text-sm text-muted-foreground">
+            <span
+              key={`ellipsis-${i}`}
+              className="flex h-8 w-8 items-center justify-center text-sm text-muted-foreground"
+            >
               …
             </span>
           ) : (
-            <PageButton
-              key={p}
-              onClick={() => go(p)}
-              active={p === currentPage}
-            >
+            <PageButton key={p} onClick={() => go(p)} active={p === currentPage}>
               {p}
             </PageButton>
           ),
         )}
 
-        <PageButton onClick={() => go(currentPage + 1)} disabled={currentPage >= totalPages} aria-label="Sljedeća stranica">
+        <PageButton
+          onClick={() => go(currentPage + 1)}
+          disabled={currentPage >= totalPages}
+          aria-label="Sljedeća stranica"
+        >
           <ChevronRight className="h-4 w-4" />
         </PageButton>
       </div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { cn } from '@/lib/utils'
 
 const REACTION_EMOJIS: Record<string, string> = {
@@ -91,7 +91,12 @@ export function Reactions({ videoId, initialReactions, userReaction }: Props) {
           <button
             key={type}
             onClick={() => handleReaction(type)}
-            className={cn('flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm transition-colors', isActive ? 'border-primary bg-primary/10 text-primary' : 'border-border bg-card text-muted-foreground hover:border-primary/50')}
+            className={cn(
+              'flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm transition-colors',
+              isActive
+                ? 'border-primary bg-primary/10 text-primary'
+                : 'border-border bg-card text-muted-foreground hover:border-primary/50',
+            )}
           >
             <span>{emoji}</span>
             {count > 0 && <span>{count}</span>}

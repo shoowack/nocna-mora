@@ -1,14 +1,22 @@
 import type { CollectionConfig } from 'payload'
 import { isAdmin, isAdminOrEditor, publishedOrAdmin } from '@/access'
-import { populateSlug } from '@/hooks/populateSlug'
 import { extractPlainTextFromTranscription } from '@/hooks/extractPlainText'
 import { notifyUsersOnNewVideo } from '@/hooks/notifyOnNewVideo'
+import { populateSlug } from '@/hooks/populateSlug'
 
 export const Videos: CollectionConfig = {
   slug: 'videos',
   admin: {
     useAsTitle: 'title',
-    defaultColumns: ['title', 'provider', 'videoType', 'duration', 'airedDate', 'published', 'deletedAt'],
+    defaultColumns: [
+      'title',
+      'provider',
+      'videoType',
+      'duration',
+      'airedDate',
+      'published',
+      'deletedAt',
+    ],
   },
   fields: [
     {

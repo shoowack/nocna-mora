@@ -1,73 +1,63 @@
-import { notFound } from "next/navigation";
-import { headers } from "next/headers";
-import { getPayload } from "@/lib/payload";
-import { VideoCard } from "@/components/VideoCard";
-import Link from "next/link";
-import { Pencil } from "lucide-react";
-import { notArchived, publishedFilter } from "@/lib/query-helpers";
+import { headers } from 'next/headers'
+import Link from 'next/link'
+import { notFound } from 'next/navigation'
+import { Pencil } from 'lucide-react'
+import { VideoCard } from '@/components/VideoCard'
+import { getPayload } from '@/lib/payload'
+import { notArchived, publishedFilter } from '@/lib/query-helpers'
 
-
-export const revalidate = 300;
+export const revalidate = 300
 
 type Props = {
-  params: Promise<{ slug: string }>;
-  searchParams: Promise<{ page?: string }>;
-};
-
-export async function generateMetadata({ params }: Props) {
-  const { slug } = await params;
-  const payload = await getPayload();
-  const result = await payload.find({
-    collection: "categories",
-    where: { and: [{ slug: { equals: slug } }, notArchived] },
-    limit: 1,
-  });
-  if (result.docs.length === 0) return { title: "Kategorija nije pronađena" };
-  return { title: `${result.docs[0].title} | Noćna mora Željka Malnara` };
+  params: Promise<{ slug: string }>
+  searchParams: Promise<{ page?: string }>
 }
 
-export default async function CategoryDetailPage({
-  params,
-  searchParams,
-}: Props) {
-  const { slug } = await params;
-  const sp = await searchParams;
-  const page = parseInt(sp.page || "1");
-  const payload = await getPayload();
-  const { user } = await payload.auth({ headers: await headers() });
-  const isAdmin = user?.role === "admin";
-
-  const catResult = await payload.find({
-    collection: "categories",
+export async function generateMetadata({ params }: Props) {
+  const { slug } = await params
+  const payload = await getPayload()
+  const result = await payload.find({
+    collection: 'categories',
     where: { and: [{ slug: { equals: slug } }, notArchived] },
     limit: 1,
-  });
+  })
+  if (result.docs.length === 0) return { title: 'Kategorija nije pronađena' }
+  return { title: `${result.docs[0].title} | Noćna mora Željka Malnara` }
+}
 
-  if (catResult.docs.length === 0) notFound();
+export default async function CategoryDetailPage({ params, searchParams }: Props) {
+  const { slug } = await params
+  const sp = await searchParams
+  const page = parseInt(sp.page || '1')
+  const payload = await getPayload()
+  const { user } = await payload.auth({ headers: await headers() })
+  const isAdmin = user?.role === 'admin'
 
-  const category = catResult.docs[0] as any;
+  const catResult = await payload.find({
+    collection: 'categories',
+    where: { and: [{ slug: { equals: slug } }, notArchived] },
+    limit: 1,
+  })
+
+  if (catResult.docs.length === 0) notFound()
+
+  const category = catResult.docs[0] as any
 
   const videos = await payload.find({
-    collection: "videos",
+    collection: 'videos',
     where: {
-      and: [
-        { categories: { equals: category.id } },
-        ...publishedFilter(isAdmin),
-        notArchived,
-      ],
+      and: [{ categories: { equals: category.id } }, ...publishedFilter(isAdmin), notArchived],
     },
-    sort: "-airedDate",
+    sort: '-airedDate',
     page,
     limit: 12,
     depth: 1,
-  });
+  })
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
       <div className="mb-2 flex items-start justify-between gap-4">
-        <h1 className="text-3xl font-bold text-foreground">
-          {category.title}
-        </h1>
+        <h1 className="text-3xl font-bold text-foreground">{category.title}</h1>
         {isAdmin && (
           <Link
             href={`/admin/collections/categories/${category.id}`}
@@ -78,9 +68,7 @@ export default async function CategoryDetailPage({
           </Link>
         )}
       </div>
-      {category.description && (
-        <p className="mb-6 text-muted-foreground">{category.description}</p>
-      )}
+      {category.description && <p className="mb-6 text-muted-foreground">{category.description}</p>}
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {videos.docs.map((video: any) => (
@@ -89,9 +77,7 @@ export default async function CategoryDetailPage({
       </div>
 
       {videos.docs.length === 0 && (
-        <p className="py-12 text-center text-muted-foreground">
-          Nema videa u ovoj kategoriji.
-        </p>
+        <p className="py-12 text-center text-muted-foreground">Nema videa u ovoj kategoriji.</p>
       )}
 
       {videos.totalPages > 1 && (
@@ -118,5 +104,5 @@ export default async function CategoryDetailPage({
         </div>
       )}
     </div>
-  );
+  )
 }

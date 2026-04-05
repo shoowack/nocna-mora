@@ -1,31 +1,31 @@
-import { getPayload } from "@/lib/payload";
-import { ParticipantCard } from "@/components/ParticipantCard";
-import { notArchived } from "@/lib/query-helpers";
+import { ParticipantCard } from '@/components/ParticipantCard'
+import { getPayload } from '@/lib/payload'
+import { notArchived } from '@/lib/query-helpers'
 
-export const revalidate = 3600;
+export const revalidate = 3600
 
 export const metadata = {
-  title: "Gosti | Noćna mora Željka Malnara",
-  description: "Gosti emisije",
-};
+  title: 'Gosti | Noćna mora Željka Malnara',
+  description: 'Gosti emisije',
+}
 
 type Props = {
-  searchParams: Promise<{ page?: string }>;
-};
+  searchParams: Promise<{ page?: string }>
+}
 
 export default async function GuestsPage({ searchParams }: Props) {
-  const params = await searchParams;
-  const page = parseInt(params.page || "1");
-  const payload = await getPayload();
+  const params = await searchParams
+  const page = parseInt(params.page || '1')
+  const payload = await getPayload()
 
   const participants = await payload.find({
-    collection: "participants",
-    where: { and: [{ type: { equals: "guest" } }, notArchived] },
-    sort: "lastName",
+    collection: 'participants',
+    where: { and: [{ type: { equals: 'guest' } }, notArchived] },
+    sort: 'lastName',
     page,
     limit: 40,
     depth: 1,
-  });
+  })
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
@@ -33,18 +33,12 @@ export default async function GuestsPage({ searchParams }: Props) {
 
       <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
         {participants.docs.map((participant: any) => (
-          <ParticipantCard
-            key={participant.id}
-            participant={participant}
-            basePath="/gosti"
-          />
+          <ParticipantCard key={participant.id} participant={participant} basePath="/gosti" />
         ))}
       </div>
 
       {participants.docs.length === 0 && (
-        <p className="py-12 text-center text-muted-foreground">
-          Još nema gostiju u arhivu.
-        </p>
+        <p className="py-12 text-center text-muted-foreground">Još nema gostiju u arhivu.</p>
       )}
 
       {/* Pagination */}
@@ -72,5 +66,5 @@ export default async function GuestsPage({ searchParams }: Props) {
         </div>
       )}
     </div>
-  );
+  )
 }

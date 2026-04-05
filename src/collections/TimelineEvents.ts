@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { isAdmin, isAdminOrEditor, anyone } from '@/access'
+import { anyone, isAdmin, isAdminOrEditor } from '@/access'
 
 export const TimelineEvents: CollectionConfig = {
   slug: 'timeline-events',

@@ -21,20 +21,14 @@ export const isAdminOrSelf: Access = ({ req: { user } }) => {
 export const publishedOrAdmin: Access = ({ req: { user } }) => {
   if (user?.role === 'admin' || user?.role === 'editor') return true
   return {
-    and: [
-      { published: { equals: true } } as any,
-      { deletedAt: { exists: false } } as any,
-    ],
+    and: [{ published: { equals: true } } as any, { deletedAt: { exists: false } } as any],
   }
 }
 
 export const approvedOrAdmin: Access = ({ req: { user } }) => {
   if (user?.role === 'admin') return true
   return {
-    and: [
-      { approved: { equals: true } } as any,
-      { deletedAt: { exists: false } } as any,
-    ],
+    and: [{ approved: { equals: true } } as any, { deletedAt: { exists: false } } as any],
   }
 }
 

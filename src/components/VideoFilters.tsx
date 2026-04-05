@@ -1,17 +1,14 @@
 'use client'
 
 import * as React from 'react'
+import { hr as rdpHr } from 'react-day-picker/locale'
 import { useRouter } from 'next/navigation'
 import { format } from 'date-fns'
 import { hr as dateFnsHr } from 'date-fns/locale'
-import { hr as rdpHr } from 'react-day-picker/locale'
-import { ChevronDown, CalendarIcon, X } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { buildVideoUrl, type VideoFilterParams } from '@/lib/video-url'
-import { Button } from '@/components/ui/button'
+import { CalendarIcon, ChevronDown, X } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import { Calendar, CalendarDayButton } from '@/components/ui/calendar'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import {
   Command,
   CommandEmpty,
@@ -21,6 +18,9 @@ import {
   CommandList,
   CommandSeparator,
 } from '@/components/ui/command'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { cn } from '@/lib/utils'
+import { type VideoFilterParams, buildVideoUrl } from '@/lib/video-url'
 
 type Category = { id: string; title: string }
 type Participant = { id: string; fullName: string; type: 'main' | 'guest' }
@@ -49,7 +49,13 @@ const PUBLISHED_OPTIONS = [
   { value: 'false', label: 'Neobjavljeno' },
 ]
 
-export function VideoFilters({ categories, participants, isAdmin, videoDates, current }: VideoFiltersProps) {
+export function VideoFilters({
+  categories,
+  participants,
+  isAdmin,
+  videoDates,
+  current,
+}: VideoFiltersProps) {
   const router = useRouter()
 
   const [filters, setFilters] = React.useState<VideoFilterParams>({
@@ -102,10 +108,7 @@ export function VideoFilters({ categories, participants, isAdmin, videoDates, cu
 
   const selectedDate = filters.date ? new Date(filters.date + 'T12:00:00') : undefined
 
-  const parsedVideoDates = React.useMemo(
-    () => videoDates.map((d) => new Date(d)),
-    [videoDates],
-  )
+  const parsedVideoDates = React.useMemo(() => videoDates.map((d) => new Date(d)), [videoDates])
 
   return (
     <div className="mb-8 grid grid-cols-1 gap-2 sm:flex sm:flex-wrap sm:items-center">
@@ -153,7 +156,9 @@ export function VideoFilters({ categories, participants, isAdmin, videoDates, cu
           >
             <span className="flex items-center gap-2">
               <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-              {selectedDate ? format(selectedDate, 'dd.MM.yyyy', { locale: dateFnsHr }) : 'Datum emitiranja'}
+              {selectedDate
+                ? format(selectedDate, 'dd.MM.yyyy', { locale: dateFnsHr })
+                : 'Datum emitiranja'}
             </span>
             {selectedDate ? (
               <span
@@ -211,7 +216,12 @@ export function VideoFilters({ categories, participants, isAdmin, videoDates, cu
 
       {/* Clear all */}
       {hasActiveFilters && (
-        <Button variant="ghost" size="sm" onClick={clearAll} className="text-muted-foreground hover:text-foreground">
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={clearAll}
+          className="text-muted-foreground hover:text-foreground"
+        >
           <X className="mr-1 h-3.5 w-3.5" />
           Poništi filtere
         </Button>
@@ -231,7 +241,14 @@ interface MultiComboboxProps {
   searchPlaceholder?: string
 }
 
-function MultiCombobox({ label, options, selected, onToggle, onClear, searchPlaceholder }: MultiComboboxProps) {
+function MultiCombobox({
+  label,
+  options,
+  selected,
+  onToggle,
+  onClear,
+  searchPlaceholder,
+}: MultiComboboxProps) {
   const [open, setOpen] = React.useState(false)
   const count = selected.length
 
@@ -242,7 +259,10 @@ function MultiCombobox({ label, options, selected, onToggle, onClear, searchPlac
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={cn('w-full justify-between font-normal sm:w-auto sm:min-w-[140px]', count > 0 && 'border-primary')}
+          className={cn(
+            'w-full justify-between font-normal sm:w-auto sm:min-w-[140px]',
+            count > 0 && 'border-primary',
+          )}
         >
           <span className="flex items-center gap-1.5">
             {label}
@@ -272,7 +292,12 @@ function MultiCombobox({ label, options, selected, onToggle, onClear, searchPlac
             <CommandEmpty>Nema rezultata.</CommandEmpty>
             <CommandGroup>
               {options.map((opt) => (
-                <CommandItem key={opt.value} value={opt.value} data-checked={selected.includes(opt.value)} onSelect={() => onToggle(opt.value)}>
+                <CommandItem
+                  key={opt.value}
+                  value={opt.value}
+                  data-checked={selected.includes(opt.value)}
+                  onSelect={() => onToggle(opt.value)}
+                >
                   {opt.label}
                 </CommandItem>
               ))}
@@ -293,7 +318,14 @@ interface GroupedMultiComboboxProps {
   searchPlaceholder?: string
 }
 
-function GroupedMultiCombobox({ label, groups, selected, onToggle, onClear, searchPlaceholder }: GroupedMultiComboboxProps) {
+function GroupedMultiCombobox({
+  label,
+  groups,
+  selected,
+  onToggle,
+  onClear,
+  searchPlaceholder,
+}: GroupedMultiComboboxProps) {
   const [open, setOpen] = React.useState(false)
   const count = selected.length
 
@@ -304,7 +336,10 @@ function GroupedMultiCombobox({ label, groups, selected, onToggle, onClear, sear
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={cn('w-full justify-between font-normal sm:w-auto sm:min-w-[140px]', count > 0 && 'border-primary')}
+          className={cn(
+            'w-full justify-between font-normal sm:w-auto sm:min-w-[140px]',
+            count > 0 && 'border-primary',
+          )}
         >
           <span className="flex items-center gap-1.5">
             {label}
@@ -337,7 +372,12 @@ function GroupedMultiCombobox({ label, groups, selected, onToggle, onClear, sear
                 {i > 0 && <CommandSeparator />}
                 <CommandGroup heading={group.heading}>
                   {group.options.map((opt) => (
-                    <CommandItem key={opt.value} value={opt.value} data-checked={selected.includes(opt.value)} onSelect={() => onToggle(opt.value)}>
+                    <CommandItem
+                      key={opt.value}
+                      value={opt.value}
+                      data-checked={selected.includes(opt.value)}
+                      onSelect={() => onToggle(opt.value)}
+                    >
                       {opt.label}
                     </CommandItem>
                   ))}
@@ -360,7 +400,14 @@ interface SingleComboboxProps {
   allLabel: string
 }
 
-function SingleCombobox({ label, options, selected, onSelect, onClear, allLabel }: SingleComboboxProps) {
+function SingleCombobox({
+  label,
+  options,
+  selected,
+  onSelect,
+  onClear,
+  allLabel,
+}: SingleComboboxProps) {
   const [open, setOpen] = React.useState(false)
   const active = options.find((o) => o.value === selected)
 
@@ -371,7 +418,10 @@ function SingleCombobox({ label, options, selected, onSelect, onClear, allLabel 
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={cn('w-full justify-between font-normal sm:w-auto sm:min-w-[140px]', active && 'border-primary')}
+          className={cn(
+            'w-full justify-between font-normal sm:w-auto sm:min-w-[140px]',
+            active && 'border-primary',
+          )}
         >
           <span>{active ? active.label : allLabel}</span>
           {active ? (

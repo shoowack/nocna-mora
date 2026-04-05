@@ -1,18 +1,18 @@
-import Link from "next/link";
-import Image from "next/image";
-import { Baby, Skull, Youtube, Play, CalendarDays } from "lucide-react";
-import { cn } from "@/lib/utils";
+import Image from 'next/image'
+import Link from 'next/link'
+import { Baby, CalendarDays, Play, Skull, Youtube } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 export type TimelineEvent = {
-  id: string;
-  title: string;
-  description?: { root: unknown } | null;
-  eventDate: string;
-  image?: { url: string; alt: string; credit?: string | null } | null;
-  relatedVideo?: { slug: string; title: string } | null;
-  category?: "birth" | "death" | "aired" | "event";
-  link?: { href: string; label: string } | null;
-};
+  id: string
+  title: string
+  description?: { root: unknown } | null
+  eventDate: string
+  image?: { url: string; alt: string; credit?: string | null } | null
+  relatedVideo?: { slug: string; title: string } | null
+  category?: 'birth' | 'death' | 'aired' | 'event'
+  link?: { href: string; label: string } | null
+}
 
 export function Timeline({ events }: { events: TimelineEvent[] }) {
   return (
@@ -25,21 +25,21 @@ export function Timeline({ events }: { events: TimelineEvent[] }) {
           {/* Icon */}
           <div
             className={cn(
-              "flex size-10 shrink-0 items-center justify-center rounded-full ring-4 ring-background bg-muted text-stone-500 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2",
+              'flex size-10 shrink-0 items-center justify-center rounded-full ring-4 ring-background bg-muted text-stone-500 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2',
               {
-                "": event.category === "death",
-                "bg-blue-200 text-blue-800 dark:bg-blue-900 dark:text-blue-200":
-                  event.category === "birth",
-                "bg-red-200 text-red-800 dark:bg-red-900 dark:text-red-200":
-                  event.category === "aired",
+                '': event.category === 'death',
+                'bg-blue-200 text-blue-800 dark:bg-blue-900 dark:text-blue-200':
+                  event.category === 'birth',
+                'bg-red-200 text-red-800 dark:bg-red-900 dark:text-red-200':
+                  event.category === 'aired',
               },
             )}
           >
-            {event.category === "birth" ? (
+            {event.category === 'birth' ? (
               <Baby className="size-5" strokeWidth={2} />
-            ) : event.category === "death" ? (
+            ) : event.category === 'death' ? (
               <Skull className="size-5" strokeWidth={2} />
-            ) : event.category === "aired" ? (
+            ) : event.category === 'aired' ? (
               <Youtube className="size-5" strokeWidth={2} />
             ) : (
               <CalendarDays className="size-5" strokeWidth={2} />
@@ -49,26 +49,24 @@ export function Timeline({ events }: { events: TimelineEvent[] }) {
           {/* Card */}
           <div
             className={cn(
-              "w-[calc(100%-4rem)] rounded-xl p-4 md:w-[calc(50%-2.5rem)] relative border bg-muted dark:bg-muted dark:border-muted-foreground/20 border-muted-foreground/30",
+              'w-[calc(100%-4rem)] rounded-xl p-4 md:w-[calc(50%-2.5rem)] relative border bg-muted dark:bg-muted dark:border-muted-foreground/20 border-muted-foreground/30',
               {
-                "": event.category === "death",
-                "bg-blue-100/50 text-blue-800 dark:bg-blue-950/50 dark:border-blue-950 border-blue-200":
-                  event.category === "birth",
-                "bg-red-100/50 text-red-800 dark:bg-red-950/50 dark:border-red-950 border-red-200":
-                  event.category === "aired",
+                '': event.category === 'death',
+                'bg-blue-100/50 text-blue-800 dark:bg-blue-950/50 dark:border-blue-950 border-blue-200':
+                  event.category === 'birth',
+                'bg-red-100/50 text-red-800 dark:bg-red-950/50 dark:border-red-950 border-red-200':
+                  event.category === 'aired',
               },
             )}
           >
             <div className="mb-1 flex flex-col items-start justify-between md:flex-row md:space-x-2">
-              {event.title && (
-                <div className="font-bold text-foreground">{event.title}</div>
-              )}
+              {event.title && <div className="font-bold text-foreground">{event.title}</div>}
               {event.eventDate && (
                 <time className="mt-1.5 whitespace-nowrap text-xs text-muted-foreground">
-                  {new Date(event.eventDate).toLocaleString("hr-HR", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric",
+                  {new Date(event.eventDate).toLocaleString('hr-HR', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
                   })}
                 </time>
               )}
@@ -94,7 +92,7 @@ export function Timeline({ events }: { events: TimelineEvent[] }) {
                 </div>
               )}
 
-              {event.category === "aired" && event.link ? (
+              {event.category === 'aired' && event.link ? (
                 <Link
                   href={event.link.href}
                   className="mt-2 inline-flex items-center rounded-md bg-stone-800 px-3 py-1.5 text-sm font-medium text-white hover:bg-stone-700"
@@ -103,10 +101,7 @@ export function Timeline({ events }: { events: TimelineEvent[] }) {
                   Video
                 </Link>
               ) : event.link ? (
-                <Link
-                  href={event.link.href}
-                  className="mt-2 inline-block text-sm hover:underline"
-                >
+                <Link href={event.link.href} className="mt-2 inline-block text-sm hover:underline">
                   {event.link.label}
                 </Link>
               ) : event.relatedVideo ? (
@@ -123,5 +118,5 @@ export function Timeline({ events }: { events: TimelineEvent[] }) {
         </div>
       ))}
     </div>
-  );
+  )
 }

@@ -1,29 +1,29 @@
-import Link from "next/link";
-import { headers } from "next/headers";
-import { getPayload } from "@/lib/payload";
-import { VideoCard } from "@/components/VideoCard";
-import { ParticipantCard } from "@/components/ParticipantCard";
-import { notArchived, publishedFilter } from "@/lib/query-helpers";
+import { headers } from 'next/headers'
+import Link from 'next/link'
+import { ParticipantCard } from '@/components/ParticipantCard'
+import { VideoCard } from '@/components/VideoCard'
+import { getPayload } from '@/lib/payload'
+import { notArchived, publishedFilter } from '@/lib/query-helpers'
 
 export default async function HomePage() {
-  const payload = await getPayload();
-  const { user } = await payload.auth({ headers: await headers() });
-  const isAdmin = user?.role === "admin";
+  const payload = await getPayload()
+  const { user } = await payload.auth({ headers: await headers() })
+  const isAdmin = user?.role === 'admin'
 
   const [homepage, latestVideos, participants] = await Promise.all([
-    payload.findGlobal({ slug: "homepage" }),
+    payload.findGlobal({ slug: 'homepage' }),
     payload.find({
-      collection: "videos",
+      collection: 'videos',
       where: { and: [...publishedFilter(isAdmin), notArchived] },
-      sort: "-airedDate",
+      sort: '-airedDate',
       limit: 6,
     }),
     payload.find({
-      collection: "participants",
-      where: { and: [{ type: { equals: "main" } }, notArchived] },
+      collection: 'participants',
+      where: { and: [{ type: { equals: 'main' } }, notArchived] },
       limit: 8,
     }),
-  ]);
+  ])
 
   return (
     <div>
@@ -31,7 +31,7 @@ export default async function HomePage() {
       <section className="border-b border-border bg-card py-16">
         <div className="mx-auto max-w-7xl px-4 text-center">
           <h1 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-            {homepage.heroTitle || "Noćna mora Željka Malnara"}
+            {homepage.heroTitle || 'Noćna mora Željka Malnara'}
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
             Arhiv omiljene hrvatske TV emisije. Videi, gosti, glumci i više.
@@ -57,13 +57,8 @@ export default async function HomePage() {
       <section className="py-12">
         <div className="mx-auto max-w-7xl px-4">
           <div className="mb-6 flex items-center justify-between">
-            <h2 className="text-2xl font-bold text-foreground">
-              Najnoviji videi
-            </h2>
-            <Link
-              href="/video"
-              className="text-sm text-primary hover:underline"
-            >
+            <h2 className="text-2xl font-bold text-foreground">Najnoviji videi</h2>
+            <Link href="/video" className="text-sm text-primary hover:underline">
               Vidi sve
             </Link>
           </div>
@@ -73,9 +68,7 @@ export default async function HomePage() {
             ))}
           </div>
           {latestVideos.docs.length === 0 && (
-            <p className="text-center text-muted-foreground">
-              Još nema videa u arhivu.
-            </p>
+            <p className="text-center text-muted-foreground">Još nema videa u arhivu.</p>
           )}
         </div>
       </section>
@@ -85,13 +78,8 @@ export default async function HomePage() {
         <section className="border-t border-border py-12">
           <div className="mx-auto max-w-7xl px-4">
             <div className="mb-6 flex items-center justify-between">
-              <h2 className="text-2xl font-bold text-foreground">
-                Stalna postava
-              </h2>
-              <Link
-                href="/glumci"
-                className="text-sm text-primary hover:underline"
-              >
+              <h2 className="text-2xl font-bold text-foreground">Stalna postava</h2>
+              <Link href="/glumci" className="text-sm text-primary hover:underline">
                 Vidi sve
               </Link>
             </div>
@@ -108,5 +96,5 @@ export default async function HomePage() {
         </section>
       )}
     </div>
-  );
+  )
 }
