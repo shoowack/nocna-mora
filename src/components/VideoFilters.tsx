@@ -3,13 +3,14 @@
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import { format } from 'date-fns'
-import { hr } from 'date-fns/locale'
-import { Check, ChevronDown, CalendarIcon, X } from 'lucide-react'
+import { hr as dateFnsHr } from 'date-fns/locale'
+import { hr as rdpHr } from 'react-day-picker/locale'
+import { ChevronDown, CalendarIcon, X } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { buildVideoUrl, type VideoFilterParams } from '@/lib/video-url'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Calendar } from '@/components/ui/calendar'
+import { Calendar, CalendarDayButton } from '@/components/ui/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import {
   Command,
@@ -152,7 +153,7 @@ export function VideoFilters({ categories, participants, isAdmin, videoDates, cu
           >
             <span className="flex items-center gap-2">
               <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-              {selectedDate ? format(selectedDate, 'dd.MM.yyyy', { locale: hr }) : 'Datum emitiranja'}
+              {selectedDate ? format(selectedDate, 'dd.MM.yyyy', { locale: dateFnsHr }) : 'Datum emitiranja'}
             </span>
             {selectedDate ? (
               <span
@@ -180,9 +181,18 @@ export function VideoFilters({ categories, participants, isAdmin, videoDates, cu
             startMonth={new Date(2000, 0)}
             endMonth={new Date()}
             defaultMonth={selectedDate}
+            locale={rdpHr}
             modifiers={{ hasVideo: parsedVideoDates }}
-            modifiersClassNames={{ hasVideo: 'has-video-dot' }}
-            initialFocus
+            components={{
+              DayButton: (props) => (
+                <CalendarDayButton locale={rdpHr} {...props}>
+                  {props.children}
+                  {props.modifiers?.hasVideo && (
+                    <span className="absolute bottom-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-primary" />
+                  )}
+                </CalendarDayButton>
+              ),
+            }}
           />
         </PopoverContent>
       </Popover>
@@ -262,10 +272,7 @@ function MultiCombobox({ label, options, selected, onToggle, onClear, searchPlac
             <CommandEmpty>Nema rezultata.</CommandEmpty>
             <CommandGroup>
               {options.map((opt) => (
-                <CommandItem key={opt.value} value={opt.value} onSelect={() => onToggle(opt.value)}>
-                  <Check
-                    className={cn('mr-2 h-4 w-4', selected.includes(opt.value) ? 'opacity-100' : 'opacity-0')}
-                  />
+                <CommandItem key={opt.value} value={opt.value} data-checked={selected.includes(opt.value)} onSelect={() => onToggle(opt.value)}>
                   {opt.label}
                 </CommandItem>
               ))}
@@ -330,10 +337,7 @@ function GroupedMultiCombobox({ label, groups, selected, onToggle, onClear, sear
                 {i > 0 && <CommandSeparator />}
                 <CommandGroup heading={group.heading}>
                   {group.options.map((opt) => (
-                    <CommandItem key={opt.value} value={opt.value} onSelect={() => onToggle(opt.value)}>
-                      <Check
-                        className={cn('mr-2 h-4 w-4', selected.includes(opt.value) ? 'opacity-100' : 'opacity-0')}
-                      />
+                    <CommandItem key={opt.value} value={opt.value} data-checked={selected.includes(opt.value)} onSelect={() => onToggle(opt.value)}>
                       {opt.label}
                     </CommandItem>
                   ))}
@@ -395,12 +399,12 @@ function SingleCombobox({ label, options, selected, onSelect, onClear, allLabel 
                 <CommandItem
                   key={opt.value}
                   value={opt.value}
+                  data-checked={selected === opt.value}
                   onSelect={() => {
                     onSelect(opt.value)
                     setOpen(false)
                   }}
                 >
-                  <Check className={cn('mr-2 h-4 w-4', selected === opt.value ? 'opacity-100' : 'opacity-0')} />
                   {opt.label}
                 </CommandItem>
               ))}
