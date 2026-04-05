@@ -25,14 +25,10 @@ function extractTextFromLexical(node: Record<string, unknown>): string {
   return text
 }
 
-export const extractPlainTextFromTranscription: CollectionBeforeChangeHook = ({
-  data,
-}) => {
+export const extractPlainTextFromTranscription: CollectionBeforeChangeHook = ({ data }) => {
   if (data.transcription) {
     const root =
-      typeof data.transcription === 'string'
-        ? JSON.parse(data.transcription)
-        : data.transcription
+      typeof data.transcription === 'string' ? JSON.parse(data.transcription) : data.transcription
 
     data.transcriptionPlain = extractTextFromLexical(root.root || root)
       .replace(/\s+/g, ' ')

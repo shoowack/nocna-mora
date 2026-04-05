@@ -1,42 +1,38 @@
-import Link from "next/link";
-import { headers } from "next/headers";
-import { getPayload } from "@/lib/payload";
-import { Folder } from "lucide-react";
-import { notArchived, publishedFilter } from "@/lib/query-helpers";
+import { headers } from 'next/headers'
+import Link from 'next/link'
+import { Folder } from 'lucide-react'
+import { getPayload } from '@/lib/payload'
+import { notArchived, publishedFilter } from '@/lib/query-helpers'
 
 export const metadata = {
-  title: "Kategorije | Noćna mora Željka Malnara",
-};
+  title: 'Kategorije | Noćna mora Željka Malnara',
+}
 
 export default async function CategoriesPage() {
-  const payload = await getPayload();
-  const { user } = await payload.auth({ headers: await headers() });
-  const isAdmin = user?.role === "admin";
+  const payload = await getPayload()
+  const { user } = await payload.auth({ headers: await headers() })
+  const isAdmin = user?.role === 'admin'
 
   const categories = await payload.find({
-    collection: "categories",
+    collection: 'categories',
     where: notArchived,
-    sort: "title",
+    sort: 'title',
     limit: 100,
-  });
+  })
 
   // Count videos per category
   const categoriesWithCounts = await Promise.all(
     categories.docs.map(async (cat: any) => {
       const videos = await payload.find({
-        collection: "videos",
+        collection: 'videos',
         where: {
-          and: [
-            { categories: { equals: cat.id } },
-            ...publishedFilter(isAdmin),
-            notArchived,
-          ],
+          and: [{ categories: { equals: cat.id } }, ...publishedFilter(isAdmin), notArchived],
         },
         limit: 0,
-      });
-      return { ...cat, videoCount: videos.totalDocs };
+      })
+      return { ...cat, videoCount: videos.totalDocs }
     }),
-  );
+  )
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8">
@@ -53,23 +49,17 @@ export default async function CategoriesPage() {
             <div>
               <h2 className="font-medium text-foreground">{cat.title}</h2>
               {cat.description && (
-                <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
-                  {cat.description}
-                </p>
+                <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{cat.description}</p>
               )}
-              <p className="mt-2 text-xs text-muted-foreground">
-                {cat.videoCount} videa
-              </p>
+              <p className="mt-2 text-xs text-muted-foreground">{cat.videoCount} videa</p>
             </div>
           </Link>
         ))}
       </div>
 
       {categories.docs.length === 0 && (
-        <p className="py-12 text-center text-muted-foreground">
-          Još nema kategorija.
-        </p>
+        <p className="py-12 text-center text-muted-foreground">Još nema kategorija.</p>
       )}
     </div>
-  );
+  )
 }

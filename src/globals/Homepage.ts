@@ -1,5 +1,5 @@
 import type { GlobalConfig } from 'payload'
-import { isAdmin, anyone } from '@/access'
+import { anyone, isAdmin } from '@/access'
 
 export const Homepage: GlobalConfig = {
   slug: 'homepage',

@@ -1,5 +1,5 @@
 import type { CollectionConfig } from 'payload'
-import { isAdmin, isAuthenticated, approvedOrAdmin } from '@/access'
+import { approvedOrAdmin, isAdmin, isAuthenticated } from '@/access'
 
 export const Comments: CollectionConfig = {
   slug: 'comments',

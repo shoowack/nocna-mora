@@ -3,7 +3,7 @@
 import * as React from 'react'
 import { DayPicker } from 'react-day-picker'
 import { hr } from 'react-day-picker/locale'
-import { ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react'
+import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react'
 import { cn } from '@/lib/utils'
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
@@ -18,7 +18,8 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
         months: 'flex flex-col sm:flex-row gap-2',
         month: 'flex flex-col gap-4',
         month_caption: 'flex justify-center pt-1 relative items-center w-full',
-        caption_label: 'inline-flex items-center gap-1 rounded border border-border px-2 py-1 text-sm font-medium hover:bg-accent cursor-pointer select-none',
+        caption_label:
+          'inline-flex items-center gap-1 rounded border border-border px-2 py-1 text-sm font-medium hover:bg-accent cursor-pointer select-none',
         // Dropdown navigation
         dropdowns: 'flex items-center justify-center gap-1',
         dropdown_root: 'relative',
@@ -46,7 +47,8 @@ function Calendar({ className, classNames, showOutsideDays = true, ...props }: C
           'hover:bg-accent hover:text-accent-foreground',
           'aria-selected:opacity-100',
         ),
-        selected: 'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground rounded-md',
+        selected:
+          'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground rounded-md',
         today: 'bg-accent text-accent-foreground rounded-md',
         outside: 'text-muted-foreground opacity-50',
         disabled: 'text-muted-foreground opacity-50',
