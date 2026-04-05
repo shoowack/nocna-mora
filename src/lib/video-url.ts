@@ -5,7 +5,11 @@ export interface VideoFilterParams {
   date?: string
   published?: string
   page?: number
+  perPage?: number
 }
+
+export const PAGE_SIZE_OPTIONS = [12, 24, 48] as const
+export const DEFAULT_PAGE_SIZE = 12
 
 export function buildVideoUrl(params: VideoFilterParams): string {
   const qs = new URLSearchParams()
@@ -28,6 +32,9 @@ export function buildVideoUrl(params: VideoFilterParams): string {
   if (params.page && params.page > 1) {
     qs.set('page', String(params.page))
   }
+  if (params.perPage && params.perPage !== DEFAULT_PAGE_SIZE) {
+    qs.set('perPage', String(params.perPage))
+  }
 
   const query = qs.toString()
   return query ? `/video?${query}` : '/video'
@@ -40,7 +47,9 @@ export function parseVideoParams(raw: {
   participants?: string
   date?: string
   published?: string
+  perPage?: string
 }) {
+  const perPage = parseInt(raw.perPage || String(DEFAULT_PAGE_SIZE))
   return {
     page: parseInt(raw.page || '1'),
     type: raw.type ? raw.type.split(',').filter(Boolean) : [],
@@ -48,5 +57,6 @@ export function parseVideoParams(raw: {
     participants: raw.participants ? raw.participants.split(',').filter(Boolean) : [],
     date: raw.date || '',
     published: raw.published || '',
+    perPage: PAGE_SIZE_OPTIONS.includes(perPage as any) ? perPage : DEFAULT_PAGE_SIZE,
   }
 }

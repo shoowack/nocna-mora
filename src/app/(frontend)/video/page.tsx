@@ -3,9 +3,10 @@ import { headers } from 'next/headers'
 import { getPayload } from '@/lib/payload'
 import { VideoCard } from '@/components/VideoCard'
 import { VideoFilters } from '@/components/VideoFilters'
-import Link from 'next/link'
+import { VideoPagination } from '@/components/VideoPagination'
 import { notArchived, publishedFilter } from '@/lib/query-helpers'
-import { buildVideoUrl, parseVideoParams } from '@/lib/video-url'
+
+import { parseVideoParams } from '@/lib/video-url'
 
 type Props = {
   searchParams: Promise<{
@@ -15,13 +16,14 @@ type Props = {
     participants?: string
     date?: string
     published?: string
+    perPage?: string
   }>
 }
 
 export default async function VideosPage({ searchParams }: Props) {
   const raw = await searchParams
   const params = parseVideoParams(raw)
-  const limit = 12
+  const limit = params.perPage
   const payload = await getPayload()
   const { user } = await payload.auth({ headers: await headers() })
   const isAdmin = user?.role === 'admin'
@@ -94,9 +96,6 @@ export default async function VideosPage({ searchParams }: Props) {
     }),
   ])
 
-  const prevUrl = buildVideoUrl({ ...params, page: params.page - 1 })
-  const nextUrl = buildVideoUrl({ ...params, page: params.page + 1 })
-
   const videoDates = allDates.docs
     .map((v: any) => v.airedDate)
     .filter(Boolean) as string[]
@@ -135,28 +134,20 @@ export default async function VideosPage({ searchParams }: Props) {
       )}
 
       {/* Pagination */}
-      {videos.totalPages > 1 && (
-        <div className="mt-8 flex justify-center gap-2">
-          {params.page > 1 && (
-            <Link
-              href={prevUrl}
-              className="rounded-md border border-border px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
-            >
-              Prethodna
-            </Link>
-          )}
-          <span className="flex items-center px-4 text-sm text-muted-foreground">
-            Stranica {params.page} od {videos.totalPages}
-          </span>
-          {params.page < videos.totalPages && (
-            <Link
-              href={nextUrl}
-              className="rounded-md border border-border px-4 py-2 text-sm text-muted-foreground transition-colors hover:text-foreground"
-            >
-              Sljedeća
-            </Link>
-          )}
-        </div>
+      {videos.totalDocs > 0 && (
+        <VideoPagination
+          currentPage={params.page}
+          totalPages={videos.totalPages}
+          totalDocs={videos.totalDocs}
+          perPage={params.perPage}
+          filterParams={{
+            type: params.type,
+            categories: params.categories,
+            participants: params.participants,
+            date: params.date,
+            published: params.published,
+          }}
+        />
       )}
     </div>
   )
