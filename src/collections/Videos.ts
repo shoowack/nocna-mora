@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
-import { isAdmin, isAdminOrEditor, publishedOrAdmin } from '@/access'
 import { extractPlainTextFromTranscription } from '@/hooks/extractPlainText'
+import { isAdmin, isAdminOrEditor, publishedOrAdmin } from '@/access'
 import { notifyUsersOnNewVideo } from '@/hooks/notifyOnNewVideo'
 import { populateSlug } from '@/hooks/populateSlug'
 

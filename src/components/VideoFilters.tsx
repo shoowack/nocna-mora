@@ -1,14 +1,10 @@
 'use client'
 
-import * as React from 'react'
 import { hr as rdpHr } from 'react-day-picker/locale'
-import { useRouter } from 'next/navigation'
-import { format } from 'date-fns'
-import { hr as dateFnsHr } from 'date-fns/locale'
+import * as React from 'react'
 import { CalendarIcon, ChevronDown, X } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { Calendar, CalendarDayButton } from '@/components/ui/calendar'
+import { hr as dateFnsHr } from 'date-fns/locale'
+import { format } from 'date-fns'
 import {
   Command,
   CommandEmpty,
@@ -19,8 +15,12 @@ import {
   CommandSeparator,
 } from '@/components/ui/command'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { cn } from '@/lib/utils'
 import { type VideoFilterParams, buildVideoUrl } from '@/lib/video-url'
+import { Calendar, CalendarDayButton } from '@/components/ui/calendar'
+import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
+import { cn } from '@/lib/utils'
+import { useRouter } from 'next/navigation'
 
 type Category = { id: string; title: string }
 type Participant = { id: string; fullName: string; type: 'main' | 'guest' }
@@ -39,12 +39,17 @@ interface VideoFiltersProps {
   }
 }
 
-const VIDEO_TYPES = [
+type Option = {
+  label: string
+  value: string
+}
+
+const VIDEO_TYPES: Option[] = [
   { value: 'full', label: 'Cijele epizode' },
   { value: 'clip', label: 'Isječci' },
 ]
 
-const PUBLISHED_OPTIONS = [
+const PUBLISHED_OPTIONS: Option[] = [
   { value: 'true', label: 'Objavljeno' },
   { value: 'false', label: 'Neobjavljeno' },
 ]

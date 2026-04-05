@@ -5,12 +5,13 @@
   "printWidth": 100,
   "tabWidth": 2,
   "plugins": ["prettier-plugin-tailwindcss", "@trivago/prettier-plugin-sort-imports"],
+  "importOrderSortByLength": "desc",
   "importOrder": [
     "^(react|react-dom)(.*)$",
-    "^(next)(.*)$",
     "<THIRD_PARTY_MODULES>",
     "^@/(.*)$",
-    "^[./]"
+    "^[./]",
+    "^(next)(.*)$"
   ],
   "importOrderSeparation": false,
   "importOrderSortSpecifiers": true,
