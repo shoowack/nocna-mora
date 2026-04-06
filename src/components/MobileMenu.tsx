@@ -1,26 +1,26 @@
-'use client'
+"use client"
 
-import { useCallback, useEffect, useState } from 'react'
-import { createPortal } from 'react-dom'
-import { ChevronUp, LogOut, Menu, Monitor, Moon, Search, Sun, User, X } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { useRouter } from 'next/navigation'
-import { useTheme } from 'next-themes'
-import Image from 'next/image'
-import Link from 'next/link'
+import { useCallback, useEffect, useState } from "react"
+import { createPortal } from "react-dom"
+import { ChevronUp, LogOut, Menu, Monitor, Moon, Search, Sun, User, X } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { useRouter } from "next/navigation"
+import { useTheme } from "next-themes"
+import Image from "next/image"
+import Link from "next/link"
 
 const navLinks = [
-  { href: '/video', label: 'Videi' },
-  { href: '/glumci', label: 'Glumci' },
-  { href: '/gosti', label: 'Gosti' },
-  { href: '/kategorije', label: 'Kategorije' },
-  { href: '/vremenska-crta', label: 'Vremenska crta' },
+  { href: "/video", label: "Videi" },
+  { href: "/glumci", label: "Glumci" },
+  { href: "/gosti", label: "Gosti" },
+  { href: "/kategorije", label: "Kategorije" },
+  { href: "/vremenska-crta", label: "Vremenska crta" }
 ]
 
 const themeOptions = [
-  { value: 'light', icon: Sun, label: 'Svijetla' },
-  { value: 'system', icon: Monitor, label: 'Sustav' },
-  { value: 'dark', icon: Moon, label: 'Tamna' },
+  { value: "light", icon: Sun, label: "Svijetla" },
+  { value: "system", icon: Monitor, label: "Sustav" },
+  { value: "dark", icon: Moon, label: "Tamna" }
 ] as const
 
 type Props = {
@@ -32,7 +32,7 @@ function ProfilePopup({
   user,
   avatarUrl,
   onClose,
-  onNavigate,
+  onNavigate
 }: {
   user: { name: string; email: string }
   avatarUrl?: string
@@ -43,10 +43,10 @@ function ProfilePopup({
   const router = useRouter()
 
   async function handleLogout() {
-    await fetch('/api/users/logout', { method: 'POST' })
-    ;(window as any).umami?.track('logout')
+    await fetch("/api/users/logout", { method: "POST" })
+    ;(window as any).umami?.track("logout")
     onNavigate()
-    router.push('/')
+    router.push("/")
     router.refresh()
   }
 
@@ -93,14 +93,14 @@ function ProfilePopup({
                 key={value}
                 onClick={() => {
                   setTheme(value)
-                  ;(window as any).umami?.track('theme change', { theme: value })
+                  ;(window as any).umami?.track("theme change", { theme: value })
                 }}
                 aria-label={label}
                 className={cn(
-                  'flex h-full w-6 items-center justify-center rounded-sm transition-colors',
+                  "flex h-full w-6 items-center justify-center rounded-sm transition-colors",
                   theme === value
-                    ? 'bg-background text-foreground shadow-sm'
-                    : 'text-muted-foreground hover:text-foreground',
+                    ? "bg-background text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground"
                 )}
               >
                 <Icon className="h-3 w-3" />
@@ -140,8 +140,8 @@ export function MobileMenu({ user, avatarUrl }: Props) {
       {/* Drawer — full screen */}
       <div
         className={cn(
-          'fixed inset-0 z-50 flex flex-col bg-background transition-transform duration-300 ease-in-out',
-          drawerOpen ? 'translate-x-0' : 'translate-x-full',
+          "fixed inset-0 z-50 flex flex-col bg-background transition-transform duration-300 ease-in-out",
+          drawerOpen ? "translate-x-0" : "translate-x-full"
         )}
       >
         {/* Header row inside drawer */}
@@ -220,8 +220,8 @@ export function MobileMenu({ user, avatarUrl }: Props) {
                 </div>
                 <ChevronUp
                   className={cn(
-                    'h-4 w-4 shrink-0 text-muted-foreground transition-transform',
-                    profileOpen ? 'rotate-0' : 'rotate-180',
+                    "h-4 w-4 shrink-0 text-muted-foreground transition-transform",
+                    profileOpen ? "rotate-0" : "rotate-180"
                   )}
                 />
               </button>
@@ -248,7 +248,7 @@ export function MobileMenu({ user, avatarUrl }: Props) {
       <button
         onClick={() => setDrawerOpen((v) => !v)}
         className="flex h-9 w-9 items-center justify-center rounded-md text-muted-foreground hover:text-foreground transition-colors"
-        aria-label={drawerOpen ? 'Zatvori meni' : 'Otvori meni'}
+        aria-label={drawerOpen ? "Zatvori meni" : "Otvori meni"}
       >
         {drawerOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
       </button>

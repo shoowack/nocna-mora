@@ -1,9 +1,9 @@
-import { getPayload } from '@/lib/payload'
-import { NextRequest, NextResponse } from 'next/server'
-import { headers } from 'next/headers'
+import { getPayload } from "@/lib/payload"
+import { NextRequest, NextResponse } from "next/server"
+import { headers } from "next/headers"
 
 export async function GET(req: NextRequest) {
-  const videoId = req.nextUrl.searchParams.get('videoId')
+  const videoId = req.nextUrl.searchParams.get("videoId")
   if (!videoId) return NextResponse.json({ reaction: null })
 
   const payload = await getPayload()
@@ -13,11 +13,11 @@ export async function GET(req: NextRequest) {
   if (!user) return NextResponse.json({ reaction: null })
 
   const result = await payload.find({
-    collection: 'reactions',
+    collection: "reactions",
     where: {
-      and: [{ video: { equals: videoId } }, { user: { equals: user.id } }],
+      and: [{ video: { equals: videoId } }, { user: { equals: user.id } }]
     },
-    limit: 1,
+    limit: 1
   })
 
   if (result.docs.length === 0) return NextResponse.json({ reaction: null })
@@ -30,30 +30,30 @@ export async function POST(req: NextRequest) {
   const headersList = await headers()
   const { user } = await payload.auth({ headers: headersList })
 
-  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
   const { type, videoId } = await req.json()
 
   const existing = await payload.find({
-    collection: 'reactions',
+    collection: "reactions",
     where: {
-      and: [{ video: { equals: videoId } }, { user: { equals: user.id } }],
+      and: [{ video: { equals: videoId } }, { user: { equals: user.id } }]
     },
-    limit: 1,
+    limit: 1
   })
 
   if (existing.docs.length > 0) {
     const updated = await payload.update({
-      collection: 'reactions',
+      collection: "reactions",
       id: existing.docs[0].id,
-      data: { type },
+      data: { type }
     })
     return NextResponse.json({ reaction: { id: updated.id, type: updated.type } })
   }
 
   const created = await payload.create({
-    collection: 'reactions',
-    data: { type, video: videoId, user: user.id },
+    collection: "reactions",
+    data: { type, video: videoId, user: user.id }
   })
   return NextResponse.json({ reaction: { id: created.id, type: created.type } })
 }
@@ -63,22 +63,22 @@ export async function DELETE(req: NextRequest) {
   const headersList = await headers()
   const { user } = await payload.auth({ headers: headersList })
 
-  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
 
   const { videoId } = await req.json()
 
   const existing = await payload.find({
-    collection: 'reactions',
+    collection: "reactions",
     where: {
-      and: [{ video: { equals: videoId } }, { user: { equals: user.id } }],
+      and: [{ video: { equals: videoId } }, { user: { equals: user.id } }]
     },
-    limit: 1,
+    limit: 1
   })
 
   if (existing.docs.length > 0) {
     await payload.delete({
-      collection: 'reactions',
-      id: existing.docs[0].id,
+      collection: "reactions",
+      id: existing.docs[0].id
     })
   }
 

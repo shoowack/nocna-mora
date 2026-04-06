@@ -1,14 +1,14 @@
-import { Pencil } from 'lucide-react'
-import { notArchived, publishedFilter } from '@/lib/query-helpers'
-import { CommentSection } from '@/components/CommentSection'
-import { formatDate, formatDuration } from '@/lib/utils'
-import { getProviderLabel } from '@/lib/video-providers'
-import { VideoEmbed } from '@/components/VideoEmbed'
-import { Reactions } from '@/components/Reactions'
-import { getPayload } from '@/lib/payload'
-import { notFound } from 'next/navigation'
-import { headers } from 'next/headers'
-import Link from 'next/link'
+import { Pencil } from "lucide-react"
+import { notArchived, publishedFilter } from "@/lib/query-helpers"
+import { CommentSection } from "@/components/CommentSection"
+import { formatDate, formatDuration } from "@/lib/utils"
+import { getProviderLabel } from "@/lib/video-providers"
+import { VideoEmbed } from "@/components/VideoEmbed"
+import { Reactions } from "@/components/Reactions"
+import { getPayload } from "@/lib/payload"
+import { notFound } from "next/navigation"
+import { headers } from "next/headers"
+import Link from "next/link"
 
 export const revalidate = 300
 
@@ -20,16 +20,16 @@ export async function generateMetadata({ params }: Props) {
   const { slug } = await params
   const payload = await getPayload()
   const videos = await payload.find({
-    collection: 'videos',
+    collection: "videos",
     where: { and: [{ slug: { equals: slug } }, notArchived] },
-    limit: 1,
+    limit: 1
   })
 
-  if (videos.docs.length === 0) return { title: 'Video nije pronađen' }
+  if (videos.docs.length === 0) return { title: "Video nije pronađen" }
 
   return {
     title: `${videos.docs[0].title} | Noćna mora Željka Malnara`,
-    description: videos.docs[0].description || undefined,
+    description: videos.docs[0].description || undefined
   }
 }
 
@@ -37,13 +37,13 @@ export default async function VideoDetailPage({ params }: Props) {
   const { slug } = await params
   const payload = await getPayload()
   const { user } = await payload.auth({ headers: await headers() })
-  const isAdmin = user?.role === 'admin'
+  const isAdmin = user?.role === "admin"
 
   const videos = await payload.find({
-    collection: 'videos',
+    collection: "videos",
     where: { and: [{ slug: { equals: slug } }, ...publishedFilter(isAdmin), notArchived] },
     limit: 1,
-    depth: 2,
+    depth: 2
   })
 
   if (videos.docs.length === 0) notFound()
@@ -53,19 +53,19 @@ export default async function VideoDetailPage({ params }: Props) {
   // Fetch comments and reactions
   const [comments, reactions] = await Promise.all([
     payload.find({
-      collection: 'comments',
+      collection: "comments",
       where: {
-        and: [{ video: { equals: video.id } }, { approved: { equals: true } }],
+        and: [{ video: { equals: video.id } }, { approved: { equals: true } }]
       },
-      sort: '-createdAt',
+      sort: "-createdAt",
       depth: 1,
-      limit: 50,
+      limit: 50
     }),
     payload.find({
-      collection: 'reactions',
+      collection: "reactions",
       where: { video: { equals: video.id } },
-      limit: 0,
-    }),
+      limit: 0
+    })
   ])
 
   // Aggregate reactions by type
@@ -75,8 +75,8 @@ export default async function VideoDetailPage({ params }: Props) {
         acc[r.type] = (acc[r.type] || 0) + 1
         return acc
       },
-      {} as Record<string, number>,
-    ),
+      {} as Record<string, number>
+    )
   ).map(([type, count]) => ({ type, count }))
 
   const participants = (video.participants || []) as any[]
@@ -109,7 +109,7 @@ export default async function VideoDetailPage({ params }: Props) {
             {getProviderLabel(video.provider)}
           </span>
           <span className="rounded bg-muted px-2 py-0.5 text-xs">
-            {video.videoType === 'full' ? 'Cijela epizoda' : 'Isječak'}
+            {video.videoType === "full" ? "Cijela epizoda" : "Isječak"}
           </span>
         </div>
 
@@ -126,7 +126,7 @@ export default async function VideoDetailPage({ params }: Props) {
               {participants.map((p: any) => (
                 <Link
                   key={p.id}
-                  href={`/${p.type === 'main' ? 'glumci' : 'gosti'}/${p.slug}`}
+                  href={`/${p.type === "main" ? "glumci" : "gosti"}/${p.slug}`}
                   className="rounded-full border border-border px-3 py-1 text-sm text-muted-foreground hover:border-primary/50 hover:text-foreground transition-colors"
                 >
                   {p.firstName} {p.lastName}
@@ -172,7 +172,7 @@ export default async function VideoDetailPage({ params }: Props) {
               id: c.id,
               content: c.content,
               createdAt: c.createdAt,
-              author: { name: c.author?.name || 'Anonimni' },
+              author: { name: c.author?.name || "Anonimni" }
             }))}
           />
         </div>

@@ -3,7 +3,7 @@ services:
     build: .
     restart: unless-stopped
     ports:
-      - '4000:3000'
+      - "4000:3000"
     environment:
       - DATABASE_URI=postgresql://tvarhiv:${DB_PASSWORD:-tvarhiv}@db:5432/tvarhiv
       - PAYLOAD_SECRET=${PAYLOAD_SECRET:-change-me-in-production}
@@ -29,12 +29,12 @@ services:
       POSTGRES_USER: tvarhiv
       POSTGRES_PASSWORD: ${DB_PASSWORD:-tvarhiv}
     ports:
-      - '5433:5432'
+      - "5433:5432"
     volumes:
       - pg_data:/var/lib/postgresql/data
       - ./docker/init-db.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U tvarhiv']
+      test: ["CMD-SHELL", "pg_isready -U tvarhiv"]
       interval: 5s
       timeout: 5s
       retries: 5

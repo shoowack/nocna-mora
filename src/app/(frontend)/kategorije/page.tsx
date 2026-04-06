@@ -1,37 +1,37 @@
-import { Folder } from 'lucide-react'
-import { notArchived, publishedFilter } from '@/lib/query-helpers'
-import { getPayload } from '@/lib/payload'
-import { headers } from 'next/headers'
-import Link from 'next/link'
+import { Folder } from "lucide-react"
+import { notArchived, publishedFilter } from "@/lib/query-helpers"
+import { getPayload } from "@/lib/payload"
+import { headers } from "next/headers"
+import Link from "next/link"
 
 export const metadata = {
-  title: 'Kategorije | Noćna mora Željka Malnara',
+  title: "Kategorije | Noćna mora Željka Malnara"
 }
 
 export default async function CategoriesPage() {
   const payload = await getPayload()
   const { user } = await payload.auth({ headers: await headers() })
-  const isAdmin = user?.role === 'admin'
+  const isAdmin = user?.role === "admin"
 
   const categories = await payload.find({
-    collection: 'categories',
+    collection: "categories",
     where: notArchived,
-    sort: 'title',
-    limit: 100,
+    sort: "title",
+    limit: 100
   })
 
   // Count videos per category
   const categoriesWithCounts = await Promise.all(
     categories.docs.map(async (cat: any) => {
       const videos = await payload.find({
-        collection: 'videos',
+        collection: "videos",
         where: {
-          and: [{ categories: { equals: cat.id } }, ...publishedFilter(isAdmin), notArchived],
+          and: [{ categories: { equals: cat.id } }, ...publishedFilter(isAdmin), notArchived]
         },
-        limit: 0,
+        limit: 0
       })
       return { ...cat, videoCount: videos.totalDocs }
-    }),
+    })
   )
 
   return (

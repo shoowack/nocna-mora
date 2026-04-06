@@ -1,10 +1,10 @@
-import { Pencil } from 'lucide-react'
-import { notArchived, publishedFilter } from '@/lib/query-helpers'
-import { VideoCard } from '@/components/VideoCard'
-import { getPayload } from '@/lib/payload'
-import { notFound } from 'next/navigation'
-import { headers } from 'next/headers'
-import Link from 'next/link'
+import { Pencil } from "lucide-react"
+import { notArchived, publishedFilter } from "@/lib/query-helpers"
+import { VideoCard } from "@/components/VideoCard"
+import { getPayload } from "@/lib/payload"
+import { notFound } from "next/navigation"
+import { headers } from "next/headers"
+import Link from "next/link"
 
 export const revalidate = 300
 
@@ -17,26 +17,26 @@ export async function generateMetadata({ params }: Props) {
   const { slug } = await params
   const payload = await getPayload()
   const result = await payload.find({
-    collection: 'categories',
+    collection: "categories",
     where: { and: [{ slug: { equals: slug } }, notArchived] },
-    limit: 1,
+    limit: 1
   })
-  if (result.docs.length === 0) return { title: 'Kategorija nije pronađena' }
+  if (result.docs.length === 0) return { title: "Kategorija nije pronađena" }
   return { title: `${result.docs[0].title} | Noćna mora Željka Malnara` }
 }
 
 export default async function CategoryDetailPage({ params, searchParams }: Props) {
   const { slug } = await params
   const sp = await searchParams
-  const page = parseInt(sp.page || '1')
+  const page = parseInt(sp.page || "1")
   const payload = await getPayload()
   const { user } = await payload.auth({ headers: await headers() })
-  const isAdmin = user?.role === 'admin'
+  const isAdmin = user?.role === "admin"
 
   const catResult = await payload.find({
-    collection: 'categories',
+    collection: "categories",
     where: { and: [{ slug: { equals: slug } }, notArchived] },
-    limit: 1,
+    limit: 1
   })
 
   if (catResult.docs.length === 0) notFound()
@@ -44,14 +44,14 @@ export default async function CategoryDetailPage({ params, searchParams }: Props
   const category = catResult.docs[0] as any
 
   const videos = await payload.find({
-    collection: 'videos',
+    collection: "videos",
     where: {
-      and: [{ categories: { equals: category.id } }, ...publishedFilter(isAdmin), notArchived],
+      and: [{ categories: { equals: category.id } }, ...publishedFilter(isAdmin), notArchived]
     },
-    sort: '-airedDate',
+    sort: "-airedDate",
     page,
     limit: 12,
-    depth: 1,
+    depth: 1
   })
 
   return (

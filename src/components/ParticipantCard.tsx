@@ -1,5 +1,5 @@
-import Image from 'next/image'
-import Link from 'next/link'
+import Image from "next/image"
+import Link from "next/link"
 
 type Props = {
   participant: {
@@ -7,7 +7,7 @@ type Props = {
     firstName: string
     lastName: string
     nickname?: string | null
-    type: 'main' | 'guest'
+    type: "main" | "guest"
     photo?: { url: string; alt: string } | null
   }
   basePath: string

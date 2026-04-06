@@ -1,6 +1,6 @@
-import { sql } from 'drizzle-orm'
-import { getPayload } from '@/lib/payload'
-import { NextRequest, NextResponse } from 'next/server'
+import { sql } from "drizzle-orm"
+import { getPayload } from "@/lib/payload"
+import { NextRequest, NextResponse } from "next/server"
 
 /**
  * Custom search endpoint that uses PostgreSQL full-text search.
@@ -10,12 +10,12 @@ import { NextRequest, NextResponse } from 'next/server'
  */
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams
-  const query = searchParams.get('q') || ''
-  const category = searchParams.get('category')
-  const participant = searchParams.get('participant')
-  const dateFrom = searchParams.get('from')
-  const dateTo = searchParams.get('to')
-  const page = parseInt(searchParams.get('page') || '1')
+  const query = searchParams.get("q") || ""
+  const category = searchParams.get("category")
+  const participant = searchParams.get("participant")
+  const dateFrom = searchParams.get("from")
+  const dateTo = searchParams.get("to")
+  const page = parseInt(searchParams.get("page") || "1")
   const limit = 12
 
   if (!query.trim()) {
@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
 
   const payload = await getPayload()
   const { user } = await payload.auth({ headers: request.headers })
-  const isAdmin = user?.role === 'admin'
+  const isAdmin = user?.role === "admin"
 
   try {
     // Try PostgreSQL FTS via Drizzle (available after running migrations/0001_fts_setup.sql)
@@ -36,7 +36,7 @@ export async function GET(request: NextRequest) {
       .split(/\s+/)
       .filter(Boolean)
       .map((word) => `${word}:*`)
-      .join(' & ')
+      .join(" & ")
 
     const offset = (page - 1) * limit
 
@@ -66,18 +66,18 @@ export async function GET(request: NextRequest) {
         ${dateTo ? sql`AND v."aired_date" <= ${dateTo}::date` : sql``}
     `)
 
-    const totalDocs = parseInt(countResult.rows?.[0]?.total || '0')
+    const totalDocs = parseInt(countResult.rows?.[0]?.total || "0")
 
     return NextResponse.json({
       docs: result.rows || [],
       totalDocs,
       page,
-      totalPages: Math.ceil(totalDocs / limit),
+      totalPages: Math.ceil(totalDocs / limit)
     })
   } catch {
     // Fallback to Payload's built-in search if FTS is not configured
     const results = await payload.find({
-      collection: 'videos',
+      collection: "videos",
       where: {
         and: [
           ...(isAdmin ? [] : [{ published: { equals: true } }]),
@@ -85,21 +85,21 @@ export async function GET(request: NextRequest) {
             or: [
               { title: { contains: query } },
               { description: { contains: query } },
-              { transcriptionPlain: { contains: query } },
-            ],
-          },
-        ],
+              { transcriptionPlain: { contains: query } }
+            ]
+          }
+        ]
       },
-      sort: '-airedDate',
+      sort: "-airedDate",
       page,
-      limit,
+      limit
     })
 
     return NextResponse.json({
       docs: results.docs,
       totalDocs: results.totalDocs,
       page: results.page,
-      totalPages: results.totalPages,
+      totalPages: results.totalPages
     })
   }
 }

@@ -1,9 +1,9 @@
-import { ThemeProvider } from '@/components/ThemeProvider'
-import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
-import Link from 'next/link'
+import { ThemeProvider } from "@/components/ThemeProvider"
+import { Footer } from "@/components/Footer"
+import { Header } from "@/components/Header"
+import Link from "next/link"
 
-export const dynamic = 'force-dynamic'
+export const dynamic = "force-dynamic"
 
 export default function NotFound() {
   return (

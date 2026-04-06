@@ -1,28 +1,28 @@
-import { notArchived, publishedFilter } from '@/lib/query-helpers'
-import { ParticipantCard } from '@/components/ParticipantCard'
-import { VideoCard } from '@/components/VideoCard'
-import { getPayload } from '@/lib/payload'
-import { headers } from 'next/headers'
-import Link from 'next/link'
+import { notArchived, publishedFilter } from "@/lib/query-helpers"
+import { ParticipantCard } from "@/components/ParticipantCard"
+import { VideoCard } from "@/components/VideoCard"
+import { getPayload } from "@/lib/payload"
+import { headers } from "next/headers"
+import Link from "next/link"
 
 export default async function HomePage() {
   const payload = await getPayload()
   const { user } = await payload.auth({ headers: await headers() })
-  const isAdmin = user?.role === 'admin'
+  const isAdmin = user?.role === "admin"
 
   const [homepage, latestVideos, participants] = await Promise.all([
-    payload.findGlobal({ slug: 'homepage' }),
+    payload.findGlobal({ slug: "homepage" }),
     payload.find({
-      collection: 'videos',
+      collection: "videos",
       where: { and: [...publishedFilter(isAdmin), notArchived] },
-      sort: '-airedDate',
-      limit: 6,
+      sort: "-airedDate",
+      limit: 6
     }),
     payload.find({
-      collection: 'participants',
-      where: { and: [{ type: { equals: 'main' } }, notArchived] },
-      limit: 8,
-    }),
+      collection: "participants",
+      where: { and: [{ type: { equals: "main" } }, notArchived] },
+      limit: 8
+    })
   ])
 
   return (
@@ -31,7 +31,7 @@ export default async function HomePage() {
       <section className="border-b border-border bg-card py-16">
         <div className="mx-auto max-w-7xl px-4 text-center">
           <h1 className="text-4xl font-bold tracking-tight text-foreground md:text-5xl">
-            {homepage.heroTitle || 'Noćna mora Željka Malnara'}
+            {homepage.heroTitle || "Noćna mora Željka Malnara"}
           </h1>
           <p className="mx-auto mt-4 max-w-2xl text-lg text-muted-foreground">
             Arhiv omiljene hrvatske TV emisije. Videi, gosti, glumci i više.

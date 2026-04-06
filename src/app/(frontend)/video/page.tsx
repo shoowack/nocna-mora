@@ -1,11 +1,11 @@
-import type { Where } from 'payload'
-import { notArchived, publishedFilter } from '@/lib/query-helpers'
-import { VideoPagination } from '@/components/VideoPagination'
-import { VideoFilters } from '@/components/VideoFilters'
-import { VideoCard } from '@/components/VideoCard'
-import { parseVideoParams } from '@/lib/video-url'
-import { getPayload } from '@/lib/payload'
-import { headers } from 'next/headers'
+import type { Where } from "payload"
+import { notArchived, publishedFilter } from "@/lib/query-helpers"
+import { VideoPagination } from "@/components/VideoPagination"
+import { VideoFilters } from "@/components/VideoFilters"
+import { VideoCard } from "@/components/VideoCard"
+import { parseVideoParams } from "@/lib/video-url"
+import { getPayload } from "@/lib/payload"
+import { headers } from "next/headers"
 
 type Props = {
   searchParams: Promise<{
@@ -25,7 +25,7 @@ export default async function VideosPage({ searchParams }: Props) {
   const limit = params.perPage
   const payload = await getPayload()
   const { user } = await payload.auth({ headers: await headers() })
-  const isAdmin = user?.role === 'admin'
+  const isAdmin = user?.role === "admin"
 
   // Build where clause
   const where: Where = { and: [...publishedFilter(isAdmin), notArchived] } as any
@@ -47,50 +47,50 @@ export default async function VideosPage({ searchParams }: Props) {
   }
 
   if (params.date) {
-    const start = new Date(params.date + 'T00:00:00.000Z')
-    const end = new Date(params.date + 'T23:59:59.999Z')
+    const start = new Date(params.date + "T00:00:00.000Z")
+    const end = new Date(params.date + "T23:59:59.999Z")
     ;(where as any).and.push({ airedDate: { greater_than_equal: start.toISOString() } })
     ;(where as any).and.push({ airedDate: { less_than_equal: end.toISOString() } })
   }
 
-  if (isAdmin && params.published !== '') {
-    ;(where as any).and.push({ published: { equals: params.published === 'true' } })
+  if (isAdmin && params.published !== "") {
+    ;(where as any).and.push({ published: { equals: params.published === "true" } })
   }
 
   // Build a where clause without the date filter for calendar dot indicators
   const whereWithoutDate: typeof where = {
-    and: (where as any).and.filter((clause: any) => !clause.airedDate),
+    and: (where as any).and.filter((clause: any) => !clause.airedDate)
   } as any
 
   const [videos, categories, participants, allDates] = await Promise.all([
     payload.find({
-      collection: 'videos',
+      collection: "videos",
       where,
-      sort: '-airedDate',
+      sort: "-airedDate",
       page: params.page,
       limit,
-      depth: 1,
+      depth: 1
     }),
     payload.find({
-      collection: 'categories',
+      collection: "categories",
       where: notArchived,
-      sort: 'title',
-      limit: 100,
+      sort: "title",
+      limit: 100
     }),
     payload.find({
-      collection: 'participants',
+      collection: "participants",
       where: notArchived,
-      sort: 'fullName',
-      limit: 200,
+      sort: "fullName",
+      limit: 200
     }),
     payload.find({
-      collection: 'videos',
+      collection: "videos",
       where: whereWithoutDate,
       select: { airedDate: true },
-      sort: '-airedDate',
+      sort: "-airedDate",
       limit: 500,
-      depth: 0,
-    }),
+      depth: 0
+    })
   ])
 
   const videoDates = allDates.docs.map((v: any) => v.airedDate).filter(Boolean) as string[]
@@ -104,7 +104,7 @@ export default async function VideosPage({ searchParams }: Props) {
         participants={participants.docs.map((p: any) => ({
           id: p.id,
           fullName: p.fullName || `${p.firstName} ${p.lastName}`,
-          type: p.type,
+          type: p.type
         }))}
         isAdmin={isAdmin}
         videoDates={videoDates}
@@ -113,7 +113,7 @@ export default async function VideosPage({ searchParams }: Props) {
           categories: params.categories,
           participants: params.participants,
           date: params.date,
-          published: params.published,
+          published: params.published
         }}
       />
 
@@ -140,7 +140,7 @@ export default async function VideosPage({ searchParams }: Props) {
             categories: params.categories,
             participants: params.participants,
             date: params.date,
-            published: params.published,
+            published: params.published
           }}
         />
       )}

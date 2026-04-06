@@ -15,29 +15,29 @@ export function buildVideoUrl(params: VideoFilterParams): string {
   const qs = new URLSearchParams()
 
   if (params.type && params.type.length > 0) {
-    qs.set('type', params.type.join(','))
+    qs.set("type", params.type.join(","))
   }
   if (params.categories && params.categories.length > 0) {
-    qs.set('categories', params.categories.join(','))
+    qs.set("categories", params.categories.join(","))
   }
   if (params.participants && params.participants.length > 0) {
-    qs.set('participants', params.participants.join(','))
+    qs.set("participants", params.participants.join(","))
   }
   if (params.date) {
-    qs.set('date', params.date)
+    qs.set("date", params.date)
   }
-  if (params.published !== undefined && params.published !== '') {
-    qs.set('published', params.published)
+  if (params.published !== undefined && params.published !== "") {
+    qs.set("published", params.published)
   }
   if (params.page && params.page > 1) {
-    qs.set('page', String(params.page))
+    qs.set("page", String(params.page))
   }
   if (params.perPage && params.perPage !== DEFAULT_PAGE_SIZE) {
-    qs.set('perPage', String(params.perPage))
+    qs.set("perPage", String(params.perPage))
   }
 
   const query = qs.toString()
-  return query ? `/video?${query}` : '/video'
+  return query ? `/video?${query}` : "/video"
 }
 
 export function parseVideoParams(raw: {
@@ -51,12 +51,12 @@ export function parseVideoParams(raw: {
 }) {
   const perPage = parseInt(raw.perPage || String(DEFAULT_PAGE_SIZE))
   return {
-    page: parseInt(raw.page || '1'),
-    type: raw.type ? raw.type.split(',').filter(Boolean) : [],
-    categories: raw.categories ? raw.categories.split(',').filter(Boolean) : [],
-    participants: raw.participants ? raw.participants.split(',').filter(Boolean) : [],
-    date: raw.date || '',
-    published: raw.published || '',
-    perPage: PAGE_SIZE_OPTIONS.includes(perPage as any) ? perPage : DEFAULT_PAGE_SIZE,
+    page: parseInt(raw.page || "1"),
+    type: raw.type ? raw.type.split(",").filter(Boolean) : [],
+    categories: raw.categories ? raw.categories.split(",").filter(Boolean) : [],
+    participants: raw.participants ? raw.participants.split(",").filter(Boolean) : [],
+    date: raw.date || "",
+    published: raw.published || "",
+    perPage: PAGE_SIZE_OPTIONS.includes(perPage as any) ? perPage : DEFAULT_PAGE_SIZE
   }
 }

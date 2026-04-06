@@ -1,11 +1,11 @@
-'use client'
+"use client"
 
-import { hr as rdpHr } from 'react-day-picker/locale'
-import * as React from 'react'
-import { CalendarIcon, ChevronDown, X } from 'lucide-react'
-import { Combobox as BaseCombobox } from '@base-ui/react'
-import { hr as dateFnsHr } from 'date-fns/locale'
-import { format } from 'date-fns'
+import { hr as rdpHr } from "react-day-picker/locale"
+import * as React from "react"
+import { CalendarIcon, ChevronDown, X } from "lucide-react"
+import { Combobox as BaseCombobox } from "@base-ui/react"
+import { hr as dateFnsHr } from "date-fns/locale"
+import { format } from "date-fns"
 import {
   Combobox,
   ComboboxContent,
@@ -15,19 +15,19 @@ import {
   ComboboxItem,
   ComboboxLabel,
   ComboboxList,
-  ComboboxSeparator,
-} from '@/components/ui/combobox'
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { type VideoFilterParams, buildVideoUrl } from '@/lib/video-url'
-import { Calendar, CalendarDayButton } from '@/components/ui/calendar'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { cn } from '@/lib/utils'
-import { Separator } from './ui/separator'
-import { useRouter } from 'next/navigation'
+  ComboboxSeparator
+} from "@/components/ui/combobox"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { type VideoFilterParams, buildVideoUrl } from "@/lib/video-url"
+import { Calendar, CalendarDayButton } from "@/components/ui/calendar"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { cn } from "@/lib/utils"
+import { Separator } from "./ui/separator"
+import { useRouter } from "next/navigation"
 
 type Category = { id: string; title: string }
-type Participant = { id: string; fullName: string; type: 'main' | 'guest' }
+type Participant = { id: string; fullName: string; type: "main" | "guest" }
 
 interface VideoFiltersProps {
   categories: Category[]
@@ -49,13 +49,13 @@ type Option = {
 }
 
 const VIDEO_TYPES: Option[] = [
-  { value: 'full', label: 'Cijele epizode' },
-  { value: 'clip', label: 'Isječci' },
+  { value: "full", label: "Cijele epizode" },
+  { value: "clip", label: "Isječci" }
 ]
 
 const PUBLISHED_OPTIONS: Option[] = [
-  { value: 'true', label: 'Objavljeno' },
-  { value: 'false', label: 'Neobjavljeno' },
+  { value: "true", label: "Objavljeno" },
+  { value: "false", label: "Neobjavljeno" }
 ]
 
 export function VideoFilters({
@@ -63,7 +63,7 @@ export function VideoFilters({
   participants,
   isAdmin,
   videoDates,
-  current,
+  current
 }: VideoFiltersProps) {
   const router = useRouter()
 
@@ -72,7 +72,7 @@ export function VideoFilters({
     categories: current.categories,
     participants: current.participants,
     date: current.date,
-    published: current.published,
+    published: current.published
   })
 
   const applyFilters = React.useCallback(
@@ -80,15 +80,15 @@ export function VideoFilters({
       setFilters(next)
       router.push(buildVideoUrl({ ...next, page: 1 }))
     },
-    [router],
+    [router]
   )
 
   function setDate(date: Date | undefined) {
-    applyFilters({ ...filters, date: date ? format(date, 'yyyy-MM-dd') : '' })
+    applyFilters({ ...filters, date: date ? format(date, "yyyy-MM-dd") : "" })
   }
 
   function clearAll() {
-    applyFilters({ type: [], categories: [], participants: [], date: '', published: '' })
+    applyFilters({ type: [], categories: [], participants: [], date: "", published: "" })
   }
 
   const hasActiveFilters =
@@ -98,10 +98,10 @@ export function VideoFilters({
     !!filters.date ||
     !!filters.published
 
-  const actors = participants.filter((p) => p.type === 'main')
-  const guests = participants.filter((p) => p.type === 'guest')
+  const actors = participants.filter((p) => p.type === "main")
+  const guests = participants.filter((p) => p.type === "guest")
 
-  const selectedDate = filters.date ? new Date(filters.date + 'T12:00:00') : undefined
+  const selectedDate = filters.date ? new Date(filters.date + "T12:00:00") : undefined
   const parsedVideoDates = React.useMemo(() => videoDates.map((d) => new Date(d)), [videoDates])
 
   return (
@@ -127,8 +127,8 @@ export function VideoFilters({
       <GroupedMultiCombobox
         label="Sudionici"
         groups={[
-          { heading: 'Glumci', options: actors.map((p) => ({ value: p.id, label: p.fullName })) },
-          { heading: 'Gosti', options: guests.map((p) => ({ value: p.id, label: p.fullName })) },
+          { heading: "Glumci", options: actors.map((p) => ({ value: p.id, label: p.fullName })) },
+          { heading: "Gosti", options: guests.map((p) => ({ value: p.id, label: p.fullName })) }
         ]}
         selected={filters.participants ?? []}
         onValueChange={(values) => applyFilters({ ...filters, participants: values })}
@@ -141,15 +141,15 @@ export function VideoFilters({
           <Button
             variant="outline"
             className={cn(
-              'w-full justify-between font-normal sm:w-auto sm:min-w-[175px]',
-              selectedDate && 'border-primary text-foreground',
+              "w-full justify-between font-normal sm:w-auto sm:min-w-[175px]",
+              selectedDate && "border-primary text-foreground"
             )}
           >
             <span className="flex items-center gap-2">
               <CalendarIcon className="h-4 w-4 text-muted-foreground" />
               {selectedDate
-                ? format(selectedDate, 'dd.MM.yyyy', { locale: dateFnsHr })
-                : 'Datum emitiranja'}
+                ? format(selectedDate, "dd.MM.yyyy", { locale: dateFnsHr })
+                : "Datum emitiranja"}
             </span>
             {selectedDate ? (
               <span
@@ -187,7 +187,7 @@ export function VideoFilters({
                     <span className="absolute bottom-0.5 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-primary" />
                   )}
                 </CalendarDayButton>
-              ),
+              )
             }}
           />
         </PopoverContent>
@@ -198,8 +198,8 @@ export function VideoFilters({
         <SingleCombobox
           label="Status"
           options={PUBLISHED_OPTIONS}
-          selected={filters.published ?? ''}
-          onValueChange={(val) => applyFilters({ ...filters, published: val?.value ?? '' })}
+          selected={filters.published ?? ""}
+          onValueChange={(val) => applyFilters({ ...filters, published: val?.value ?? "" })}
           allLabel="Svi statusi"
         />
       )}
@@ -226,7 +226,7 @@ function ComboboxTriggerButton({
   label,
   count,
   active,
-  onClear,
+  onClear
 }: {
   label: string
   count?: number
@@ -242,8 +242,8 @@ function ComboboxTriggerButton({
         <Button
           variant="outline"
           className={cn(
-            'w-full justify-between font-normal sm:w-auto sm:min-w-[140px] gap-1 pr-1',
-            hasValue && 'border-primary',
+            "w-full justify-between font-normal sm:w-auto sm:min-w-[140px] gap-1 pr-1",
+            hasValue && "border-primary"
           )}
         />
       }
@@ -259,7 +259,7 @@ function ComboboxTriggerButton({
           onClick: (e) => {
             e.stopPropagation()
             onClear()
-          },
+          }
         })}
       >
         <Icon className="h-4 w-4 text-muted-foreground" />
@@ -281,7 +281,7 @@ function MultiCombobox({
   options,
   selected,
   onValueChange,
-  searchPlaceholder,
+  searchPlaceholder
 }: MultiComboboxProps) {
   const count = selected.length
   const value = options.filter((opt) => selected.includes(opt.value))
@@ -323,9 +323,9 @@ function GroupedMultiCombobox({
   groups,
   selected,
   onValueChange,
-  searchPlaceholder,
+  searchPlaceholder
 }: GroupedMultiComboboxProps) {
-  const [query, setQuery] = React.useState('')
+  const [query, setQuery] = React.useState("")
 
   const count = selected.length
   const allOptions = React.useMemo(() => groups.flatMap((g) => g.options), [groups])
@@ -346,7 +346,7 @@ function GroupedMultiCombobox({
       onValueChange={(opts) => onValueChange(opts.map((o) => o.value))}
       onInputValueChange={(val) => setQuery(val)}
       onOpenChange={(open) => {
-        if (!open) setQuery('')
+        if (!open) setQuery("")
       }}
       isItemEqualToValue={(a: Option, b: Option) => a.value === b.value}
     >
@@ -387,7 +387,7 @@ function SingleCombobox({
   options,
   selected,
   onValueChange,
-  allLabel,
+  allLabel
 }: SingleComboboxProps) {
   const active = options.find((o) => o.value === selected) ?? null
 
@@ -403,8 +403,8 @@ function SingleCombobox({
           <Button
             variant="outline"
             className={cn(
-              'w-full justify-between font-normal sm:w-auto sm:min-w-[140px]',
-              active && 'border-primary',
+              "w-full justify-between font-normal sm:w-auto sm:min-w-[140px]",
+              active && "border-primary"
             )}
           />
         }

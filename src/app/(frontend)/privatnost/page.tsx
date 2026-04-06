@@ -1,5 +1,5 @@
 export const metadata = {
-  title: 'Privatnost | Noćna mora Željka Malnara',
+  title: "Privatnost | Noćna mora Željka Malnara"
 }
 
 export default function PrivacyPage() {

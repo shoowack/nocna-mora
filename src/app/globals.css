@@ -1,6 +1,6 @@
-@import 'tailwindcss';
-@import 'tw-animate-css';
-@import 'shadcn/tailwind.css';
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -13,7 +13,7 @@
   inset: 0;
 }
 .gradient-blur-top::before {
-  content: '';
+  content: "";
   z-index: 1;
   backdrop-filter: blur(0.5px);
   mask: linear-gradient(
@@ -99,7 +99,7 @@
   );
 }
 .gradient-blur-top::after {
-  content: '';
+  content: "";
   z-index: 8;
   backdrop-filter: blur(64px);
   mask: linear-gradient(to top, rgba(0, 0, 0, 0) 87.5%, rgba(0, 0, 0, 1) 100%);
@@ -220,7 +220,7 @@
 
 /* Calendar: dot indicator for days that have videos */
 .has-video-dot::after {
-  content: '';
+  content: "";
   display: block;
   position: absolute;
   bottom: 2px;

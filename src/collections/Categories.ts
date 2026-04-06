@@ -1,55 +1,55 @@
-import type { CollectionConfig } from 'payload'
-import { isAdmin, isAdminOrEditor, notArchived } from '@/access'
-import { populateSlug } from '@/hooks/populateSlug'
+import type { CollectionConfig } from "payload"
+import { isAdmin, isAdminOrEditor, notArchived } from "@/access"
+import { populateSlug } from "@/hooks/populateSlug"
 
 export const Categories: CollectionConfig = {
-  slug: 'categories',
+  slug: "categories",
   admin: {
-    useAsTitle: 'title',
-    defaultColumns: ['title', 'slug', 'deletedAt'],
+    useAsTitle: "title",
+    defaultColumns: ["title", "slug", "deletedAt"]
   },
   fields: [
     {
-      name: 'title',
-      type: 'text',
+      name: "title",
+      type: "text",
       required: true,
       unique: true,
-      label: 'Naziv',
+      label: "Naziv"
     },
     {
-      name: 'slug',
-      type: 'text',
+      name: "slug",
+      type: "text",
       required: true,
       unique: true,
       admin: {
-        position: 'sidebar',
+        position: "sidebar"
       },
       hooks: {
-        beforeValidate: [populateSlug('title')],
-      },
+        beforeValidate: [populateSlug("title")]
+      }
     },
     {
-      name: 'description',
-      type: 'textarea',
-      label: 'Opis',
+      name: "description",
+      type: "textarea",
+      label: "Opis"
     },
     {
-      name: 'deletedAt',
-      type: 'date',
-      label: 'Arhivirano',
+      name: "deletedAt",
+      type: "date",
+      label: "Arhivirano",
       admin: {
-        position: 'sidebar',
-        description: 'Postavi datum za arhiviranje (sakriva od javnosti)',
+        position: "sidebar",
+        description: "Postavi datum za arhiviranje (sakriva od javnosti)",
         date: {
-          pickerAppearance: 'dayAndTime',
-        },
-      },
-    },
+          pickerAppearance: "dayAndTime"
+        }
+      }
+    }
   ],
   access: {
     read: notArchived,
     create: isAdminOrEditor,
     update: isAdminOrEditor,
-    delete: isAdmin,
-  },
+    delete: isAdmin
+  }
 }

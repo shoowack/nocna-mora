@@ -1,7 +1,7 @@
-'use client'
+"use client"
 
-import { useState } from 'react'
-import { formatDate } from '@/lib/utils'
+import { useState } from "react"
+import { formatDate } from "@/lib/utils"
 
 type Comment = {
   id: string
@@ -17,7 +17,7 @@ type Props = {
 
 export function CommentSection({ videoId, initialComments }: Props) {
   const [comments, setComments] = useState<Comment[]>(initialComments)
-  const [content, setContent] = useState('')
+  const [content, setContent] = useState("")
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
@@ -29,24 +29,24 @@ export function CommentSection({ videoId, initialComments }: Props) {
     setError(null)
 
     try {
-      const res = await fetch('/api/comments', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ content: content.trim(), video: videoId }),
+      const res = await fetch("/api/comments", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: content.trim(), video: videoId })
       })
 
       if (!res.ok) {
         const data = await res.json()
-        throw new Error(data.errors?.[0]?.message || 'Greška pri slanju komentara')
+        throw new Error(data.errors?.[0]?.message || "Greška pri slanju komentara")
       }
 
-      setContent('')
+      setContent("")
       // Comment needs approval, show message
       setError(null)
-      ;(window as any).umami?.track('comment submitted')
-      alert('Komentar je poslan na odobrenje.')
+      ;(window as any).umami?.track("comment submitted")
+      alert("Komentar je poslan na odobrenje.")
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Nešto je pošlo po krivu')
+      setError(err instanceof Error ? err.message : "Nešto je pošlo po krivu")
     } finally {
       setSubmitting(false)
     }
@@ -73,7 +73,7 @@ export function CommentSection({ videoId, initialComments }: Props) {
             disabled={submitting || !content.trim()}
             className="rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50 transition-colors"
           >
-            {submitting ? 'Šaljem...' : 'Komentiraj'}
+            {submitting ? "Šaljem..." : "Komentiraj"}
           </button>
         </div>
       </form>

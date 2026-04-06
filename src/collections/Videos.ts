@@ -1,165 +1,165 @@
-import type { CollectionConfig } from 'payload'
-import { extractPlainTextFromTranscription } from '@/hooks/extractPlainText'
-import { isAdmin, isAdminOrEditor, publishedOrAdmin } from '@/access'
-import { notifyUsersOnNewVideo } from '@/hooks/notifyOnNewVideo'
-import { populateSlug } from '@/hooks/populateSlug'
+import type { CollectionConfig } from "payload"
+import { extractPlainTextFromTranscription } from "@/hooks/extractPlainText"
+import { isAdmin, isAdminOrEditor, publishedOrAdmin } from "@/access"
+import { notifyUsersOnNewVideo } from "@/hooks/notifyOnNewVideo"
+import { populateSlug } from "@/hooks/populateSlug"
 
 export const Videos: CollectionConfig = {
-  slug: 'videos',
+  slug: "videos",
   admin: {
-    useAsTitle: 'title',
+    useAsTitle: "title",
     defaultColumns: [
-      'title',
-      'provider',
-      'videoType',
-      'duration',
-      'airedDate',
-      'published',
-      'deletedAt',
-    ],
+      "title",
+      "provider",
+      "videoType",
+      "duration",
+      "airedDate",
+      "published",
+      "deletedAt"
+    ]
   },
   fields: [
     {
-      name: 'title',
-      type: 'text',
+      name: "title",
+      type: "text",
       required: true,
-      label: 'Naslov',
+      label: "Naslov"
     },
     {
-      name: 'slug',
-      type: 'text',
+      name: "slug",
+      type: "text",
       required: true,
       unique: true,
       admin: {
-        position: 'sidebar',
-        description: 'Automatski generiran iz naslova ako je prazan',
+        position: "sidebar",
+        description: "Automatski generiran iz naslova ako je prazan"
       },
       hooks: {
-        beforeValidate: [populateSlug('title')],
-      },
+        beforeValidate: [populateSlug("title")]
+      }
     },
     {
-      name: 'description',
-      type: 'textarea',
-      label: 'Opis',
+      name: "description",
+      type: "textarea",
+      label: "Opis"
     },
     {
-      name: 'videoId',
-      type: 'text',
+      name: "videoId",
+      type: "text",
       required: true,
-      label: 'ID videa',
+      label: "ID videa",
       admin: {
-        description: 'ID videa na platformi (npr. YouTube video ID)',
-      },
+        description: "ID videa na platformi (npr. YouTube video ID)"
+      }
     },
     {
-      name: 'provider',
-      type: 'select',
+      name: "provider",
+      type: "select",
       required: true,
       options: [
-        { label: 'YouTube', value: 'youtube' },
-        { label: 'Vimeo', value: 'vimeo' },
-        { label: 'Dailymotion', value: 'dailymotion' },
-        { label: 'Facebook', value: 'facebook' },
-      ],
+        { label: "YouTube", value: "youtube" },
+        { label: "Vimeo", value: "vimeo" },
+        { label: "Dailymotion", value: "dailymotion" },
+        { label: "Facebook", value: "facebook" }
+      ]
     },
     {
-      name: 'videoType',
-      type: 'select',
+      name: "videoType",
+      type: "select",
       required: true,
-      defaultValue: 'full',
-      label: 'Tip videa',
+      defaultValue: "full",
+      label: "Tip videa",
       options: [
-        { label: 'Cijela epizoda', value: 'full' },
-        { label: 'Isječak', value: 'clip' },
-      ],
+        { label: "Cijela epizoda", value: "full" },
+        { label: "Isječak", value: "clip" }
+      ]
     },
     {
-      name: 'duration',
-      type: 'number',
+      name: "duration",
+      type: "number",
       min: 0,
-      label: 'Trajanje',
+      label: "Trajanje",
       admin: {
         components: {
-          Field: '@/components/admin/DurationField#DurationField',
-          Cell: '@/components/admin/DurationCell#DurationCell',
-        },
-      },
+          Field: "@/components/admin/DurationField#DurationField",
+          Cell: "@/components/admin/DurationCell#DurationCell"
+        }
+      }
     },
     {
-      name: 'airedDate',
-      type: 'date',
-      label: 'Datum emitiranja',
+      name: "airedDate",
+      type: "date",
+      label: "Datum emitiranja",
       admin: {
         date: {
-          pickerAppearance: 'dayOnly',
-          displayFormat: 'dd.MM.yyyy',
-        },
-      },
+          pickerAppearance: "dayOnly",
+          displayFormat: "dd.MM.yyyy"
+        }
+      }
     },
     {
-      name: 'published',
-      type: 'checkbox',
+      name: "published",
+      type: "checkbox",
       defaultValue: false,
       admin: {
-        position: 'sidebar',
-        description: 'Objavljeno na javnom dijelu stranice',
-      },
+        position: "sidebar",
+        description: "Objavljeno na javnom dijelu stranice"
+      }
     },
     {
-      name: 'thumbnail',
-      type: 'upload',
-      relationTo: 'media',
-      label: 'Sličica',
+      name: "thumbnail",
+      type: "upload",
+      relationTo: "media",
+      label: "Sličica"
     },
     {
-      name: 'participants',
-      type: 'relationship',
-      relationTo: 'participants',
+      name: "participants",
+      type: "relationship",
+      relationTo: "participants",
       hasMany: true,
-      label: 'Sudionici',
+      label: "Sudionici"
     },
     {
-      name: 'categories',
-      type: 'relationship',
-      relationTo: 'categories',
+      name: "categories",
+      type: "relationship",
+      relationTo: "categories",
       hasMany: true,
-      label: 'Kategorije',
+      label: "Kategorije"
     },
     {
-      name: 'transcription',
-      type: 'richText',
-      label: 'Transkripcija',
+      name: "transcription",
+      type: "richText",
+      label: "Transkripcija"
     },
     {
-      name: 'transcriptionPlain',
-      type: 'textarea',
+      name: "transcriptionPlain",
+      type: "textarea",
       admin: {
         readOnly: true,
-        hidden: true,
-      },
+        hidden: true
+      }
     },
     {
-      name: 'deletedAt',
-      type: 'date',
-      label: 'Arhivirano',
+      name: "deletedAt",
+      type: "date",
+      label: "Arhivirano",
       admin: {
-        position: 'sidebar',
-        description: 'Postavi datum za arhiviranje (sakriva od javnosti)',
+        position: "sidebar",
+        description: "Postavi datum za arhiviranje (sakriva od javnosti)",
         date: {
-          pickerAppearance: 'dayAndTime',
-        },
-      },
-    },
+          pickerAppearance: "dayAndTime"
+        }
+      }
+    }
   ],
   hooks: {
     beforeChange: [extractPlainTextFromTranscription],
-    afterChange: [notifyUsersOnNewVideo],
+    afterChange: [notifyUsersOnNewVideo]
   },
   access: {
     read: publishedOrAdmin,
     create: isAdminOrEditor,
     update: isAdminOrEditor,
-    delete: isAdmin,
-  },
+    delete: isAdmin
+  }
 }

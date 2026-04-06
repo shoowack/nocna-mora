@@ -1,17 +1,17 @@
-'use client'
+"use client"
 
-import { useState } from 'react'
-import { Search } from 'lucide-react'
-import { useRouter } from 'next/navigation'
+import { useState } from "react"
+import { Search } from "lucide-react"
+import { useRouter } from "next/navigation"
 
-export function SearchBar({ defaultValue = '' }: { defaultValue?: string }) {
+export function SearchBar({ defaultValue = "" }: { defaultValue?: string }) {
   const [query, setQuery] = useState(defaultValue)
   const router = useRouter()
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
     if (query.trim()) {
-      ;(window as any).umami?.track('search', { query: query.trim() })
+      ;(window as any).umami?.track("search", { query: query.trim() })
       router.push(`/pretraga?q=${encodeURIComponent(query.trim())}`)
     }
   }

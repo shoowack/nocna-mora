@@ -1,12 +1,12 @@
-import { ParticipantCard } from '@/components/ParticipantCard'
-import { notArchived } from '@/lib/query-helpers'
-import { getPayload } from '@/lib/payload'
+import { ParticipantCard } from "@/components/ParticipantCard"
+import { notArchived } from "@/lib/query-helpers"
+import { getPayload } from "@/lib/payload"
 
 export const revalidate = 3600
 
 export const metadata = {
-  title: 'Gosti | Noćna mora Željka Malnara',
-  description: 'Gosti emisije',
+  title: "Gosti | Noćna mora Željka Malnara",
+  description: "Gosti emisije"
 }
 
 type Props = {
@@ -15,16 +15,16 @@ type Props = {
 
 export default async function GuestsPage({ searchParams }: Props) {
   const params = await searchParams
-  const page = parseInt(params.page || '1')
+  const page = parseInt(params.page || "1")
   const payload = await getPayload()
 
   const participants = await payload.find({
-    collection: 'participants',
-    where: { and: [{ type: { equals: 'guest' } }, notArchived] },
-    sort: 'lastName',
+    collection: "participants",
+    where: { and: [{ type: { equals: "guest" } }, notArchived] },
+    sort: "lastName",
     page,
     limit: 40,
-    depth: 1,
+    depth: 1
   })
 
   return (

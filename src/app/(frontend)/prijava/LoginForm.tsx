@@ -1,12 +1,12 @@
-'use client'
+"use client"
 
-import { useState } from 'react'
-import { useRouter } from 'next/navigation'
-import Link from 'next/link'
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import Link from "next/link"
 
 export function LoginForm() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
@@ -17,21 +17,21 @@ export function LoginForm() {
     setLoading(true)
 
     try {
-      const res = await fetch('/api/users/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+      const res = await fetch("/api/users/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
       })
 
       if (!res.ok) {
-        throw new Error('Pogrešan email ili lozinka')
+        throw new Error("Pogrešan email ili lozinka")
       }
 
-      ;(window as any).umami?.track('login')
-      router.push('/')
+      ;(window as any).umami?.track("login")
+      router.push("/")
       router.refresh()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Nešto je pošlo po krivu')
+      setError(err instanceof Error ? err.message : "Nešto je pošlo po krivu")
     } finally {
       setLoading(false)
     }
@@ -77,12 +77,12 @@ export function LoginForm() {
           disabled={loading}
           className="w-full rounded-lg bg-primary py-2.5 font-medium text-primary-foreground hover:bg-primary/90 disabled:opacity-50 transition-colors"
         >
-          {loading ? 'Prijavljujem se...' : 'Prijavi se'}
+          {loading ? "Prijavljujem se..." : "Prijavi se"}
         </button>
       </form>
 
       <p className="mt-6 text-center text-sm text-muted-foreground">
-        Nemaš račun?{' '}
+        Nemaš račun?{" "}
         <Link href="/registracija" className="text-primary hover:underline">
           Registriraj se
         </Link>

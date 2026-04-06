@@ -1,71 +1,71 @@
-import type { CollectionConfig } from 'payload'
-import { approvedOrAdmin, isAdmin, isAuthenticated } from '@/access'
+import type { CollectionConfig } from "payload"
+import { approvedOrAdmin, isAdmin, isAuthenticated } from "@/access"
 
 export const Comments: CollectionConfig = {
-  slug: 'comments',
+  slug: "comments",
   admin: {
-    defaultColumns: ['content', 'video', 'author', 'approved', 'createdAt', 'deletedAt'],
+    defaultColumns: ["content", "video", "author", "approved", "createdAt", "deletedAt"]
   },
   fields: [
     {
-      name: 'content',
-      type: 'textarea',
+      name: "content",
+      type: "textarea",
       required: true,
       maxLength: 500,
-      label: 'Sadržaj',
+      label: "Sadržaj"
     },
     {
-      name: 'video',
-      type: 'relationship',
-      relationTo: 'videos',
+      name: "video",
+      type: "relationship",
+      relationTo: "videos",
       required: true,
       index: true,
-      label: 'Video',
+      label: "Video"
     },
     {
-      name: 'author',
-      type: 'relationship',
-      relationTo: 'users',
+      name: "author",
+      type: "relationship",
+      relationTo: "users",
       required: true,
-      label: 'Autor',
+      label: "Autor"
     },
     {
-      name: 'approved',
-      type: 'checkbox',
+      name: "approved",
+      type: "checkbox",
       defaultValue: false,
-      label: 'Odobreno',
+      label: "Odobreno",
       admin: {
-        position: 'sidebar',
-        description: 'Odobri komentar za prikaz na stranici',
-      },
+        position: "sidebar",
+        description: "Odobri komentar za prikaz na stranici"
+      }
     },
     {
-      name: 'deletedAt',
-      type: 'date',
-      label: 'Arhivirano',
+      name: "deletedAt",
+      type: "date",
+      label: "Arhivirano",
       admin: {
-        position: 'sidebar',
-        description: 'Postavi datum za arhiviranje (sakriva od javnosti)',
+        position: "sidebar",
+        description: "Postavi datum za arhiviranje (sakriva od javnosti)",
         date: {
-          pickerAppearance: 'dayAndTime',
-        },
-      },
-    },
+          pickerAppearance: "dayAndTime"
+        }
+      }
+    }
   ],
   hooks: {
     beforeChange: [
       ({ data, req, operation }) => {
-        if (operation === 'create' && req.user) {
+        if (operation === "create" && req.user) {
           data.author = req.user.id
         }
         return data
-      },
-    ],
+      }
+    ]
   },
   access: {
     read: approvedOrAdmin,
     create: isAuthenticated,
     update: isAdmin,
-    delete: isAdmin,
-  },
+    delete: isAdmin
+  }
 }

@@ -1,7 +1,7 @@
-'use client'
+"use client"
 
-import { useEffect, useState } from 'react'
-import { FieldLabel, useField } from '@payloadcms/ui'
+import { useEffect, useState } from "react"
+import { FieldLabel, useField } from "@payloadcms/ui"
 
 type Props = {
   path: string
@@ -14,7 +14,7 @@ export function DurationField({ path, label }: Props) {
   const toHMS = (total: number) => ({
     h: Math.floor(total / 3600),
     m: Math.floor((total % 3600) / 60),
-    s: total % 60,
+    s: total % 60
   })
 
   const [hms, setHms] = useState(() => toHMS(value || 0))
@@ -31,20 +31,20 @@ export function DurationField({ path, label }: Props) {
 
   const inputStyle = {
     width: 64,
-    padding: '0.375rem 0.5rem',
-    border: '1px solid var(--theme-elevation-150)',
+    padding: "0.375rem 0.5rem",
+    border: "1px solid var(--theme-elevation-150)",
     borderRadius: 4,
-    background: 'var(--theme-elevation-0)',
-    color: 'var(--theme-elevation-1000)',
-    fontSize: '0.875rem',
-    textAlign: 'center' as const,
+    background: "var(--theme-elevation-0)",
+    color: "var(--theme-elevation-1000)",
+    fontSize: "0.875rem",
+    textAlign: "center" as const
   }
 
   return (
-    <div style={{ marginBottom: '1rem' }}>
-      <FieldLabel label={label ?? 'Trajanje'} path={path} />
-      <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 }}>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+    <div style={{ marginBottom: "1rem" }}>
+      <FieldLabel label={label ?? "Trajanje"} path={path} />
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4 }}>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
           <input
             type="number"
             min={0}
@@ -52,10 +52,10 @@ export function DurationField({ path, label }: Props) {
             onChange={(e) => update(Math.max(0, +e.target.value), hms.m, hms.s)}
             style={inputStyle}
           />
-          <span style={{ fontSize: '0.7rem', color: 'var(--theme-elevation-400)' }}>sat</span>
+          <span style={{ fontSize: "0.7rem", color: "var(--theme-elevation-400)" }}>sat</span>
         </div>
-        <span style={{ color: 'var(--theme-elevation-400)', paddingBottom: 16 }}>:</span>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+        <span style={{ color: "var(--theme-elevation-400)", paddingBottom: 16 }}>:</span>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
           <input
             type="number"
             min={0}
@@ -64,10 +64,10 @@ export function DurationField({ path, label }: Props) {
             onChange={(e) => update(hms.h, Math.min(59, Math.max(0, +e.target.value)), hms.s)}
             style={inputStyle}
           />
-          <span style={{ fontSize: '0.7rem', color: 'var(--theme-elevation-400)' }}>min</span>
+          <span style={{ fontSize: "0.7rem", color: "var(--theme-elevation-400)" }}>min</span>
         </div>
-        <span style={{ color: 'var(--theme-elevation-400)', paddingBottom: 16 }}>:</span>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 }}>
+        <span style={{ color: "var(--theme-elevation-400)", paddingBottom: 16 }}>:</span>
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2 }}>
           <input
             type="number"
             min={0}
@@ -76,7 +76,7 @@ export function DurationField({ path, label }: Props) {
             onChange={(e) => update(hms.h, hms.m, Math.min(59, Math.max(0, +e.target.value)))}
             style={inputStyle}
           />
-          <span style={{ fontSize: '0.7rem', color: 'var(--theme-elevation-400)' }}>sek</span>
+          <span style={{ fontSize: "0.7rem", color: "var(--theme-elevation-400)" }}>sek</span>
         </div>
       </div>
     </div>

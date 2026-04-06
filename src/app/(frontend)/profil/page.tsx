@@ -1,14 +1,14 @@
-import { Bell, User } from 'lucide-react'
-import { getPayload } from '@/lib/payload'
-import { formatDate } from '@/lib/utils'
-import type { Media } from '../../../../payload-types'
-import { redirect } from 'next/navigation'
-import { headers } from 'next/headers'
-import Image from 'next/image'
-import Link from 'next/link'
+import { Bell, User } from "lucide-react"
+import { getPayload } from "@/lib/payload"
+import { formatDate } from "@/lib/utils"
+import type { Media } from "../../../../payload-types"
+import { redirect } from "next/navigation"
+import { headers } from "next/headers"
+import Image from "next/image"
+import Link from "next/link"
 
 export const metadata = {
-  title: 'Profil | Noćna mora Željka Malnara',
+  title: "Profil | Noćna mora Željka Malnara"
 }
 
 export default async function ProfilePage() {
@@ -18,21 +18,21 @@ export default async function ProfilePage() {
   const { user } = await payload.auth({ headers: headersList })
 
   if (!user) {
-    redirect('/prijava')
+    redirect("/prijava")
   }
 
-  const fullUser = await payload.findByID({ collection: 'users', id: user.id, depth: 1 })
+  const fullUser = await payload.findByID({ collection: "users", id: user.id, depth: 1 })
   const avatarUrl = (fullUser?.avatar as Media | null | undefined)?.url ?? undefined
 
   // Fetch unread notifications
   const notifications = await payload.find({
-    collection: 'notifications',
+    collection: "notifications",
     where: {
-      and: [{ recipient: { equals: user.id } }, { read: { equals: false } }],
+      and: [{ recipient: { equals: user.id } }, { read: { equals: false } }]
     },
-    sort: '-createdAt',
+    sort: "-createdAt",
     limit: 20,
-    depth: 1,
+    depth: 1
   })
 
   return (
@@ -75,7 +75,7 @@ export default async function ProfilePage() {
                     {formatDate(notif.createdAt)}
                   </span>
                 </div>
-                {notif.relatedVideo && typeof notif.relatedVideo === 'object' && (
+                {notif.relatedVideo && typeof notif.relatedVideo === "object" && (
                   <Link
                     href={`/video/${notif.relatedVideo.slug}`}
                     className="mt-2 inline-block text-sm text-primary hover:underline"

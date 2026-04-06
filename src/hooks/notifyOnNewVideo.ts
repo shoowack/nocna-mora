@@ -1,13 +1,13 @@
-import type { CollectionAfterChangeHook } from 'payload'
+import type { CollectionAfterChangeHook } from "payload"
 
 export const notifyUsersOnNewVideo: CollectionAfterChangeHook = async ({
   doc,
   previousDoc,
   operation,
-  req,
+  req
 }) => {
   // Only trigger when a video is first published
-  if (operation === 'update' && doc.published && !previousDoc?.published) {
+  if (operation === "update" && doc.published && !previousDoc?.published) {
     const payload = req.payload
 
     // Fire and forget — don't block the save response
@@ -15,22 +15,22 @@ export const notifyUsersOnNewVideo: CollectionAfterChangeHook = async ({
       try {
         // Find users who opted in to notifications
         const subscribers = await payload.find({
-          collection: 'users',
+          collection: "users",
           where: { notifyNewVideos: { equals: true } },
-          limit: 0,
+          limit: 0
         })
 
         for (const user of subscribers.docs) {
           // Create in-app notification
           await payload.create({
-            collection: 'notifications',
+            collection: "notifications",
             data: {
-              title: 'Novi video!',
+              title: "Novi video!",
               message: `Dodan je novi video: ${doc.title}`,
-              type: 'new_video',
+              type: "new_video",
               recipient: user.id,
-              relatedVideo: doc.id,
-            },
+              relatedVideo: doc.id
+            }
           })
 
           // Send email notification
@@ -40,10 +40,10 @@ export const notifyUsersOnNewVideo: CollectionAfterChangeHook = async ({
                 to: user.email,
                 subject: `Novi video: ${doc.title}`,
                 html: `
-                  <p>Pozdrav ${user.name || ''},</p>
+                  <p>Pozdrav ${user.name || ""},</p>
                   <p>Dodan je novi video u arhiv: <strong>${doc.title}</strong></p>
                   <p><a href="${process.env.NEXT_PUBLIC_SITE_URL}/video/${doc.slug}">Pogledaj video</a></p>
-                `,
+                `
               })
             } catch {
               console.error(`Failed to send email to ${user.email}`)
@@ -51,7 +51,7 @@ export const notifyUsersOnNewVideo: CollectionAfterChangeHook = async ({
           }
         }
       } catch (error) {
-        console.error('Error sending notifications:', error)
+        console.error("Error sending notifications:", error)
       }
     })()
   }

@@ -1,10 +1,10 @@
-import { getPayload } from '@/lib/payload'
-import Link from 'next/link'
+import { getPayload } from "@/lib/payload"
+import Link from "next/link"
 
 async function getFooterText() {
   try {
     const payload = await getPayload()
-    const siteSettings = await payload.findGlobal({ slug: 'site-settings' })
+    const siteSettings = await payload.findGlobal({ slug: "site-settings" })
     return siteSettings?.footerText ?? null
   } catch {
     return null

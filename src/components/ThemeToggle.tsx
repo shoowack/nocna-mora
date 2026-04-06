@@ -1,14 +1,14 @@
-'use client'
+"use client"
 
-import { useEffect, useState } from 'react'
-import { Monitor, Moon, Sun } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { useTheme } from 'next-themes'
+import { useEffect, useState } from "react"
+import { Monitor, Moon, Sun } from "lucide-react"
+import { cn } from "@/lib/utils"
+import { useTheme } from "next-themes"
 
 const options = [
-  { value: 'light', icon: Sun, label: 'Light' },
-  { value: 'system', icon: Monitor, label: 'System' },
-  { value: 'dark', icon: Moon, label: 'Dark' },
+  { value: "light", icon: Sun, label: "Light" },
+  { value: "system", icon: Monitor, label: "System" },
+  { value: "dark", icon: Moon, label: "Dark" }
 ] as const
 
 export function ThemeToggle() {
@@ -26,14 +26,14 @@ export function ThemeToggle() {
           key={value}
           onClick={() => {
             setTheme(value)
-            ;(window as any).umami?.track('theme change', { theme: value })
+            ;(window as any).umami?.track("theme change", { theme: value })
           }}
           aria-label={label}
           className={cn(
-            'flex h-full w-7 items-center justify-center rounded-sm transition-colors',
+            "flex h-full w-7 items-center justify-center rounded-sm transition-colors",
             theme === value
-              ? 'bg-background text-foreground shadow-sm'
-              : 'text-muted-foreground hover:text-foreground',
+              ? "bg-background text-foreground shadow-sm"
+              : "text-muted-foreground hover:text-foreground"
           )}
         >
           <Icon className="h-3.5 w-3.5" />

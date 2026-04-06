@@ -1,12 +1,12 @@
-import { Pencil } from 'lucide-react'
-import { notArchived, publishedFilter } from '@/lib/query-helpers'
-import { VideoCard } from '@/components/VideoCard'
-import { getPayload } from '@/lib/payload'
-import { formatDate } from '@/lib/utils'
-import { notFound } from 'next/navigation'
-import { headers } from 'next/headers'
-import Image from 'next/image'
-import Link from 'next/link'
+import { Pencil } from "lucide-react"
+import { notArchived, publishedFilter } from "@/lib/query-helpers"
+import { VideoCard } from "@/components/VideoCard"
+import { getPayload } from "@/lib/payload"
+import { formatDate } from "@/lib/utils"
+import { notFound } from "next/navigation"
+import { headers } from "next/headers"
+import Image from "next/image"
+import Link from "next/link"
 
 export const revalidate = 3600
 
@@ -18,20 +18,20 @@ export async function generateMetadata({ params }: Props) {
   const { slug } = await params
   const payload = await getPayload()
   const result = await payload.find({
-    collection: 'participants',
-    where: { and: [{ slug: { equals: slug } }, { type: { equals: 'main' } }, notArchived] },
-    limit: 1,
+    collection: "participants",
+    where: { and: [{ slug: { equals: slug } }, { type: { equals: "main" } }, notArchived] },
+    limit: 1
   })
-  if (result.docs.length === 0) return { title: 'Glumac nije pronađen' }
+  if (result.docs.length === 0) return { title: "Glumac nije pronađen" }
   const p = result.docs[0] as any
-  const siteSettings = (await payload.findGlobal({ slug: 'site-settings' })) as any
-  const siteName = siteSettings?.siteName || 'Noćna Mora'
-  const fullName = `${p.firstName} ${p.lastName}${p.nickname ? ` (${p.nickname})` : ''}`
+  const siteSettings = (await payload.findGlobal({ slug: "site-settings" })) as any
+  const siteName = siteSettings?.siteName || "Noćna Mora"
+  const fullName = `${p.firstName} ${p.lastName}${p.nickname ? ` (${p.nickname})` : ""}`
   const tokens = {
     firstName: p.firstName,
     lastName: p.lastName,
-    nickname: p.nickname || '',
-    siteName,
+    nickname: p.nickname || "",
+    siteName
   }
   const interpolate = (tpl: string) =>
     tpl.replace(/\{(\w+)\}/g, (_, k) => tokens[k as keyof typeof tokens] ?? _)
@@ -44,7 +44,7 @@ export async function generateMetadata({ params }: Props) {
   return {
     title,
     description,
-    openGraph: { title: titleTpl ? interpolate(titleTpl) : fullName, description },
+    openGraph: { title: titleTpl ? interpolate(titleTpl) : fullName, description }
   }
 }
 
@@ -52,13 +52,13 @@ export default async function ActorDetailPage({ params }: Props) {
   const { slug } = await params
   const payload = await getPayload()
   const { user } = await payload.auth({ headers: await headers() })
-  const isAdmin = user?.role === 'admin'
+  const isAdmin = user?.role === "admin"
 
   const result = await payload.find({
-    collection: 'participants',
-    where: { and: [{ slug: { equals: slug } }, { type: { equals: 'main' } }, notArchived] },
+    collection: "participants",
+    where: { and: [{ slug: { equals: slug } }, { type: { equals: "main" } }, notArchived] },
     limit: 1,
-    depth: 1,
+    depth: 1
   })
 
   if (result.docs.length === 0) notFound()
@@ -67,13 +67,13 @@ export default async function ActorDetailPage({ params }: Props) {
 
   // Find videos featuring this person
   const videos = await payload.find({
-    collection: 'videos',
+    collection: "videos",
     where: {
-      and: [{ participants: { equals: person.id } }, ...publishedFilter(isAdmin), notArchived],
+      and: [{ participants: { equals: person.id } }, ...publishedFilter(isAdmin), notArchived]
     },
-    sort: '-airedDate',
+    sort: "-airedDate",
     limit: 50,
-    depth: 1,
+    depth: 1
   })
 
   return (
@@ -124,34 +124,34 @@ export default async function ActorDetailPage({ params }: Props) {
             <p className="mt-1 text-lg text-muted-foreground">&quot;{person.nickname}&quot;</p>
           )}
           {person.bio?.root?.children
-            ?.map((node: any) => node.children?.map((t: any) => t.text).join(''))
+            ?.map((node: any) => node.children?.map((t: any) => t.text).join(""))
             .filter(Boolean)
-            .join('\n') && (
+            .join("\n") && (
             <p className="mt-3 text-sm text-muted-foreground">
               {person.bio.root.children
-                .map((node: any) => node.children?.map((t: any) => t.text).join(''))
+                .map((node: any) => node.children?.map((t: any) => t.text).join(""))
                 .filter(Boolean)
-                .join(' ')}
+                .join(" ")}
             </p>
           )}
           <div className="mt-3 flex flex-wrap gap-3 text-sm text-muted-foreground">
             {person.birthDate && (
               <span>
-                {person.gender === 'female'
-                  ? 'Rođena'
-                  : person.gender === 'male'
-                    ? 'Rođen'
-                    : 'Rođen/a'}
+                {person.gender === "female"
+                  ? "Rođena"
+                  : person.gender === "male"
+                    ? "Rođen"
+                    : "Rođen/a"}
                 : {formatDate(person.birthDate)}
               </span>
             )}
             {person.deathDate && (
               <span>
-                {person.gender === 'female'
-                  ? 'Preminula'
-                  : person.gender === 'male'
-                    ? 'Preminuo'
-                    : 'Preminuo/la'}
+                {person.gender === "female"
+                  ? "Preminula"
+                  : person.gender === "male"
+                    ? "Preminuo"
+                    : "Preminuo/la"}
                 : {formatDate(person.deathDate)}
               </span>
             )}

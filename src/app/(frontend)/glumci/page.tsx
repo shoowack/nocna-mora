@@ -1,23 +1,23 @@
-import { ParticipantCard } from '@/components/ParticipantCard'
-import { notArchived } from '@/lib/query-helpers'
-import { getPayload } from '@/lib/payload'
+import { ParticipantCard } from "@/components/ParticipantCard"
+import { notArchived } from "@/lib/query-helpers"
+import { getPayload } from "@/lib/payload"
 
 export const revalidate = 3600
 
 export const metadata = {
-  title: 'Glumci | Noćna mora Željka Malnara',
-  description: 'Stalna postava emisije',
+  title: "Glumci | Noćna mora Željka Malnara",
+  description: "Stalna postava emisije"
 }
 
 export default async function ActorsPage() {
   const payload = await getPayload()
 
   const participants = await payload.find({
-    collection: 'participants',
-    where: { and: [{ type: { equals: 'main' } }, notArchived] },
-    sort: 'lastName',
+    collection: "participants",
+    where: { and: [{ type: { equals: "main" } }, notArchived] },
+    sort: "lastName",
     limit: 100,
-    depth: 1,
+    depth: 1
   })
 
   return (

@@ -1,14 +1,14 @@
-'use client'
+"use client"
 
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation"
 
 export function LogoutButton() {
   const router = useRouter()
 
   async function handleLogout() {
-    await fetch('/api/users/logout', { method: 'POST' })
-    ;(window as any).umami?.track('logout')
-    router.push('/')
+    await fetch("/api/users/logout", { method: "POST" })
+    ;(window as any).umami?.track("logout")
+    router.push("/")
     router.refresh()
   }
 

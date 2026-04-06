@@ -1,13 +1,13 @@
-import { notArchived, publishedFilter } from '@/lib/query-helpers'
-import { SearchBar } from '@/components/SearchBar'
-import { VideoCard } from '@/components/VideoCard'
-import { getPayload } from '@/lib/payload'
-import { cn } from '@/lib/utils'
-import { headers } from 'next/headers'
-import Link from 'next/link'
+import { notArchived, publishedFilter } from "@/lib/query-helpers"
+import { SearchBar } from "@/components/SearchBar"
+import { VideoCard } from "@/components/VideoCard"
+import { getPayload } from "@/lib/payload"
+import { cn } from "@/lib/utils"
+import { headers } from "next/headers"
+import Link from "next/link"
 
 export const metadata = {
-  title: 'Pretraži | Noćna mora Željka Malnara',
+  title: "Pretraži | Noćna mora Željka Malnara"
 }
 
 type Props = {
@@ -21,11 +21,11 @@ type Props = {
 
 export default async function SearchPage({ searchParams }: Props) {
   const params = await searchParams
-  const query = params.q || ''
-  const page = parseInt(params.page || '1')
+  const query = params.q || ""
+  const page = parseInt(params.page || "1")
   const payload = await getPayload()
   const { user } = await payload.auth({ headers: await headers() })
-  const isAdmin = user?.role === 'admin'
+  const isAdmin = user?.role === "admin"
 
   let results: any = { docs: [], totalDocs: 0, totalPages: 0 }
   let participantResults: any[] = []
@@ -33,7 +33,7 @@ export default async function SearchPage({ searchParams }: Props) {
   if (query) {
     // Search videos using Payload's built-in search
     results = await payload.find({
-      collection: 'videos',
+      collection: "videos",
       where: {
         and: [
           ...publishedFilter(isAdmin),
@@ -42,22 +42,22 @@ export default async function SearchPage({ searchParams }: Props) {
             or: [
               { title: { contains: query } },
               { description: { contains: query } },
-              { transcriptionPlain: { contains: query } },
-            ],
+              { transcriptionPlain: { contains: query } }
+            ]
           },
           ...(params.category ? [{ categories: { equals: params.category } }] : []),
-          ...(params.participant ? [{ participants: { equals: params.participant } }] : []),
-        ],
+          ...(params.participant ? [{ participants: { equals: params.participant } }] : [])
+        ]
       },
-      sort: '-airedDate',
+      sort: "-airedDate",
       page,
       limit: 12,
-      depth: 1,
+      depth: 1
     })
 
     // Also search participants
     const pResult = await payload.find({
-      collection: 'participants',
+      collection: "participants",
       where: {
         and: [
           notArchived,
@@ -65,22 +65,22 @@ export default async function SearchPage({ searchParams }: Props) {
             or: [
               { firstName: { contains: query } },
               { lastName: { contains: query } },
-              { nickname: { contains: query } },
-            ],
-          },
-        ],
+              { nickname: { contains: query } }
+            ]
+          }
+        ]
       },
-      limit: 5,
+      limit: 5
     })
     participantResults = pResult.docs as any[]
   }
 
   // Fetch categories for filter
   const categories = await payload.find({
-    collection: 'categories',
+    collection: "categories",
     where: notArchived,
-    sort: 'title',
-    limit: 100,
+    sort: "title",
+    limit: 100
   })
 
   return (
@@ -97,10 +97,10 @@ export default async function SearchPage({ searchParams }: Props) {
           <Link
             href={`/pretraga?q=${encodeURIComponent(query)}`}
             className={cn(
-              'rounded-full border px-3 py-1 text-sm transition-colors',
+              "rounded-full border px-3 py-1 text-sm transition-colors",
               params.category
-                ? 'border-border text-muted-foreground'
-                : 'border-primary bg-primary/10 text-primary',
+                ? "border-border text-muted-foreground"
+                : "border-primary bg-primary/10 text-primary"
             )}
           >
             Sve kategorije
@@ -110,10 +110,10 @@ export default async function SearchPage({ searchParams }: Props) {
               key={cat.id}
               href={`/pretraga?q=${encodeURIComponent(query)}&category=${String(cat.id)}`}
               className={cn(
-                'rounded-full border px-3 py-1 text-sm transition-colors',
+                "rounded-full border px-3 py-1 text-sm transition-colors",
                 params.category === String(cat.id)
-                  ? 'border-primary bg-primary/10 text-primary'
-                  : 'border-border text-muted-foreground',
+                  ? "border-primary bg-primary/10 text-primary"
+                  : "border-border text-muted-foreground"
               )}
             >
               {cat.title}
@@ -130,7 +130,7 @@ export default async function SearchPage({ searchParams }: Props) {
             {participantResults.map((p: any) => (
               <Link
                 key={p.id}
-                href={`/${p.type === 'main' ? 'glumci' : 'gosti'}/${p.slug}`}
+                href={`/${p.type === "main" ? "glumci" : "gosti"}/${p.slug}`}
                 className="rounded-full border border-border bg-card px-4 py-2 text-sm text-foreground hover:border-primary/50 transition-colors"
               >
                 {p.firstName} {p.lastName}
@@ -161,10 +161,10 @@ export default async function SearchPage({ searchParams }: Props) {
                   const cat = categories.docs.find((c: any) => String(c.id) === params.category)
                   return cat ? ` u kategoriji ${(cat as any).title}` : null
                 })()}
-              .{' '}
+              .{" "}
               {params.category
-                ? 'Pokušajte s drugim pojmom ili drugom kategorijom.'
-                : 'Pokušajte s drugim pojmom.'}
+                ? "Pokušajte s drugim pojmom ili drugom kategorijom."
+                : "Pokušajte s drugim pojmom."}
             </p>
           )}
 

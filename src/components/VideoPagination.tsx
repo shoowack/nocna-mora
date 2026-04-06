@@ -1,29 +1,29 @@
-'use client'
+"use client"
 
-import * as React from 'react'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
+import * as React from "react"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 import {
   DEFAULT_PAGE_SIZE,
   PAGE_SIZE_OPTIONS,
   type VideoFilterParams,
-  buildVideoUrl,
-} from '@/lib/video-url'
+  buildVideoUrl
+} from "@/lib/video-url"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
-import { cn } from '@/lib/utils'
-import { useRouter } from 'next/navigation'
+  SelectValue
+} from "@/components/ui/select"
+import { cn } from "@/lib/utils"
+import { useRouter } from "next/navigation"
 
 interface VideoPaginationProps {
   currentPage: number
   totalPages: number
   totalDocs: number
   perPage: number
-  filterParams: Omit<VideoFilterParams, 'page' | 'perPage'>
+  filterParams: Omit<VideoFilterParams, "page" | "perPage">
 }
 
 export function VideoPagination({
@@ -31,7 +31,7 @@ export function VideoPagination({
   totalPages,
   totalDocs,
   perPage,
-  filterParams,
+  filterParams
 }: VideoPaginationProps) {
   const router = useRouter()
 
@@ -80,7 +80,7 @@ export function VideoPagination({
         </PageButton>
 
         {pages.map((p, i) =>
-          p === '...' ? (
+          p === "..." ? (
             <span
               key={`ellipsis-${i}`}
               className="flex h-8 w-8 items-center justify-center text-sm text-muted-foreground"
@@ -91,7 +91,7 @@ export function VideoPagination({
             <PageButton key={p} onClick={() => go(p)} active={p === currentPage}>
               {p}
             </PageButton>
-          ),
+          )
         )}
 
         <PageButton
@@ -115,12 +115,12 @@ function PageButton({ active, className, children, ...props }: PageButtonProps) 
     <button
       {...props}
       className={cn(
-        'inline-flex h-8 min-w-8 items-center justify-center rounded-md border px-2 text-sm transition-colors',
+        "inline-flex h-8 min-w-8 items-center justify-center rounded-md border px-2 text-sm transition-colors",
         active
-          ? 'border-primary bg-primary/10 text-primary font-medium'
-          : 'border-border text-muted-foreground hover:border-primary/50 hover:text-foreground',
-        props.disabled && 'pointer-events-none opacity-40',
-        className,
+          ? "border-primary bg-primary/10 text-primary font-medium"
+          : "border-border text-muted-foreground hover:border-primary/50 hover:text-foreground",
+        props.disabled && "pointer-events-none opacity-40",
+        className
       )}
     >
       {children}
@@ -128,18 +128,18 @@ function PageButton({ active, className, children, ...props }: PageButtonProps) 
   )
 }
 
-function getPageNumbers(current: number, total: number): (number | '...')[] {
+function getPageNumbers(current: number, total: number): (number | "...")[] {
   if (total <= 7) {
     return Array.from({ length: total }, (_, i) => i + 1)
   }
 
   if (current <= 4) {
-    return [1, 2, 3, 4, 5, '...', total]
+    return [1, 2, 3, 4, 5, "...", total]
   }
 
   if (current >= total - 3) {
-    return [1, '...', total - 4, total - 3, total - 2, total - 1, total]
+    return [1, "...", total - 4, total - 3, total - 2, total - 1, total]
   }
 
-  return [1, '...', current - 1, current, current + 1, '...', total]
+  return [1, "...", current - 1, current, current + 1, "...", total]
 }

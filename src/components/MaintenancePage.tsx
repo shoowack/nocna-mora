@@ -1,4 +1,4 @@
-import { Construction } from 'lucide-react'
+import { Construction } from "lucide-react"
 
 export function MaintenancePage({ message }: { message?: string | null }) {
   return (
@@ -6,7 +6,7 @@ export function MaintenancePage({ message }: { message?: string | null }) {
       <Construction className="mb-6 h-16 w-16 text-muted-foreground/50" />
       <h1 className="mb-3 text-2xl font-bold text-foreground">Stranica je u održavanju</h1>
       <p className="max-w-md text-muted-foreground">
-        {message || 'Stranica je trenutno u održavanju. Molimo pokušajte kasnije.'}
+        {message || "Stranica je trenutno u održavanju. Molimo pokušajte kasnije."}
       </p>
     </div>
   )

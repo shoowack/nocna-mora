@@ -1,7 +1,7 @@
-'use client'
+"use client"
 
-import { useState } from 'react'
-import { BookDashed, Clapperboard, Clock, Play, PlayCircle, Tv } from 'lucide-react'
+import { useState } from "react"
+import { BookDashed, Clapperboard, Clock, Play, PlayCircle, Tv } from "lucide-react"
 import {
   Card,
   CardAction,
@@ -9,23 +9,23 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
-import { formatDate, formatDuration } from '@/lib/utils'
-import { getThumbnailUrl } from '@/lib/video-providers'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import Image from 'next/image'
-import Link from 'next/link'
+  CardTitle
+} from "@/components/ui/card"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+import { formatDate, formatDuration } from "@/lib/utils"
+import { getThumbnailUrl } from "@/lib/video-providers"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import Image from "next/image"
+import Link from "next/link"
 
 type Props = {
   video: {
     slug: string
     title: string
-    provider: 'youtube' | 'vimeo' | 'dailymotion' | 'facebook'
+    provider: "youtube" | "vimeo" | "dailymotion" | "facebook"
     videoId: string
-    videoType: 'full' | 'clip'
+    videoType: "full" | "clip"
     published?: boolean
     duration?: number | null
     airedDate?: string | null
@@ -37,7 +37,7 @@ export function VideoCard({ video }: Props) {
   const [imgError, setImgError] = useState(false)
 
   const thumbnailUrl = video.thumbnail?.url || getThumbnailUrl(video.provider, video.videoId)
-  const Icon = video.videoType === 'clip' ? Clapperboard : Tv
+  const Icon = video.videoType === "clip" ? Clapperboard : Tv
 
   return (
     <Link
@@ -73,7 +73,7 @@ export function VideoCard({ video }: Props) {
               </Button>
             </TooltipTrigger>
             <TooltipContent>
-              <p>{video.videoType === 'clip' ? 'Isječak' : 'Cijela emisija'}</p>
+              <p>{video.videoType === "clip" ? "Isječak" : "Cijela emisija"}</p>
             </TooltipContent>
           </Tooltip>
           {video.published === false && (

@@ -1,7 +1,7 @@
-'use client'
+"use client"
 
-import { useEffect, useState } from 'react'
-import { useTheme } from 'next-themes'
+import { useEffect, useState } from "react"
+import { useTheme } from "next-themes"
 
 export function ThemeColor() {
   const { resolvedTheme } = useTheme()
@@ -11,5 +11,5 @@ export function ThemeColor() {
 
   if (!mounted) return null
 
-  return <meta name="theme-color" content={resolvedTheme === 'dark' ? '#0a0a0a' : '#ffffff'} />
+  return <meta name="theme-color" content={resolvedTheme === "dark" ? "#0a0a0a" : "#ffffff"} />
 }

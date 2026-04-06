@@ -1,46 +1,46 @@
-import type { CollectionConfig } from 'payload'
-import { anyone, isAdminOrEditor } from '@/access'
+import type { CollectionConfig } from "payload"
+import { anyone, isAdminOrEditor } from "@/access"
 
 export const Media: CollectionConfig = {
-  slug: 'media',
+  slug: "media",
   upload: {
-    staticDir: 'media',
-    mimeTypes: ['image/*'],
+    staticDir: "media",
+    mimeTypes: ["image/*"],
     imageSizes: [
       {
-        name: 'thumbnail',
+        name: "thumbnail",
         width: 400,
         height: 300,
-        position: 'centre',
+        position: "centre"
       },
       {
-        name: 'card',
+        name: "card",
         width: 768,
         height: 432,
-        position: 'centre',
-      },
-    ],
+        position: "centre"
+      }
+    ]
   },
   admin: {
-    useAsTitle: 'alt',
+    useAsTitle: "alt"
   },
   fields: [
     {
-      name: 'alt',
-      type: 'text',
+      name: "alt",
+      type: "text",
       required: true,
-      label: 'Alt tekst',
+      label: "Alt tekst"
     },
     {
-      name: 'credit',
-      type: 'text',
-      label: 'Autor fotografije',
-    },
+      name: "credit",
+      type: "text",
+      label: "Autor fotografije"
+    }
   ],
   access: {
     read: anyone,
     create: isAdminOrEditor,
     update: isAdminOrEditor,
-    delete: isAdminOrEditor,
-  },
+    delete: isAdminOrEditor
+  }
 }

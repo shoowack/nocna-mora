@@ -1,72 +1,72 @@
-import type { CollectionConfig } from 'payload'
-import { isAdmin, isRecipientOrAdmin } from '@/access'
+import type { CollectionConfig } from "payload"
+import { isAdmin, isRecipientOrAdmin } from "@/access"
 
 export const Notifications: CollectionConfig = {
-  slug: 'notifications',
+  slug: "notifications",
   admin: {
-    defaultColumns: ['title', 'type', 'recipient', 'read', 'createdAt'],
+    defaultColumns: ["title", "type", "recipient", "read", "createdAt"]
   },
   fields: [
     {
-      name: 'title',
-      type: 'text',
+      name: "title",
+      type: "text",
       required: true,
-      label: 'Naslov',
+      label: "Naslov"
     },
     {
-      name: 'message',
-      type: 'textarea',
+      name: "message",
+      type: "textarea",
       required: true,
-      label: 'Poruka',
+      label: "Poruka"
     },
     {
-      name: 'type',
-      type: 'select',
+      name: "type",
+      type: "select",
       required: true,
-      label: 'Tip',
+      label: "Tip",
       options: [
-        { label: 'Novi video', value: 'new_video' },
-        { label: 'Odgovor na komentar', value: 'comment_reply' },
-        { label: 'Sustav', value: 'system' },
-      ],
+        { label: "Novi video", value: "new_video" },
+        { label: "Odgovor na komentar", value: "comment_reply" },
+        { label: "Sustav", value: "system" }
+      ]
     },
     {
-      name: 'recipient',
-      type: 'relationship',
-      relationTo: 'users',
+      name: "recipient",
+      type: "relationship",
+      relationTo: "users",
       required: true,
       index: true,
-      label: 'Primatelj',
+      label: "Primatelj"
     },
     {
-      name: 'relatedVideo',
-      type: 'relationship',
-      relationTo: 'videos',
-      label: 'Povezani video',
+      name: "relatedVideo",
+      type: "relationship",
+      relationTo: "videos",
+      label: "Povezani video"
     },
     {
-      name: 'read',
-      type: 'checkbox',
+      name: "read",
+      type: "checkbox",
       defaultValue: false,
-      label: 'Pročitano',
+      label: "Pročitano",
       admin: {
-        position: 'sidebar',
-      },
+        position: "sidebar"
+      }
     },
     {
-      name: 'emailSent',
-      type: 'checkbox',
+      name: "emailSent",
+      type: "checkbox",
       defaultValue: false,
-      label: 'Email poslan',
+      label: "Email poslan",
       admin: {
-        position: 'sidebar',
-      },
-    },
+        position: "sidebar"
+      }
+    }
   ],
   access: {
     read: isRecipientOrAdmin,
     create: isAdmin,
     update: isRecipientOrAdmin,
-    delete: isAdmin,
-  },
+    delete: isAdmin
+  }
 }
