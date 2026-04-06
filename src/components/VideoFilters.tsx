@@ -353,10 +353,12 @@ function GroupedMultiCombobox({
       <ComboboxTriggerButton label={label} count={count} onClear={() => onValueChange([])} />
       <ComboboxContent>
         {searchPlaceholder && <ComboboxInput placeholder={searchPlaceholder} showTrigger={false} />}
-        <ComboboxEmpty>Nema rezultata.</ComboboxEmpty>
         <ComboboxList>
+          {filteredGroups.length === 0 && (
+            <div className="py-2 text-center text-sm text-muted-foreground">Nema rezultata.</div>
+          )}
           {filteredGroups.map((group, i) => (
-            <ComboboxGroup key={group.heading}>
+            <ComboboxGroup key={group.heading} className="p-1">
               {i > 0 && <ComboboxSeparator />}
               <ComboboxLabel>{group.heading}</ComboboxLabel>
               {group.options.map((opt) => (
