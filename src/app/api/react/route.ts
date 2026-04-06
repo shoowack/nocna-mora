@@ -1,6 +1,6 @@
-import { headers } from 'next/headers'
-import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from '@/lib/payload'
+import { NextRequest, NextResponse } from 'next/server'
+import { headers } from 'next/headers'
 
 export async function GET(req: NextRequest) {
   const videoId = req.nextUrl.searchParams.get('videoId')

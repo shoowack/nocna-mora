@@ -1,10 +1,10 @@
-import { headers } from 'next/headers'
-import Link from 'next/link'
+import { notArchived, publishedFilter } from '@/lib/query-helpers'
 import { SearchBar } from '@/components/SearchBar'
 import { VideoCard } from '@/components/VideoCard'
 import { getPayload } from '@/lib/payload'
-import { notArchived, publishedFilter } from '@/lib/query-helpers'
 import { cn } from '@/lib/utils'
+import { headers } from 'next/headers'
+import Link from 'next/link'
 
 export const metadata = {
   title: 'Pretraži | Noćna mora Željka Malnara',

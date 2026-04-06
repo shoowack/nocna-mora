@@ -1,10 +1,10 @@
-import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { postgresAdapter } from '@payloadcms/db-postgres'
 import { s3Storage } from '@payloadcms/storage-s3'
-import path from 'path'
 import { buildConfig } from 'payload'
-import sharp from 'sharp'
 import { fileURLToPath } from 'url'
+import sharp from 'sharp'
+import path from 'path'
 import {
   Categories,
   Comments,
@@ -16,8 +16,8 @@ import {
   Users,
   Videos,
 } from '@/collections'
-import { Homepage } from '@/globals/Homepage'
 import { SiteSettings } from '@/globals/SiteSettings'
+import { Homepage } from '@/globals/Homepage'
 import { migrations } from '@/migrations'
 
 const filename = fileURLToPath(import.meta.url)

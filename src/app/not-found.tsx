@@ -1,7 +1,7 @@
-import Link from 'next/link'
+import { ThemeProvider } from '@/components/ThemeProvider'
 import { Footer } from '@/components/Footer'
 import { Header } from '@/components/Header'
-import { ThemeProvider } from '@/components/ThemeProvider'
+import Link from 'next/link'
 
 export const dynamic = 'force-dynamic'
 

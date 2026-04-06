@@ -1,13 +1,13 @@
-import { headers } from 'next/headers'
-import Image from 'next/image'
-import Link from 'next/link'
 import { Search } from 'lucide-react'
 import { LogoutButton } from '@/components/LogoutButton'
-import { MobileMenu } from '@/components/MobileMenu'
 import { ThemeToggle } from '@/components/ThemeToggle'
+import { MobileMenu } from '@/components/MobileMenu'
 import { getPayload } from '@/lib/payload'
 import { cn } from '@/lib/utils'
 import { Media } from '../../payload-types'
+import { headers } from 'next/headers'
+import Image from 'next/image'
+import Link from 'next/link'
 
 const navLinks = [
   { href: '/video', label: 'Videi' },

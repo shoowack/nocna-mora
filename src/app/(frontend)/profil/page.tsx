@@ -1,11 +1,11 @@
-import { headers } from 'next/headers'
-import Image from 'next/image'
-import Link from 'next/link'
-import { redirect } from 'next/navigation'
 import { Bell, User } from 'lucide-react'
 import { getPayload } from '@/lib/payload'
 import { formatDate } from '@/lib/utils'
 import type { Media } from '../../../../payload-types'
+import { redirect } from 'next/navigation'
+import { headers } from 'next/headers'
+import Image from 'next/image'
+import Link from 'next/link'
 
 export const metadata = {
   title: 'Profil | Noćna mora Željka Malnara',

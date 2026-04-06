@@ -1,6 +1,6 @@
 import type { CollectionConfig } from 'payload'
-import { isAdmin, isAdminOrEditor, notArchived } from '@/access'
 import { populateFullName, populateParticipantSlug } from '@/hooks/populateSlug'
+import { isAdmin, isAdminOrEditor, notArchived } from '@/access'
 
 export const Participants: CollectionConfig = {
   slug: 'participants',

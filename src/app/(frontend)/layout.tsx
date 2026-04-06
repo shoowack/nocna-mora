@@ -1,14 +1,14 @@
-import type { Metadata } from 'next'
-import { Geist } from 'next/font/google'
-import { headers } from 'next/headers'
-import { Footer } from '@/components/Footer'
-import { Header } from '@/components/Header'
 import { MaintenancePage } from '@/components/MaintenancePage'
-import { ThemeColor } from '@/components/ThemeColor'
 import { ThemeProvider } from '@/components/ThemeProvider'
 import { UmamiIdentify } from '@/components/UmamiIdentify'
+import { ThemeColor } from '@/components/ThemeColor'
+import { Footer } from '@/components/Footer'
+import { Header } from '@/components/Header'
 import { getPayload } from '@/lib/payload'
 import type { Media } from '../../../payload-types'
+import { Geist } from 'next/font/google'
+import { headers } from 'next/headers'
+import type { Metadata } from 'next'
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' })
 

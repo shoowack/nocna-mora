@@ -1,5 +1,5 @@
-import Link from 'next/link'
 import { getPayload } from '@/lib/payload'
+import Link from 'next/link'
 
 async function getFooterText() {
   try {

@@ -2,12 +2,12 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
+import { ChevronUp, LogOut, Menu, Monitor, Moon, Search, Sun, User, X } from 'lucide-react'
+import { cn } from '@/lib/utils'
+import { useRouter } from 'next/navigation'
 import { useTheme } from 'next-themes'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { ChevronUp, LogOut, Menu, Monitor, Moon, Search, Sun, User, X } from 'lucide-react'
-import { cn } from '@/lib/utils'
 
 const navLinks = [
   { href: '/video', label: 'Videi' },

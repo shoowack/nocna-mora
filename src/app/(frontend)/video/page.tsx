@@ -1,11 +1,11 @@
-import { headers } from 'next/headers'
 import type { Where } from 'payload'
-import { VideoCard } from '@/components/VideoCard'
-import { VideoFilters } from '@/components/VideoFilters'
-import { VideoPagination } from '@/components/VideoPagination'
-import { getPayload } from '@/lib/payload'
 import { notArchived, publishedFilter } from '@/lib/query-helpers'
+import { VideoPagination } from '@/components/VideoPagination'
+import { VideoFilters } from '@/components/VideoFilters'
+import { VideoCard } from '@/components/VideoCard'
 import { parseVideoParams } from '@/lib/video-url'
+import { getPayload } from '@/lib/payload'
+import { headers } from 'next/headers'
 
 type Props = {
   searchParams: Promise<{

@@ -1,7 +1,7 @@
 'use client'
 
-import * as React from 'react'
 import { type DayButton, DayPicker, type Locale, getDefaultClassNames } from 'react-day-picker'
+import * as React from 'react'
 import { ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon } from '@hugeicons/core-free-icons'
 import { HugeiconsIcon } from '@hugeicons/react'
 import { Button, buttonVariants } from '@/components/ui/button'

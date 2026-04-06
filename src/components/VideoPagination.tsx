@@ -1,8 +1,13 @@
 'use client'
 
 import * as React from 'react'
-import { useRouter } from 'next/navigation'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
+import {
+  DEFAULT_PAGE_SIZE,
+  PAGE_SIZE_OPTIONS,
+  type VideoFilterParams,
+  buildVideoUrl,
+} from '@/lib/video-url'
 import {
   Select,
   SelectContent,
@@ -11,12 +16,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { cn } from '@/lib/utils'
-import {
-  DEFAULT_PAGE_SIZE,
-  PAGE_SIZE_OPTIONS,
-  type VideoFilterParams,
-  buildVideoUrl,
-} from '@/lib/video-url'
+import { useRouter } from 'next/navigation'
 
 interface VideoPaginationProps {
   currentPage: number

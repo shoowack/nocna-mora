@@ -1,8 +1,8 @@
-import { headers } from 'next/headers'
-import { Timeline } from '@/components/Timeline'
-import type { TimelineEvent } from '@/components/Timeline'
-import { getPayload } from '@/lib/payload'
 import { notArchived, publishedFilter } from '@/lib/query-helpers'
+import type { TimelineEvent } from '@/components/Timeline'
+import { Timeline } from '@/components/Timeline'
+import { getPayload } from '@/lib/payload'
+import { headers } from 'next/headers'
 
 export const revalidate = 3600
 

@@ -1,6 +1,6 @@
 import { ParticipantCard } from '@/components/ParticipantCard'
-import { getPayload } from '@/lib/payload'
 import { notArchived } from '@/lib/query-helpers'
+import { getPayload } from '@/lib/payload'
 
 export const revalidate = 3600
 

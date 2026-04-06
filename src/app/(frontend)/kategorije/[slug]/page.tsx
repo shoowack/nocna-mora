@@ -1,10 +1,10 @@
-import { headers } from 'next/headers'
-import Link from 'next/link'
-import { notFound } from 'next/navigation'
 import { Pencil } from 'lucide-react'
+import { notArchived, publishedFilter } from '@/lib/query-helpers'
 import { VideoCard } from '@/components/VideoCard'
 import { getPayload } from '@/lib/payload'
-import { notArchived, publishedFilter } from '@/lib/query-helpers'
+import { notFound } from 'next/navigation'
+import { headers } from 'next/headers'
+import Link from 'next/link'
 
 export const revalidate = 300
 

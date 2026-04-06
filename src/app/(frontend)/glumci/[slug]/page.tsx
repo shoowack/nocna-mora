@@ -1,12 +1,12 @@
+import { Pencil } from 'lucide-react'
+import { notArchived, publishedFilter } from '@/lib/query-helpers'
+import { VideoCard } from '@/components/VideoCard'
+import { getPayload } from '@/lib/payload'
+import { formatDate } from '@/lib/utils'
+import { notFound } from 'next/navigation'
 import { headers } from 'next/headers'
 import Image from 'next/image'
 import Link from 'next/link'
-import { notFound } from 'next/navigation'
-import { Pencil } from 'lucide-react'
-import { VideoCard } from '@/components/VideoCard'
-import { getPayload } from '@/lib/payload'
-import { notArchived, publishedFilter } from '@/lib/query-helpers'
-import { formatDate } from '@/lib/utils'
 
 export const revalidate = 3600
 

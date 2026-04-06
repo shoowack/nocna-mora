@@ -1,9 +1,9 @@
-import { headers } from 'next/headers'
-import Link from 'next/link'
+import { notArchived, publishedFilter } from '@/lib/query-helpers'
 import { ParticipantCard } from '@/components/ParticipantCard'
 import { VideoCard } from '@/components/VideoCard'
 import { getPayload } from '@/lib/payload'
-import { notArchived, publishedFilter } from '@/lib/query-helpers'
+import { headers } from 'next/headers'
+import Link from 'next/link'
 
 export default async function HomePage() {
   const payload = await getPayload()

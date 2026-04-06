@@ -1,8 +1,8 @@
+import { Folder } from 'lucide-react'
+import { notArchived, publishedFilter } from '@/lib/query-helpers'
+import { getPayload } from '@/lib/payload'
 import { headers } from 'next/headers'
 import Link from 'next/link'
-import { Folder } from 'lucide-react'
-import { getPayload } from '@/lib/payload'
-import { notArchived, publishedFilter } from '@/lib/query-helpers'
 
 export const metadata = {
   title: 'Kategorije | Noćna mora Željka Malnara',

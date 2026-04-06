@@ -1,14 +1,14 @@
-import { headers } from 'next/headers'
-import Link from 'next/link'
-import { notFound } from 'next/navigation'
 import { Pencil } from 'lucide-react'
-import { CommentSection } from '@/components/CommentSection'
-import { Reactions } from '@/components/Reactions'
-import { VideoEmbed } from '@/components/VideoEmbed'
-import { getPayload } from '@/lib/payload'
 import { notArchived, publishedFilter } from '@/lib/query-helpers'
+import { CommentSection } from '@/components/CommentSection'
 import { formatDate, formatDuration } from '@/lib/utils'
 import { getProviderLabel } from '@/lib/video-providers'
+import { VideoEmbed } from '@/components/VideoEmbed'
+import { Reactions } from '@/components/Reactions'
+import { getPayload } from '@/lib/payload'
+import { notFound } from 'next/navigation'
+import { headers } from 'next/headers'
+import Link from 'next/link'
 
 export const revalidate = 300
 
