@@ -24,6 +24,7 @@ services:
   db:
     image: postgres:16-alpine
     restart: unless-stopped
+    profiles: ["local"]
     environment:
       POSTGRES_DB: tvarhiv
       POSTGRES_USER: tvarhiv
