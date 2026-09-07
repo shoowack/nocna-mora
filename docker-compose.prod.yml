@@ -1,0 +1,13 @@
+services:
+  app:
+    # Plain `depends_on: []` doesn't clear the base file's dependency - Compose
+    # merges depends_on as a map union, so the healthcheck condition on `db`
+    # would survive. `!reset` is required to actually drop it.
+    depends_on: !reset []
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    restart: unless-stopped
+    command: tunnel run
+    environment:
+      - TUNNEL_TOKEN=${TUNNEL_TOKEN}

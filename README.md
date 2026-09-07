@@ -107,9 +107,11 @@ The admin panel is available at <http://localhost:3000/admin>. On first visit, y
 
 ### Running with Docker
 
-Build and run with Docker Compose:
+The `db` service is gated behind the `local` Compose profile, so set
+`COMPOSE_PROFILES=local` (e.g. in a git-ignored `.env`) before starting it locally:
 
 ```bash
+echo "COMPOSE_PROFILES=local" >> .env
 docker compose up --build
 ```
 
